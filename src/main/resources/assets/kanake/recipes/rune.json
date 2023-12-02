@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "|||",
+    "###",
+    "|||"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    },
+    "|": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "kanake:rune",
+    "count": 1
+  }
+}

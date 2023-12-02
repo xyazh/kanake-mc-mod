@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0":"kanake:blocks/compressed1x_quartz_block"
+  }
+}

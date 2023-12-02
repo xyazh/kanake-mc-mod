@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH",
+    "T#T",
+    "***"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "gemHarmoniumCrystal"
+    },
+    "*": {
+      "type": "forge:ore_dict",
+      "ore": "blockQuartz"
+    },
+    "T": {
+      "type": "forge:ore_dict",
+      "ore": "gemQuartz"
+    },
+    "H": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    }
+  },
+  "result": {
+    "item": "kanake:crystaler",
+    "count": 1
+  }
+}

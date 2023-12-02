@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "***",
+    "***",
+    "***"
+  ],
+  "key": {
+    "*": {
+      "item": "kanake:ws_magic_nugget"
+    }
+  },
+  "result": {
+    "item": "kanake:ws_magic_ingot",
+    "count": 1
+  }
+}

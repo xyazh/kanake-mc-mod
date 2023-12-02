@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "gemHarmoniumCrystal"
+    },
+    "*": {
+      "type": "forge:ore_dict",
+      "ore": "blockQuartz"
+    }
+  },
+  "result": {
+    "item": "kanake:mono",
+    "count": 1
+  }
+}
