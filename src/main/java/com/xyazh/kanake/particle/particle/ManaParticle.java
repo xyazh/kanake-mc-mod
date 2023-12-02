@@ -1,0 +1,136 @@
+package com.xyazh.kanake.particle.particle;
+
+import com.xyazh.kanake.item.ModItems;
+import com.xyazh.kanake.util.MathUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+
+@SideOnly(Side.CLIENT)
+public class ManaParticle extends BaseParticle {
+    private final Vec3d inPos;
+    private final Vec3d targetPos;
+    private final Vec3d inPoint1;
+    private final Vec3d inPoint2;
+    public ManaParticle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn,Item item) {
+        super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+        this.inPos = new Vec3d(xCoordIn,yCoordIn,zCoordIn);
+        this.targetPos = new Vec3d(xSpeedIn,ySpeedIn,zSpeedIn);
+        this.setParticleTexture(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(item, 0));
+        this.canCollide = false;
+
+        this.disLight = true;
+        this.particleMaxAge = 30;
+        double dx,dy,dz;
+        dx = this.targetPos.x-this.inPos.x;
+        dy = this.targetPos.y-this.inPos.y;
+        dz = this.targetPos.z-this.inPos.z;
+        Vec3d motion = new Vec3d(dx/this.particleMaxAge, dy/this.particleMaxAge, dz/this.particleMaxAge);
+        this.motionX=motion.x;
+        this.motionY=motion.y;
+        this.motionZ=motion.z;
+        this.particleScale /= 8.0F;
+        Vec3d direction =  new Vec3d(dx,dy,dz);
+        Vec3d randomVec1 = direction.crossProduct(new Vec3d(this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble())).normalize();
+        Vec3d randomVec2 = direction.crossProduct(new Vec3d(this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble())).normalize();
+        double r1 = this.rand.nextDouble();
+        double r2 = (1-r1)*this.rand.nextDouble();
+        inPoint1 = new Vec3d(xCoordIn+dx*r1+randomVec1.x,yCoordIn+dy*r1+randomVec1.y,zCoordIn+dz*r1+randomVec1.z);
+        inPoint2 = new Vec3d(xCoordIn+dx*r2+randomVec2.x,yCoordIn+dy*r2+randomVec2.y,zCoordIn+dz*r2+randomVec2.z);
+        this.motionX = MathUtils.dBezier(inPos.x,inPoint1.x,inPoint2.x,targetPos.x,0);
+        this.motionY = MathUtils.dBezier(inPos.y,inPoint1.y,inPoint2.y,targetPos.y,0);
+        this.motionZ = MathUtils.dBezier(inPos.z,inPoint1.z,inPoint2.z,targetPos.z,0);
+        this.setPosition(xCoordIn,yCoordIn,zCoordIn);
+        this.particleTextureJitterX = this.rand.nextInt(15);
+        this.particleTextureJitterY = this.rand.nextInt(15);
+    }
+
+    public int getFXLayer()
+    {
+        return 1;
+    }
+
+    public void onUpdate()
+    {
+        if (this.particleAge++ >= this.particleMaxAge)
+        {
+            this.setExpired();
+        }
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+        double t = (double) this.particleAge/(double) this.particleMaxAge;
+        this.motionX = MathUtils.dBezier(inPos.x,inPoint1.x,inPoint2.x,targetPos.x,t)/this.particleMaxAge;
+        this.motionY = MathUtils.dBezier(inPos.y,inPoint1.y,inPoint2.y,targetPos.y,t)/this.particleMaxAge;
+        this.motionZ = MathUtils.dBezier(inPos.z,inPoint1.z,inPoint2.z,targetPos.z,t)/this.particleMaxAge;
+        this.move(this.motionX, this.motionY, this.motionZ);
+    }
+
+    @Override
+    public int getBrightnessForRender(float partialTicks) {
+        if(disLight){
+            return 0xF000F0;
+        }
+        return super.getBrightnessForRender(partialTicks);
+    }
+
+    public boolean shouldDisableDepth()
+    {
+        return true;
+    }
+
+    public void renderParticle(@Nonnull BufferBuilder buffer, @Nonnull Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
+    {
+        float f = (float)this.particleTextureIndexX / 16.0F;
+        float f1 = f + 0.0624375F;
+        float f2 = (float)this.particleTextureIndexY / 16.0F;
+        float f3 = f2 + 0.0624375F;
+        float f4 = 0.1F * this.particleScale;
+
+        if (this.particleTexture != null)
+        {
+            f = this.particleTexture.getInterpolatedU((this.particleTextureJitterX));
+            f1 = this.particleTexture.getInterpolatedU((this.particleTextureJitterX));
+            f2 = this.particleTexture.getInterpolatedV((this.particleTextureJitterY));
+            f3 = this.particleTexture.getInterpolatedV((this.particleTextureJitterY));
+        }
+
+        float f5 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
+        float f6 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
+        float f7 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
+        int i = this.getBrightnessForRender(partialTicks);
+        int j = i >> 16 & 65535;
+        int k = i & 65535;
+        Vec3d[] avec3d = new Vec3d[] {new Vec3d((double)(-rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double)(-rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(rotationYZ * f4 - rotationXZ * f4))};
+
+        buffer.pos((double)f5 + avec3d[0].x, (double)f6 + avec3d[0].y, (double)f7 + avec3d[0].z).tex((double)f1, (double)f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos((double)f5 + avec3d[1].x, (double)f6 + avec3d[1].y, (double)f7 + avec3d[1].z).tex((double)f1, (double)f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos((double)f5 + avec3d[2].x, (double)f6 + avec3d[2].y, (double)f7 + avec3d[2].z).tex((double)f, (double)f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        buffer.pos((double)f5 + avec3d[3].x, (double)f6 + avec3d[3].y, (double)f7 + avec3d[3].z).tex((double)f, (double)f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static class Factory implements IParticleFactory {
+        public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
+            Item item = null;
+            if(p_178902_15_.length>0){
+                int itemId = p_178902_15_[0];
+                item = Item.getItemById(itemId);
+            }
+            if(item==null||Items.AIR.equals(item)){
+                item = ModItems.TEST_ITEM;
+            }
+            return new ManaParticle(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn, item);
+        }
+    }
+}
