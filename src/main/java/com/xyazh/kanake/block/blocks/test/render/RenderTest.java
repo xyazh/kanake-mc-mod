@@ -3,6 +3,7 @@ package com.xyazh.kanake.block.blocks.test.render;
 import com.xyazh.kanake.render.RenderBezierTube;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.test.TileTest;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -37,14 +38,15 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
     }
 
 
-
     public void render(TileTest te, BufferBuilder bufferbuilder, double cx, double cy, double cz, float partialTicks, int destroyStage, float alpha) {
         for (int i = 0; i < te.points.length; i++) {
             double x, y, z;
             x = te.points[i].x + te.m[i].x * partialTicks;
             y = te.points[i].y + te.m[i].x * partialTicks;
             z = te.points[i].z + te.m[i].z * partialTicks;
-            bufferbuilder.pos(cx + x, cy + y, cz + z).color(255, 128, 64, 64).endVertex();
+            Vec3d vl = new Vec3d(x, y, z);
+            int l = (int) (Math.min(4 / vl.length(), 1) * 256);
+            bufferbuilder.pos(cx + x, cy + y, cz + z).color(255, 128, 64, l).endVertex();
         }
     }
 

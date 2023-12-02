@@ -14,7 +14,7 @@ public class TileTest extends TileBase implements ITickable {
 
     public TileTest(){
         super();
-        points = new Vec3d[3000];
+        points = new Vec3d[1000];
         m = new Vec3d[this.points.length];
         for(int i=0;i<this.points.length;i++){
             points[i] = new Vec3d();
@@ -22,9 +22,9 @@ public class TileTest extends TileBase implements ITickable {
             points[i].y = 0;
             points[i].z = 0;
             m[i] = new Vec3d();
-            m[i].x = Kanake.rand.nextDouble()-0.5;
-            m[i].y = Kanake.rand.nextDouble()-0.5;
-            m[i].z = Kanake.rand.nextDouble()-0.5;
+            m[i].x = Kanake.rand.nextGaussian()*Kanake.rand.nextGaussian();
+            m[i].y = Kanake.rand.nextGaussian()*Kanake.rand.nextGaussian();
+            m[i].z = Kanake.rand.nextGaussian()*Kanake.rand.nextGaussian();
             m[i].normalize();
             m[i].mul(0.05);
         }
