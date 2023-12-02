@@ -16,12 +16,8 @@ import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
-    public static final ResourceLocation TEXTURE_TP = new ResourceLocation(Kanake.MODID, "textures/misc/tp.png");
-    private final RenderBezierTube renderBezierTube;
-
     public RenderTest() {
         super();
-        this.renderBezierTube = new RenderBezierTube();
     }
 
     public boolean isGlobalRenderer(@Nonnull TileTest te) {
@@ -40,8 +36,16 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
 
     }
 
-    public void render(TileTest te, BufferBuilder bufferbuilder, double cx, double cy, double cz, float partialTicks, int destroyStage, float alpha) {
 
+
+    public void render(TileTest te, BufferBuilder bufferbuilder, double cx, double cy, double cz, float partialTicks, int destroyStage, float alpha) {
+        for (int i = 0; i < te.points.length; i++) {
+            double x, y, z;
+            x = te.points[i].x + te.m[i].x * partialTicks;
+            y = te.points[i].y + te.m[i].x * partialTicks;
+            z = te.points[i].z + te.m[i].z * partialTicks;
+            bufferbuilder.pos(cx + x, cy + y, cz + z).color(255, 128, 64, 64).endVertex();
+        }
     }
 
     public void render(@Nonnull TileTest te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -51,13 +55,11 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
         GlStateManager.depthMask(true);
-
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
