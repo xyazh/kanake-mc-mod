@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+    }
+}
+        
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+version = '0.1.13.beta'
+group = 'com.xyazh.kanake'
+archivesBaseName = 'kanake'
+
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+minecraft {
+    mappings channel: 'snapshot', version: '20171003-1.12'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+        server {
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
+
+    //compileOnly(files("./libs/GalacticraftCore-Dev-1.12.2-4.0.2.261.jar"))
+    //compileOnly(files("./libs/Galacticraft-Planets-Dev-1.12.2-4.0.2.261.jar"))
+    //compileOnly(files("./libs/industrialcraft-2-2.8.100-ex112-dev.jar"))
+    compileOnly(files("./libs/jei_1.12.2-4.13.1.220.jar"))
+    compileOnly(files("./libs/Baubles-1.12-1.5.2-deobf.jar"))
+    // at runtime, use the full JEI jar
+    runtime "mezz.jei:jei_1.12.2-4.13.1.220"
+    //runtime "baubles:Baubles-1.12-1.5.2-deobf"
+}
+
+
+repositories {
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "kanake",
+            "Specification-Vendor": "examplemodsareus",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar') 
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+sourceSets { main { output.resourcesDir = output.classesDir } }
