@@ -1,0 +1,96 @@
+itemGroup.knkcreative=简明魔法
+
+tile.harmonium_crystal_ore.name=调和水晶矿石
+tile.mono.name=台座核心
+tile.mono.desc=注入元素之力
+tile.t_mono.name=台座
+tile.mono_table.name=展示台
+tile.crystaler.name=结晶器
+tile.crystaler.desc=吸收环境中的魔力形成结晶
+tile.crystaler.desc.1= 下界 火之结晶
+tile.crystaler.desc.2= 海洋 冰之结晶
+tile.crystaler.desc.3= 雪地 冰之结晶
+tile.crystaler.desc.4= 末地 末影结晶
+tile.crystaler.desc.5= 迷宫 魔法结晶
+tile.compressed1x_quartz_block.name=压缩下界石英块
+tile.tp.name=传送阵
+
+item.test.name=测试物品
+item.rune.name=符文纸
+item.rune_empty.name=空白符文
+item.rune_fire_ball.name=火球符文
+item.rune_fire_ball_look_at.name=火球符文（觅踪）
+item.rune_ice_bolt.name=冰箭符文
+item.rune_fire_curse.name=火咒符文
+item.rune_ice_frost.name=冰霜符文
+item.rune_explosion.name=爆破符文
+item.rune_explosion_look_at.name=爆破符文（觅踪）
+item.rune_magic.name=魔弹符文
+item.rune_tp.name=传送符文
+item.rune_blocking_look_at.name=对抗符文
+item.rune_tp.desc.0=未绑定
+item.rune_tp.desc.1=已绑定
+item.harmonium_crystal.name=调和水晶
+item.harmonium_crystal_axe.name=调和水晶斧
+item.harmonium_crystal_hoe.name=调和水晶锄
+item.harmonium_crystal_pickaxe.name=调和水晶镐
+item.harmonium_crystal_shovel.name=调和水晶铲
+item.harmonium_crystal_sword.name=调和水晶剑
+item.harmonium_crystal.desc=能直接杀死史莱姆
+item.harmonium_crystal_fire.name=火之调和水晶
+item.harmonium_crystal_ice.name=冰之调和水晶
+item.harmonium_crystal_magic.name=蕴魔调和水晶
+item.harmonium_crystal_poison.name=毒之调和水晶
+item.harmonium_crystal_end.name=末影调和水晶
+item.slime_core.name=史莱姆核心
+item.slime_core_fire.name=史莱姆核心|火
+item.slime_core_ice.name=史莱姆核心|冰
+item.slime_core_magic.name=史莱姆核心|魔法
+item.slime_core_poison.name=史莱姆核心|毒
+item.slime_core_end.name=史莱姆核心|末影
+item.potion_small_mp.name=小型魔力药水
+item.potion_mp.name=魔力药水
+item.bottle_small.name=玻璃瓶（小）
+item.crystal_fire.name=火之结晶
+item.crystal_ice.name=冰之结晶
+item.crystal_magic.name=魔法结晶
+item.crystal_end.name=末影结晶
+item.mono_sp.name=台座祭坛
+item.mono_sp.desc=在一个区块里放置一个台座
+item.mono_sub.name=台座组件
+item.mono_frame.name=台座框架
+item.mana_container_big.name=大型魔力容器
+item.mana_container.name=魔力容器
+item.mana_gem.name=魔力宝石
+item.mana_ring_low.name=初等魔力指环
+item.mana_ring_high.name=高等魔力指环
+item.ws_kakera.name=废怯碎片
+item.ws_ingot.name=废怯铁锭
+item.ws_nugget.name=废怯铁粒
+item.ws_plate.name=废怯铁板
+item.ws_sword.name=废怯之剑
+item.ws_sword.desc=额外魔法伤害 +4
+item.ws_magic_ingot.name=魔法铁锭
+item.ws_magic_nugget.name=魔法铁粒
+item.ws_magic_plate.name=魔法铁板
+item.ws_magic_sword.name=魔法之剑
+item.ws_magic_sword.desc=额外魔法伤害 +8
+item.pollute_salt.name=污染盐
+item.heart.name=心脏
+item.dust_magic.name=魔力粉
+
+
+entity.ws_knight.name=废怯骑士
+entity.magic_witch.name=魔法女巫
+entity.ws_soul.name=废怯灵魂
+
+kanake.potion.koori=冻结
+
+generator.ws=废土世界
+
+message.mono.out_chunk=所有台座必须处于同一个区块
+message.mono_sp.fail=放置失败，可能是因为区域被遮挡
+
+tooltip.mana.storage=魔力容量
+tooltip.mana.mana_container.0=鼠标右键 获取魔力
+tooltip.mana.mana_container.1=Shift+鼠标右键 储存魔力

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "kanake",
+  "name": "Kannmei na kenndaimahou",
+  "description": "A magic mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Xyazh","hhzqsid"],
+  "credits": "Xyazh",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
