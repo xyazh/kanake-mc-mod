@@ -91,7 +91,7 @@ public class Kanake
     }
 
     public void preInitClient(FMLPreInitializationEvent event){
-        //network.registerMessage(new SpawnParticlesHandler(), SpawnParticlesPacket.class, 1, Side.CLIENT);
+        /*
         ShaderProgram shaderProgram = new ShaderProgram();
         String vertexShaderSource = ResourceLocationHelper.loadResourceToStr(new ResourceLocation(Kanake.MODID,"shader/dis.vs"));
         String fragmentShaderSource = ResourceLocationHelper.loadResourceToStr(new ResourceLocation(Kanake.MODID,"shader/dis.fs"));
@@ -105,7 +105,7 @@ public class Kanake
                 shaderProgram.use();
                 shaderProgram.unUse();
             }
-        }
+        }*/
     }
 
     public void preInitServer(FMLPreInitializationEvent event){
