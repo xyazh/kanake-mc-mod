@@ -46,4 +46,5 @@ public class Event {
             entityItem.setItem(itemStack);
             event.getDrops().add(entityItem);
         }
-    }}
+    }
+}

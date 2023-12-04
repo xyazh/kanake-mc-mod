@@ -10,8 +10,16 @@ import com.xyazh.kanake.proxy.ProxyBase;
 import com.xyazh.kanake.recipes.brewing.MyBrewing;
 import com.xyazh.kanake.recipes.furnace.MyFurnace;
 import com.xyazh.kanake.recipes.mono.MonoRecipes;
+import com.xyazh.kanake.render.shader.Shader;
+import com.xyazh.kanake.render.shader.ShaderDisSources;
+import com.xyazh.kanake.render.shader.ShaderProgram;
 import com.xyazh.kanake.util.Reference;
+import com.xyazh.kanake.util.ResourceLocationHelper;
 import com.xyazh.kanake.world.ModWorlds;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -25,6 +33,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 @Mod(modid = Kanake.MODID, name = Kanake.NAME, version = Kanake.VERSION,dependencies="before:baubles@[1.5.0,)")
@@ -81,6 +92,20 @@ public class Kanake
 
     public void preInitClient(FMLPreInitializationEvent event){
         //network.registerMessage(new SpawnParticlesHandler(), SpawnParticlesPacket.class, 1, Side.CLIENT);
+        ShaderProgram shaderProgram = new ShaderProgram();
+        String vertexShaderSource = ResourceLocationHelper.loadResourceToStr(new ResourceLocation(Kanake.MODID,"shader/dis.vs"));
+        String fragmentShaderSource = ResourceLocationHelper.loadResourceToStr(new ResourceLocation(Kanake.MODID,"shader/dis.fs"));
+        if(vertexShaderSource != null && fragmentShaderSource!=null){
+            Shader v = Shader.craftVertexShaderFromString(ShaderDisSources.vertexShaderSource);
+            Shader f = Shader.craftFragmentShaderFromString(ShaderDisSources.fragmentShaderSource);
+            if(v!=null&& f!=null){
+                shaderProgram.addShader(v);
+                shaderProgram.addShader(f);
+                shaderProgram.link();
+                shaderProgram.use();
+                shaderProgram.unUse();
+            }
+        }
     }
 
     public void preInitServer(FMLPreInitializationEvent event){
