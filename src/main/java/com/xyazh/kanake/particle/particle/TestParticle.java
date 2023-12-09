@@ -1,10 +1,12 @@
 package com.xyazh.kanake.particle.particle;
 
+import com.xyazh.kanake.particle.ParticleTempData;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -15,6 +17,7 @@ import javax.annotation.Nonnull;
 @SideOnly(Side.CLIENT)
 public class TestParticle extends BaseParticle {
     private double f = 0;
+    float angle = 0;
     protected TestParticle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         double radius = 1 + (xSpeedIn+ySpeedIn+zSpeedIn)/3 + rand.nextGaussian()/2;
@@ -67,7 +70,7 @@ public class TestParticle extends BaseParticle {
         this.prevPosZ = this.posZ;
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            //this.setExpired();
+            this.setExpired();
         }
         this.motionX *= 0.8D;
         this.motionY *= 0.8D;
@@ -88,7 +91,6 @@ public class TestParticle extends BaseParticle {
         float f2 = (float)this.particleTextureIndexY / 16.0F;
         float f3 = f2 + 0.0624375F;
         float f4 = 0.1F * this.particleScale;
-        rotationX += 5;
         if (this.particleTexture != null)
         {
             f = this.particleTexture.getMinU();
@@ -96,22 +98,45 @@ public class TestParticle extends BaseParticle {
             f2 = this.particleTexture.getMinV();
             f3 = this.particleTexture.getMaxV();
         }
-
         float f5 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
         float f6 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
         float f7 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
         int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[] {
-                new Vec3d((-rotationX * f4 - rotationXY * f4), (-rotationZ * f4), (-rotationYZ * f4 - rotationXZ * f4)),
-                new Vec3d((-rotationX * f4 + rotationXY * f4), (rotationZ * f4), (-rotationYZ * f4 + rotationXZ * f4)),
-                new Vec3d((rotationX * f4 + rotationXY * f4), (rotationZ * f4), (rotationYZ * f4 + rotationXZ * f4)),
-                new Vec3d((rotationX * f4 - rotationXY * f4), (-rotationZ * f4), (rotationYZ * f4 - rotationXZ * f4))};
+        Vec3d[] avec3d = ParticleTempData.AVE_3D;
+        avec3d[0].x = -rotationX * f4 - rotationXY * f4;
+        avec3d[0].y = -rotationZ * f4;
+        avec3d[0].z = -rotationYZ * f4 - rotationXZ * f4;
+        avec3d[1].x = -rotationX * f4 + rotationXY * f4;
+        avec3d[1].y = rotationZ * f4;
+        avec3d[1].z = -rotationYZ * f4 + rotationXZ * f4;
+        avec3d[2].x = rotationX * f4 + rotationXY * f4;
+        avec3d[2].y = rotationZ * f4;
+        avec3d[2].z = rotationYZ * f4 + rotationXZ * f4;
+        avec3d[3].x = rotationX * f4 - rotationXY * f4;
+        avec3d[3].y = -rotationZ * f4;
+        avec3d[3].z = rotationYZ * f4 - rotationXZ * f4;
+
         buffer.pos((double)f5 + avec3d[0].x, (double)f6 + avec3d[0].y, (double)f7 + avec3d[0].z).tex(f1, f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[1].x, (double)f6 + avec3d[1].y, (double)f7 + avec3d[1].z).tex(f1, f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[2].x, (double)f6 + avec3d[2].y, (double)f7 + avec3d[2].z).tex(f, f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[3].x, (double)f6 + avec3d[3].y, (double)f7 + avec3d[3].z).tex(f, f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+    }
+
+    public static void rotateVector(Vec3d vec, float angle, Vec3d axis) {
+        double cosTheta = Math.cos(Math.toRadians(angle));
+        double sinTheta = Math.sin(Math.toRadians(angle));
+        double x = (cosTheta + (1 - cosTheta) * axis.x * axis.x) * vec.x +
+                ((1 - cosTheta) * axis.x * axis.y - sinTheta * axis.z) * vec.y +
+                ((1 - cosTheta) * axis.x * axis.z + sinTheta * axis.y) * vec.z;
+        double y = ((1 - cosTheta) * axis.x * axis.y + sinTheta * axis.z) * vec.x +
+                (cosTheta + (1 - cosTheta) * axis.y * axis.y) * vec.y +
+                ((1 - cosTheta) * axis.y * axis.z - sinTheta * axis.x) * vec.z;
+        double z = ((1 - cosTheta) * axis.x * axis.z - sinTheta * axis.y) * vec.x +
+                ((1 - cosTheta) * axis.y * axis.z + sinTheta * axis.x) * vec.y +
+                (cosTheta + (1 - cosTheta) * axis.z * axis.z) * vec.z;
+        vec.set(x,y,z);
     }
 
     @SideOnly(Side.CLIENT)

@@ -1,15 +1,12 @@
 package com.xyazh.kanake.particle.particle;
 
-import com.xyazh.kanake.item.ModItems;
+import com.xyazh.kanake.particle.ParticleTempData;
 import com.xyazh.kanake.util.MathUtils;
-import net.minecraft.client.Minecraft;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,9 +40,12 @@ public class ManaParticle1 extends BaseParticle {
         this.motionY=motion.y;
         this.motionZ=motion.z;
         Vec3d direction =  new Vec3d(dx,dy,dz);
-        Vec3d randomVec1 = direction.crossProduct(new Vec3d(this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble())).normalize();
-        Vec3d randomVec2 = direction.crossProduct(new Vec3d(this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble())).normalize();
-        double r1 = this.rand.nextDouble();
+        Vec3d randomVec1 = new Vec3d();
+        Vec3d randomVec2 = new Vec3d();
+        randomVec1.cross(direction,new Vec3d(this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble()));
+        randomVec1.normalize();
+        randomVec2.cross(direction,new Vec3d(this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble()));
+        randomVec2.normalize();double r1 = this.rand.nextDouble();
         double r2 = (1-r1)*this.rand.nextDouble();
         inPoint1 = new Vec3d(xCoordIn+dx*r1+randomVec1.x,yCoordIn+dy*r1+randomVec1.y,zCoordIn+dz*r1+randomVec1.z);
         inPoint2 = new Vec3d(xCoordIn+dx*r2+randomVec2.x,yCoordIn+dy*r2+randomVec2.y,zCoordIn+dz*r2+randomVec2.z);
@@ -111,8 +111,19 @@ public class ManaParticle1 extends BaseParticle {
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
         int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[] {new Vec3d((double)(-rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double)(-rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(rotationYZ * f4 - rotationXZ * f4))};
-
+        Vec3d[] avec3d = ParticleTempData.AVE_3D;
+        avec3d[0].x = -rotationX * f4 - rotationXY * f4;
+        avec3d[0].y = -rotationZ * f4;
+        avec3d[0].z = -rotationYZ * f4 - rotationXZ * f4;
+        avec3d[1].x = -rotationX * f4 + rotationXY * f4;
+        avec3d[1].y = rotationZ * f4;
+        avec3d[1].z = -rotationYZ * f4 + rotationXZ * f4;
+        avec3d[2].x = rotationX * f4 + rotationXY * f4;
+        avec3d[2].y = rotationZ * f4;
+        avec3d[2].z = rotationYZ * f4 + rotationXZ * f4;
+        avec3d[3].x = rotationX * f4 - rotationXY * f4;
+        avec3d[3].y = -rotationZ * f4;
+        avec3d[3].z = rotationYZ * f4 - rotationXZ * f4;
         buffer.pos((double)f5 + avec3d[0].x, (double)f6 + avec3d[0].y, (double)f7 + avec3d[0].z).tex((double)f1, (double)f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[1].x, (double)f6 + avec3d[1].y, (double)f7 + avec3d[1].z).tex((double)f1, (double)f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[2].x, (double)f6 + avec3d[2].y, (double)f7 + avec3d[2].z).tex((double)f, (double)f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();

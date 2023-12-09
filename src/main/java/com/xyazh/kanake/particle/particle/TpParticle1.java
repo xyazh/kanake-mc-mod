@@ -1,10 +1,11 @@
 package com.xyazh.kanake.particle.particle;
 
+import com.xyazh.kanake.particle.ParticleTempData;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -76,8 +77,19 @@ public class TpParticle1 extends BaseParticle{
         int i = this.getBrightnessForRender(partialTicks);
         int j = i >> 16 & 65535;
         int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[] {new Vec3d((double)(-rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double)(-rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 + rotationXY * f4), (double)(rotationZ * f4), (double)(rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double)(rotationX * f4 - rotationXY * f4), (double)(-rotationZ * f4), (double)(rotationYZ * f4 - rotationXZ * f4))};
-
+        Vec3d[] avec3d = ParticleTempData.AVE_3D;
+        avec3d[0].x = -rotationX * f4 - rotationXY * f4;
+        avec3d[0].y = -rotationZ * f4;
+        avec3d[0].z = -rotationYZ * f4 - rotationXZ * f4;
+        avec3d[1].x = -rotationX * f4 + rotationXY * f4;
+        avec3d[1].y = rotationZ * f4;
+        avec3d[1].z = -rotationYZ * f4 + rotationXZ * f4;
+        avec3d[2].x = rotationX * f4 + rotationXY * f4;
+        avec3d[2].y = rotationZ * f4;
+        avec3d[2].z = rotationYZ * f4 + rotationXZ * f4;
+        avec3d[3].x = rotationX * f4 - rotationXY * f4;
+        avec3d[3].y = -rotationZ * f4;
+        avec3d[3].z = rotationYZ * f4 - rotationXZ * f4;
         buffer.pos((double)f5 + avec3d[0].x, (double)f6 + avec3d[0].y, (double)f7 + avec3d[0].z).tex((double)f1, (double)f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[1].x, (double)f6 + avec3d[1].y, (double)f7 + avec3d[1].z).tex((double)f1, (double)f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         buffer.pos((double)f5 + avec3d[2].x, (double)f6 + avec3d[2].y, (double)f7 + avec3d[2].z).tex((double)f, (double)f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
