@@ -88,7 +88,7 @@ public class TestParticle extends BaseParticle {
         float f2 = (float)this.particleTextureIndexY / 16.0F;
         float f3 = f2 + 0.0624375F;
         float f4 = 0.1F * this.particleScale;
-        rotationZ += 0.1;
+        rotationX += 5;
         if (this.particleTexture != null)
         {
             f = this.particleTexture.getMinU();
