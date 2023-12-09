@@ -67,7 +67,7 @@ public class TestParticle extends BaseParticle {
         this.prevPosZ = this.posZ;
         if (this.particleAge++ >= this.particleMaxAge)
         {
-            this.setExpired();
+            //this.setExpired();
         }
         this.motionX *= 0.8D;
         this.motionY *= 0.8D;
@@ -88,7 +88,7 @@ public class TestParticle extends BaseParticle {
         float f2 = (float)this.particleTextureIndexY / 16.0F;
         float f3 = f2 + 0.0624375F;
         float f4 = 0.1F * this.particleScale;
-
+        rotationZ += 0.1;
         if (this.particleTexture != null)
         {
             f = this.particleTexture.getMinU();

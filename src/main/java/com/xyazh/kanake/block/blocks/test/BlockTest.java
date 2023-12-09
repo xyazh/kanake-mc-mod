@@ -3,6 +3,7 @@ package com.xyazh.kanake.block.blocks.test;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.BlockBase;
 import com.xyazh.kanake.block.blocks.test.render.RenderTest;
+import com.xyazh.kanake.block.blocks.test.render.RenderTest1;
 import com.xyazh.kanake.particle.ModParticles;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -31,7 +32,7 @@ public class BlockTest extends BlockBase implements ITileEntityProvider {
         setResistance(3.0F);
         setLightOpacity(0);
         GameRegistry.registerTileEntity(TileTest.class, new ResourceLocation(Kanake.MODID, name));
-        this.setTickRandomly(true);
+        //this.setTickRandomly(true);
         if (!Kanake.proxy.isServer()) {
             this.bindTileRender();
         }
@@ -41,12 +42,12 @@ public class BlockTest extends BlockBase implements ITileEntityProvider {
     protected void bindTileRender() {
         net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(
                 TileTest.class,
-                new RenderTest());
+                new RenderTest1());
     }
 
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(@Nonnull IBlockState stateIn, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Random rand) {
-        for (int i = 0; i < 1; i++) {
+        /*for (int i = 0; i < 1; i++) {
             double r = rand.nextFloat();
             double phi = rand.nextFloat() * 2 * Math.PI ;
             double fx, fy, fz;
@@ -54,7 +55,7 @@ public class BlockTest extends BlockBase implements ITileEntityProvider {
             fy = rand.nextFloat()/2;
             fz = r * Math.sin(phi);
             worldIn.spawnParticle(ModParticles.TP_PARTICLES1, pos.getX() + fx + 0.5, pos.getY() + fy, pos.getZ() + fz + 0.5, 0, 0, 0);
-        }
+        }*/
     }
 
     @Nullable
@@ -80,7 +81,8 @@ public class BlockTest extends BlockBase implements ITileEntityProvider {
 
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-        return NULL_AABB;
+        return super.getCollisionBoundingBox(blockState,worldIn,pos);
+        //return NULL_AABB;
     }
 
     public boolean isOpaqueCube(@Nonnull IBlockState state) {
@@ -104,7 +106,7 @@ public class BlockTest extends BlockBase implements ITileEntityProvider {
     }
 
     public boolean isCollidable() {
-        return false;
+        return true;
     }
 
     @Nonnull

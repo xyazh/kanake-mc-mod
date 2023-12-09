@@ -17,6 +17,7 @@ import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
+    /*
     public RenderTest() {
         super();
     }
@@ -71,5 +72,5 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.enableFog();
-    }
+    }*/
 }
