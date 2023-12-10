@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -57,11 +58,11 @@ public class Kanake
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static ProxyBase proxy;
 
+    public static boolean HAS_BAUBLES = false;
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-
-
         LoopThread.creatThread();
 
         logger = event.getModLog();
@@ -88,6 +89,8 @@ public class Kanake
         MonoRecipes.addMonoRecipes();
         MyBrewing.addBrewingRecipes();
         MyFurnace.addFurnaceRecipes();
+
+        HAS_BAUBLES = Loader.isModLoaded("baubles");
     }
 
     public void preInitClient(FMLPreInitializationEvent event){

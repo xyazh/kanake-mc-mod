@@ -1,12 +1,64 @@
 package com.xyazh.kanake.render;
 
+import com.xyazh.kanake.util.Vec3d;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GLRenderHelper {
-    static public final void vertexQuads(double x1, double y1, double z1, double x2, double y2, double z2) {
+    private static final Vec3d[] vec3ds= new Vec3d[]{
+            new Vec3d(0,0,1),new Vec3d(0.866025,0,0.5), new Vec3d(-0.866025,0,0.5),
+            new Vec3d(0.866025,0,-0.5),new Vec3d(-0.866025,0,-0.5),new Vec3d(0,0,-1)
+        };
+    private static final int[] index = {0,1,3,5,4,2};
+
+    public static void inCommonUseBegin1(){
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableFog();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.alphaFunc(516, 0.003921569F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    public static void inCommonUseEnd1(){
+        GlStateManager.enableCull();
+        GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableFog();
+    }
+
+    public static void horizontalHexagonAndEdging(double x,double y,double z,double size,long color){
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
+        x += 0.5;
+        y += 1.0;
+        z += 0.5;
+        for (Vec3d vec3d : vec3ds) {
+            bufferbuilder.pos(x + size * vec3d.x, y, z + size * vec3d.z).color(32, 164, 164, 164).endVertex();
+        }
+        tessellator.draw();
+        BufferBuilder bufferbuilder1 = tessellator.getBuffer();
+        GL11.glLineWidth(2.0f);
+        bufferbuilder1.begin(2, DefaultVertexFormats.POSITION_COLOR);
+        for (int i : index) {
+            Vec3d vec3d = vec3ds[i];
+            bufferbuilder.pos(x + size * vec3d.x, y, z + size * vec3d.z).color(64, 255, 255, 255).endVertex();
+        }
+        tessellator.draw();
+    }
+
+    static public void vertexQuads(double x1, double y1, double z1, double x2, double y2, double z2) {
         //右上角点
         //glTexCoord2f(1.0, 1.0)
         GL11.glVertex3d(x2, y2, z2);

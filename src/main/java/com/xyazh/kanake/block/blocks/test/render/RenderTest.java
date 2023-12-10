@@ -22,11 +22,11 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
         super();
     }
 
-    public boolean isGlobalRenderer(@Nonnull TileTest te) {
+    public boolean isGlobalRenderer(@Nonnull TilePlatform te) {
         return true;
     }
 
-    public void renderSquare(TileTest te, BufferBuilder bufferbuilder, float partialTicks, double x, double y, double z, double size, int color) {
+    public void renderSquare(TilePlatform te, BufferBuilder bufferbuilder, float partialTicks, double x, double y, double z, double size, int color) {
 
     }
 
@@ -39,7 +39,7 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
     }
 
 
-    public void render(TileTest te, BufferBuilder bufferbuilder, double cx, double cy, double cz, float partialTicks, int destroyStage, float alpha) {
+    public void render(TilePlatform te, BufferBuilder bufferbuilder, double cx, double cy, double cz, float partialTicks, int destroyStage, float alpha) {
         for (int i = 0; i < te.points.length; i++) {
             double x, y, z;
             x = te.points[i].x + te.m[i].x * partialTicks;
@@ -51,7 +51,7 @@ public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
         }
     }
 
-    public void render(@Nonnull TileTest te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(@Nonnull TilePlatform te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         //this.bindTexture(RenderTileTeleportation.TEXTURE_TP);
         GlStateManager.disableTexture2D();
         GlStateManager.disableFog();
