@@ -1,11 +1,10 @@
 package com.xyazh.kanake.block.blocks.test.render;
 
-import com.xyazh.kanake.render.RenderBezierTube;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.test.TileTest;
-import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -17,60 +16,61 @@ import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public class RenderTest extends TileEntitySpecialRenderer<TileTest> {
-    /*
+    public static final ResourceLocation TEXTURE_TP = new ResourceLocation(Kanake.MODID, "textures/misc/kaimeitsu.png");
+
     public RenderTest() {
         super();
     }
 
-    public boolean isGlobalRenderer(@Nonnull TilePlatform te) {
+    public boolean isGlobalRenderer(@Nonnull TileTest te) {
         return true;
     }
 
-    public void renderSquare(TilePlatform te, BufferBuilder bufferbuilder, float partialTicks, double x, double y, double z, double size, int color) {
-
-    }
-
-    protected void draw(double[] vertices, double[] texCoords, BufferBuilder bufferbuilder, int color) {
-
-    }
-
-    public void renderBezierTube(BufferBuilder bufferBuilder, double x1, double x2, double x3, double x4, double y1, double y2, double y3, double y4, double z1, double z2, double z3, double z4) {
-
-    }
-
-
-    public void render(TilePlatform te, BufferBuilder bufferbuilder, double cx, double cy, double cz, float partialTicks, int destroyStage, float alpha) {
-        for (int i = 0; i < te.points.length; i++) {
-            double x, y, z;
-            x = te.points[i].x + te.m[i].x * partialTicks;
-            y = te.points[i].y + te.m[i].x * partialTicks;
-            z = te.points[i].z + te.m[i].z * partialTicks;
-            Vec3d vl = new Vec3d(x, y, z);
-            int l = (int) (Math.min(4 / vl.length(), 1) * 256);
-            bufferbuilder.pos(cx + x, cy + y, cz + z).color(255, 128, 64, l).endVertex();
-        }
-    }
-
-    public void render(@Nonnull TilePlatform te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        //this.bindTexture(RenderTileTeleportation.TEXTURE_TP);
-        GlStateManager.disableTexture2D();
+    public void render(@Nonnull TileTest te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        this.bindTexture(TEXTURE_TP);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x,y,z);
+        float r = (float) (te.lastR + (te.r - te.lastR) * partialTicks);
+        GlStateManager.rotate(r,0,1,0);
+        GlStateManager.translate(-x,-y,-z);
+        GlStateManager.enableTexture2D();
         GlStateManager.disableFog();
-        GlStateManager.disableLighting();
         GlStateManager.disableCull();
         GlStateManager.depthMask(true);
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
+        GlStateManager.disableLighting();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        int i = 15728880;
+        int j = i % 65536;
+        int k = i / 65536;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
         this.render(te, bufferbuilder, x, y, z, partialTicks, destroyStage, alpha);
         tessellator.draw();
-        GlStateManager.enableCull();
         GlStateManager.enableLighting();
-        GlStateManager.enableTexture2D();
+        GlStateManager.enableCull();
         GlStateManager.enableFog();
-    }*/
+        GlStateManager.popMatrix();
+    }
+
+    private void render(TileTest te, BufferBuilder bufferbuilder, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        int size = te.range*2;
+        double x1 = x - size / 2.0;
+        double z1 = z - size / 2.0;
+        double x2 = x + size / 2.0;
+        double z2 = z + size / 2.0;
+        y += te.lastY + (te.y - te.lastY) * (double) partialTicks;
+        int i = 15728880;
+        int j = i % 65536;
+        int k = i / 65536;
+        bufferbuilder.pos(x1, y, z1).tex(0,0).color(255, 255, 255, 164).lightmap(j,k).endVertex();
+        bufferbuilder.pos(x1, y, z2).tex(0,1).color(255, 255, 255, 164).lightmap(j,k).endVertex();
+        bufferbuilder.pos(x2, y, z2).tex(1,1).color(255, 255, 255, 164).lightmap(j,k).endVertex();
+        bufferbuilder.pos(x2, y, z1).tex(1,0).color(255, 255, 255, 164).lightmap(j,k).endVertex();
+    }
 }

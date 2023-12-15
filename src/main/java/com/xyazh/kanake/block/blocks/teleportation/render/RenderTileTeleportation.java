@@ -136,11 +136,13 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
         GlStateManager.disableBlend();
         GlStateManager.depthMask(true);
         GlStateManager.enableAlpha();
+        int i = 15728880;
+        int j = i % 65536;
+        int k = i / 65536;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         this.render(te, bufferbuilder, x, y, z, partialTicks, destroyStage, alpha);
-
         tessellator.draw();
         GlStateManager.enableCull();
         GlStateManager.enableBlend();

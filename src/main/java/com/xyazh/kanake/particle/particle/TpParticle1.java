@@ -14,12 +14,9 @@ import javax.annotation.Nonnull;
 
 @SideOnly(Side.CLIENT)
 public class TpParticle1 extends BaseParticle{
-    private int begin = 0;
-
     public TpParticle1(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn){
         super(worldIn, xCoordIn, yCoordIn+0.01, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.setRBGColorF(0.12f, 1.0f, 1.0f);
-        this.begin = 10 + this.rand.nextInt(5);
         this.particleMaxAge = 600 + this.rand.nextInt(100);
         this.motionX = 0;
         this.motionY = this.rand.nextDouble()/50;

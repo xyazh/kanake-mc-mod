@@ -3,10 +3,7 @@ package com.xyazh.kanake.item.bauble;
 import com.xyazh.kanake.item.items.ItemBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
-
-import javax.annotation.Nullable;
 
 @Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")
 public class ItemBaubleBase extends ItemBase implements baubles.api.IBauble {
@@ -52,19 +49,5 @@ public class ItemBaubleBase extends ItemBase implements baubles.api.IBauble {
     @Override
     public boolean willAutoSync(ItemStack itemstack, EntityLivingBase player) {
         return true;
-    }
-
-    @Override
-    public void onEquipped(ItemStack itemstack, EntityLivingBase player) {
-        if(Loader.isModLoaded("baubles")){
-            baubles.api.IBauble.super.onEquipped(itemstack, player);
-        }
-    }
-
-    @Override
-    public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {
-        if(Loader.isModLoaded("baubles")){
-            baubles.api.IBauble.super.onUnequipped(itemstack, player);
-        }
     }
 }

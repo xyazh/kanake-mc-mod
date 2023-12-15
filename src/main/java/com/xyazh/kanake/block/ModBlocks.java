@@ -45,5 +45,6 @@ public class ModBlocks {
 			.setOreDict(new String[]{"compressed1xQuartzBlock"})
 			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
-	public static final Block PLATFORM = new BlockPlatform("platform").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+	public static final Block PLATFORM = new BlockPlatform("platform");
+
 }

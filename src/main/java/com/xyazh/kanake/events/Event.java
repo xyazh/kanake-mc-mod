@@ -77,7 +77,7 @@ public class Event {
             return;
         }
         if(baubles.api.BaublesApi.isBaubleEquipped(player,ModItems.MANA_RING_LOW)<=-1){
-            return;
+           return;
         }
         if(!player.isCreative()){
             if(ManaData.sub(player,0.002)>0){
@@ -86,7 +86,6 @@ public class Event {
         }
         World world = player.world;
         BlockPos pos = player.getPosition();
-
         int x = pos.getX();
         int y = pos.getY()-((Math.abs(player.motionY)>0.1)?2:1);
         int z = pos.getZ();
