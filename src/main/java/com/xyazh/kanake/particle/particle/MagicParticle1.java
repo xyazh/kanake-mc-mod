@@ -33,7 +33,7 @@ public class MagicParticle1 extends BaseParticle {
                 this.setRBGColorF(0.8f, 0.0f, 0.8f);
                 break;
             case 5:
-                this.setRBGColorF(0.8f, 0.0f, 0.8f);
+                this.setRBGColorF(1f, 0.0f, 1f);
                 break;
         }
         this.particleMaxAge = 15+this.rand.nextInt(8);

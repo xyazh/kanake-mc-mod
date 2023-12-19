@@ -3,6 +3,9 @@ package com.xyazh.kanake.item.items;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.entity.*;
+import com.xyazh.kanake.util.TpHelper;
+import com.xyazh.kanake.world.ModWorlds;
+import com.xyazh.kanake.world.provider.ProviderArea;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,10 +27,10 @@ public class ItemTestItem extends ItemBase {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         ItemStack itemStack = new ItemStack(this);
         //player.addPotionEffect(new PotionEffect(PotionKoori.POTION_KOORI,1000));
-        //int dim = ModWorlds.getDimIdByName(ProviderMaze.providerName);
-        //TpHelper.changeDimension(player,dim);
+        int dim = ModWorlds.getDimIdByName(ProviderArea.providerName);
+        TpHelper.changeDimension(player,dim);
         //ManaData.add(player,50);
-        if(!world.isRemote){
+        /*if(!world.isRemote){
             for(int i=0;i<100;i++){
                 Vec3d m = Vec3d.fromPitchYaw(
                         (float) (player.rotationPitch + Kanake.rand.nextGaussian()*4),
@@ -36,7 +39,7 @@ public class ItemTestItem extends ItemBase {
                 entity.entityShoot(player,m);
                 world.spawnEntity(entity);
             }
-        }
+        }*/
         return super.onItemRightClick(world, player, hand);
     }
 
