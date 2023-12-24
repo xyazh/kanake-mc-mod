@@ -13,10 +13,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
 
 public class TileTest extends TileEntity implements ITickable {
     public int range = 64;
@@ -78,24 +81,40 @@ public class TileTest extends TileEntity implements ITickable {
                 double theta = 2 * Math.PI * Kanake.rand.nextDouble();
                 double rx = radius * Math.cos(theta);
                 double rz = radius * Math.sin(theta);
-                double ry = Math.pow(Kanake.rand.nextDouble(), 2) * sy;
-                this.world.spawnParticle(ModParticles.KAKERA_PARTICLES, this.pos.getX() + rx, ry, this.pos.getZ() + rz, 0, (Kanake.rand.nextDouble() - 0.5) / 50, 0);
+                double ry = sy;
+                this.world.spawnParticle(ModParticles.BIIMU_PARTICLES, this.pos.getX() + rx, ry, this.pos.getZ() + rz, 0, -4, 0);
             }
         } else {
-            for(int i=0;i<200;i++){
+            int maxX=-1,maxY=-1,maxZ=-1,minX=1,minY=1,minZ=1;
+            for(int i=0;i<50;i++){
                 double radius = Kanake.rand.nextDouble() * this.range;
                 double theta = 2 * Math.PI * Kanake.rand.nextDouble();
                 double rx = radius * Math.cos(theta);
                 double rz = radius * Math.sin(theta);
                 double ry = Kanake.rand.nextDouble() * this.world.getHeight(this.pos.getX() + (int) rx, this.pos.getZ() + (int) rz);
                 BlockPos blockPos = new BlockPos(this.pos.getX() + rx, ry, this.pos.getZ() + rz);
+                if(maxX<minX){
+                    maxX = minX = blockPos.getX();
+                }
+                if(maxY<minY){
+                    maxY = minY = blockPos.getY();
+                }
+                if(maxZ<minZ){
+                    maxZ = minZ = blockPos.getZ();
+                }
+                maxX = Math.max(maxX,blockPos.getX());
+                minX = Math.min(minX,blockPos.getX());
+                maxY = Math.max(maxY,blockPos.getY());
+                minY = Math.min(minY,blockPos.getY());
+                maxZ = Math.max(maxZ,blockPos.getZ());
+                minZ = Math.min(minZ,blockPos.getZ());
                 if(blockPos.equals(this.pos)){
                     continue;
                 }
                 if(this.world.getBlockState(blockPos).getBlock().equals(Blocks.BEDROCK)){
                     continue;
                 }
-                this.world.setBlockToAir(blockPos);
+                world.
             }
             if (this.aabb == null) {
                 double ax, ay, az, ax1, ay1, az1;
@@ -111,13 +130,19 @@ public class TileTest extends TileEntity implements ITickable {
             this.p.y = this.pos.getY();
             this.p.z = this.pos.getZ();
             for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, (e) -> {
+                if(e instanceof EntityPlayer){
+                    EntityPlayer player = (EntityPlayer) e;
+                    if(player.isCreative()){
+                        return false;
+                    }
+                }
                 Vec3d p1 = new Vec3d(e.posX, e.posY, e.posZ);
                 p1.sub(this.p);
                 double l = p1.length();
                 return l <= this.range;
             })) {
                 if (Kanake.rand.nextInt(100) < 10) {
-                    entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 5);
+                    entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 10);
                 }
             }
         }

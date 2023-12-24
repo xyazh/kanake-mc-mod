@@ -1,5 +1,6 @@
 package com.xyazh.kanake.item.items;
 
+import com.sun.javafx.geom.Vec3d;
 import com.xyazh.kanake.block.ModBlocks;
 import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
 import com.xyazh.kanake.data.ManaData;
@@ -21,7 +22,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;

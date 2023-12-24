@@ -39,7 +39,7 @@ public class ModParticles {
     public static final EnumParticleTypes MAGIC_PARTICLES1 = register(new MagicParticle1.Factory(), "magic1_particle", true);
     public static final EnumParticleTypes TP_PARTICLES1 = register(new TpParticle1.Factory(), "tp1_particle", false);
     public static final EnumParticleTypes KAKERA_PARTICLES = register(new KakeraParticle.Factory(), "kakera_particle", true);
-
+    public static final EnumParticleTypes BIIMU_PARTICLES = register(new BiimuParticle.Factory(), "biimu_particle", true);
     public static int nextPerticlesID() {
         while (true) {
             try {

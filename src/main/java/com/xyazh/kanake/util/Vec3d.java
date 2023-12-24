@@ -68,7 +68,11 @@ public class Vec3d {
     }
 
     public void normalize() {
-        double norm = 1.0 / length();
+        double l = length();
+        if(l==0){
+            return;
+        }
+        double norm = 1.0 / l;
         this.x = this.x * norm;
         this.y = this.y * norm;
         this.z = this.z * norm;
@@ -86,9 +90,12 @@ public class Vec3d {
     }
 
     public void cross(Vec3d v) {
-        this.x = this.y * v.z - this.z * v.y;
-        this.y = this.z * v.x - this.x * v.z;
+        double tx,ty;
+        tx = this.y * v.z - this.z * v.y;
+        ty = this.z * v.x - this.x * v.z;
         this.z = this.x * v.y - this.y * v.x;
+        this.x = tx;
+        this.y = ty;
     }
 
     public double dot(Vec3d v1) {
