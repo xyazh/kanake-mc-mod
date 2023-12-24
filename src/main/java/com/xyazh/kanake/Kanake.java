@@ -1,5 +1,7 @@
 package com.xyazh.kanake;
 
+import com.xyazh.kanake.block.blocks.clean.TileClean;
+import com.xyazh.kanake.block.blocks.clean.render.RenderClean;
 import com.xyazh.kanake.common.ConfigLoader;
 import com.xyazh.kanake.gen.GenOreHarmoniumCrystal;
 import com.xyazh.kanake.init.LoopThread;
@@ -10,15 +12,8 @@ import com.xyazh.kanake.proxy.ProxyBase;
 import com.xyazh.kanake.recipes.brewing.MyBrewing;
 import com.xyazh.kanake.recipes.furnace.MyFurnace;
 import com.xyazh.kanake.recipes.mono.MonoRecipes;
-import com.xyazh.kanake.render.shader.Shader;
-import com.xyazh.kanake.render.shader.ShaderDisSources;
-import com.xyazh.kanake.render.shader.ShaderProgram;
 import com.xyazh.kanake.util.Reference;
-import com.xyazh.kanake.util.ResourceLocationHelper;
 import com.xyazh.kanake.world.ModWorlds;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -32,11 +27,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Random;
 
 @Mod(modid = Kanake.MODID, name = Kanake.NAME, version = Kanake.VERSION,dependencies="before:baubles@[1.5.0,)")
@@ -63,6 +56,8 @@ public class Kanake
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+        HAS_BAUBLES = Loader.isModLoaded("baubles");
+
         LoopThread.creatThread();
 
         logger = event.getModLog();
@@ -77,7 +72,7 @@ public class Kanake
         network.registerMessage(new ManaHandler(), ManaPacket.class, 4, Side.CLIENT);
         network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 5, Side.CLIENT);
 
-
+        //GameRegistry.registerTileEntity(TileClean.class, new ResourceLocation(Kanake.MODID, "tile_clean"));
         if(Side.CLIENT.equals(event.getSide())){
             preInitClient(event);
         }else {
@@ -89,10 +84,9 @@ public class Kanake
         MonoRecipes.addMonoRecipes();
         MyBrewing.addBrewingRecipes();
         MyFurnace.addFurnaceRecipes();
-
-        HAS_BAUBLES = Loader.isModLoaded("baubles");
     }
 
+    @SideOnly(Side.CLIENT)
     public void preInitClient(FMLPreInitializationEvent event){
         /*
         ShaderProgram shaderProgram = new ShaderProgram();
@@ -109,6 +103,7 @@ public class Kanake
                 shaderProgram.unUse();
             }
         }*/
+        //net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(TileClean.class, new RenderClean());
     }
 
     public void preInitServer(FMLPreInitializationEvent event){

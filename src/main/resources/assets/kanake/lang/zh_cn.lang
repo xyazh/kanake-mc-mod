@@ -14,6 +14,7 @@ tile.crystaler.desc.4= 末地 末影结晶
 tile.crystaler.desc.5= 迷宫 魔法结晶
 tile.compressed1x_quartz_block.name=压缩下界石英块
 tile.tp.name=传送阵
+tile.clean.name=块-清洗
 
 item.test.name=测试物品
 item.rune.name=符文纸

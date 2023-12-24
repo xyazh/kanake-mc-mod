@@ -1,6 +1,6 @@
 package com.xyazh.kanake.block.blocks.platform;
 
-import com.xyazh.kanake.block.blocks.test.TileTest;
+import com.xyazh.kanake.block.blocks.clean.TileClean;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -8,7 +8,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.annotation.Nonnull;
 
-public class TilePlatform extends TileTest implements ITickable{
+public class TilePlatform extends TileClean implements ITickable{
     public int age = 4;
 
     public TilePlatform(){

@@ -13,7 +13,7 @@ public class ShaderDisSources {
         + "uniform mat4 dm1;\n"
         + "void main()\n"
         + "{\n"
-        + "world_pos = dm1*vec4(a_pos.x, a_pos.y, a_pos.z, 1.0);\n"
+        + "world_pos = dm1*vec4(a_pos.x, a_pos.renderY, a_pos.z, 1.0);\n"
         + "tex_coord = a_tex_coord;\n"
         + "solor = a_color;\n"
         + "normal = (vec4(a_normal,0) * dm1).xyz;\n"

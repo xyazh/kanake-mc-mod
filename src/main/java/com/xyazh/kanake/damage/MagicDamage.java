@@ -11,6 +11,12 @@ public class MagicDamage extends DamageSource {
         this.setMagicDamage();
     }
 
+    public MagicDamage(String damageTypeIn) {
+        super(damageTypeIn);
+        this.setDamageBypassesArmor();
+        this.setMagicDamage();
+    }
+
     public MagicDamage setAttacker(Entity entity){
         this.attacker = entity;
         return this;
