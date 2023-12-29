@@ -4,12 +4,12 @@ import com.xyazh.kanake.block.blocks.BlockBase;
 import com.xyazh.kanake.block.blocks.BlockHarmoniumCrystalOre;
 import com.xyazh.kanake.block.blocks.BlockNIce;
 import com.xyazh.kanake.block.blocks.BlockNFire;
+import com.xyazh.kanake.block.blocks.clean.BlockClean;
 import com.xyazh.kanake.block.blocks.crystaler.BlockCrystaler;
 import com.xyazh.kanake.block.blocks.crystaler.TileCrystaler;
 import com.xyazh.kanake.block.blocks.manatable.*;
 import com.xyazh.kanake.block.blocks.platform.BlockPlatform;
 import com.xyazh.kanake.block.blocks.teleportation.BlockTeleportation;
-import com.xyazh.kanake.block.blocks.test.BlockTest;
 import com.xyazh.kanake.init.ModCreativeTab;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,7 +23,8 @@ public class ModBlocks {
 	public static final Block N_FIRE = new BlockNFire("n_fire");
 	public static final Block N_ICE = new BlockNIce("n_ice");
 	public static final Block TP = new BlockTeleportation("tp");
-	public static final Block TEST = new BlockTest("test_block").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+
+	public static final Block CLEAN = new BlockClean("clean").setCreativeTab(ModCreativeTab.SBW_CREATIVE);;
 
 	public static final Block HARMONIUM_CRYSTAL_ORE =  new BlockHarmoniumCrystalOre("harmonium_crystal_ore")
 			.setOreDict(new String[]{"oreHarmoniumCrystal"});

@@ -1,6 +1,7 @@
 package com.xyazh.kanake.entity.render;
 
 import com.xyazh.kanake.entity.EntityEye;
+import com.xyazh.kanake.entity.EntityTreeMan;
 import com.xyazh.kanake.entity.EntityWSSoul;
 import com.xyazh.kanake.entity.EntityWSSoulBullet;
 import com.xyazh.kanake.util.Reference;
@@ -16,6 +17,7 @@ public class BindEntityRenderer {
         RenderingRegistry.registerEntityRenderingHandler(EntityWSSoul.class, RenderWSSoul::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityWSSoulBullet.class, RenderWSButtleForSoul::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityEye.class, RenderEye::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityTreeMan.class, RenderTreeMan::new);
     }
 
 }

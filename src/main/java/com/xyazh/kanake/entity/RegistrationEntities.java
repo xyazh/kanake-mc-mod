@@ -17,7 +17,7 @@ public class RegistrationEntities {
         event.getRegistry().register(EntityEntryBuilder.create()
                 .entity(EntityFireBall.class)
                 .id(new ResourceLocation(Kanake.MODID, "fire_ball"), 233)
-                .name("EntityFireBall")
+                .name("fire_ball")
                 .tracker(1024, 3, true)
                 .build()
         );
@@ -127,6 +127,16 @@ public class RegistrationEntities {
                 .name("ws_soul_bullet")
                 .tracker(1024, 3, true)
                 .build()
+        );
+        EntityRegistry.registerModEntity(new ResourceLocation(Kanake.MODID,"tree_man"),
+                EntityTreeMan.class,
+                "tree_man",
+                248,
+                Kanake.instance,
+                50,
+                3,
+                true,
+                0xcccccc, 0x00ff00
         );
     }
 
