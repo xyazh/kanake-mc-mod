@@ -15,14 +15,16 @@ public class ItemBaubleBase extends ItemBase implements baubles.api.IBauble {
     public static final int BODY=5;
     public static final int CHARM=6;
 
-    private int baubleType = RING;
+    protected int baubleType = RING;
 
     public ItemBaubleBase(String name) {
         super(name);
+        this.maxStackSize = 1;
     }
 
-    public void setBaubleType(int type){
+    public ItemBaubleBase setBaubleType(int type){
         this.baubleType = type;
+        return this;
     }
 
     @Override

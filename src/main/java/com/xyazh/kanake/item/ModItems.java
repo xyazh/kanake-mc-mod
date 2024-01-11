@@ -3,6 +3,7 @@ package com.xyazh.kanake.item;
 
 import com.xyazh.kanake.init.ModCreativeTab;
 import com.xyazh.kanake.item.axe.ItemHarmoniumCrystalAxe;
+import com.xyazh.kanake.item.bauble.ItemFlyNecklace;
 import com.xyazh.kanake.item.bauble.ItemManaRingHigh;
 import com.xyazh.kanake.item.bauble.ItemManaRingLow;
 import com.xyazh.kanake.item.hoe.ItemHarmoniumCrystalHoe;
@@ -87,6 +88,8 @@ public class ModItems {
             .setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item MANA_RING_HIGH = new ItemManaRingHigh("mana_ring_high")
             .setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+    public static final Item FLY_NECKLACE = new ItemFlyNecklace("fly_necklace")
+        .setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
     public static final Item WS_WS_KAKERA = new ItemBase("ws_kakera")
             .setCreativeTab(ModCreativeTab.SBW_CREATIVE);

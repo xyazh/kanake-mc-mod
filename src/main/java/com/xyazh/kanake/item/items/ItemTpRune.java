@@ -42,8 +42,8 @@ public class ItemTpRune extends ItemBase {
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
+        ItemStack itemStack = player.getHeldItem(hand);
         if (!world.isRemote) {
-            ItemStack itemStack = player.getHeldItem(hand);
             NBTTagCompound compound = itemStack.getTagCompound();
             if (compound == null) {
                 compound = new NBTTagCompound();
@@ -56,7 +56,7 @@ public class ItemTpRune extends ItemBase {
                 }
             }
         }
-        return super.onItemRightClick(world, player, hand);
+        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
     }
 
     @Nonnull

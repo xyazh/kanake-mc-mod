@@ -65,6 +65,7 @@ item.mana_container.name=魔力容器
 item.mana_gem.name=魔力宝石
 item.mana_ring_low.name=初等魔力指环
 item.mana_ring_high.name=高等魔力指环
+item.fly_necklace.name=飞行项链
 item.ws_kakera.name=废怯碎片
 item.ws_ingot.name=废怯铁锭
 item.ws_nugget.name=废怯铁粒
@@ -84,6 +85,7 @@ item.dust_magic.name=魔力粉
 entity.ws_knight.name=废怯骑士
 entity.magic_witch.name=魔法女巫
 entity.ws_soul.name=废怯灵魂
+entity.tree_man.name=树人
 
 kanake.potion.koori=冻结
 

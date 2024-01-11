@@ -8,6 +8,7 @@ import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class ItemHarmoniumCrystalSword extends ItemSwordBase{
     }
 
     @Override
-    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(@Nonnull ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
         if(!target.world.isRemote && (target instanceof EntitySlime)){
             target.attackEntityFrom(new KillSlimeDamage().setAttacker(attacker),Float.MAX_VALUE);
         }

@@ -1,325 +1,87 @@
 package com.xyazh.kanake.entity.render;
 
+import com.xyazh.kanake.Kanake;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * ModelTreeMan - xya
  * Created using Tabula 7.1.0
  */
 public class ModelTreeMan extends ModelBase {
-    public ModelRenderer shape1;
-    public ModelRenderer shape1_1;
-    public ModelRenderer shape1_2;
-    public ModelRenderer shape1_3;
-    public ModelRenderer shape1_4;
-    public ModelRenderer shape1_5;
-    public ModelRenderer shape5;
-    public ModelRenderer shape5_1;
-    public ModelRenderer shape5_2;
-    public ModelRenderer shape5_3;
-    public ModelRenderer shape5_4;
-    public ModelRenderer shape5_5;
-    public ModelRenderer shape5_6;
-    public ModelRenderer shape5_7;
-    public ModelRenderer shape5_8;
-    public ModelRenderer shape5_9;
-    public ModelRenderer shape5_10;
-    public ModelRenderer shape5_11;
-    public ModelRenderer shape5_12;
-    public ModelRenderer shape5_13;
-    public ModelRenderer shape5_14;
-    public ModelRenderer shape5_15;
-    public ModelRenderer shape5_16;
-    public ModelRenderer shape5_17;
-    public ModelRenderer shape5_18;
-    public ModelRenderer shape5_19;
-    public ModelRenderer shape5_20;
-    public ModelRenderer shape5_21;
-    public ModelRenderer shape5_22;
-    public ModelRenderer shape5_23;
-    public ModelRenderer shape5_24;
-    public ModelRenderer shape5_25;
-    public ModelRenderer shape5_26;
-    public ModelRenderer shape5_27;
-    public ModelRenderer shape5_28;
-    public ModelRenderer shape5_29;
-    public ModelRenderer shape5_30;
-    public ModelRenderer shape5_31;
-    public ModelRenderer shape5_32;
-    public ModelRenderer shape5_33;
-    public ModelRenderer shape5_34;
-    public ModelRenderer shape5_35;
-    public ModelRenderer shape5_36;
-    public ModelRenderer shape5_37;
-    public ModelRenderer shape5_38;
-    public ModelRenderer shape5_39;
-    public ModelRenderer shape5_40;
-    public ModelRenderer shape5_41;
-    public ModelRenderer shape5_42;
-    public ModelRenderer shape5_43;
-    public ModelRenderer shape5_44;
-    public ModelRenderer shape5_45;
-    public ModelRenderer shape5_46;
-    public ModelRenderer shape5_47;
-    public ModelRenderer shape5_48;
-    public ModelRenderer shape5_49;
-    public ModelRenderer shape5_50;
-    public ModelRenderer shape5_51;
-    public ModelRenderer shape5_52;
+    public final LinkedList<ModelRenderer> modelRenderers = new LinkedList<>();
+
+    public ModelRenderer newBox(int texOffX,int texOffY,float x,float y,float z){
+        ModelRenderer box = new ModelRenderer(this, texOffX, texOffY);
+        box.setRotationPoint(-8-16*x, -8-16*y, -8-16*z);
+        box.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
+        return box;
+    }
+
+    protected void newLogBox(float x,float y,float z){
+        this.modelRenderers.add(this.newBox(0,0,x,y,z));
+    }
+
+    protected void newLeavesBox(float x,float y,float z){
+        this.modelRenderers.add(this.newBox(0,32,x,y,z));
+    }
 
     public ModelTreeMan() {
         this.textureWidth = 64;
         this.textureHeight = 64;
-        this.shape5_22 = new ModelRenderer(this, 0, 32);
-        this.shape5_22.setRotationPoint(24.00000000000001F, -40.0F, 8.0F);
-        this.shape5_22.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_35 = new ModelRenderer(this, 0, 32);
-        this.shape5_35.setRotationPoint(-24.0F, -24.0F, 24.0F);
-        this.shape5_35.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_11 = new ModelRenderer(this, 0, 32);
-        this.shape5_11.setRotationPoint(7.999999999999997F, -24.0F, -8.0F);
-        this.shape5_11.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_44 = new ModelRenderer(this, 0, 32);
-        this.shape5_44.setRotationPoint(-24.0F, -40.0F, -8.0F);
-        this.shape5_44.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_38 = new ModelRenderer(this, 0, 32);
-        this.shape5_38.setRotationPoint(-24.0F, -24.0F, -24.0F);
-        this.shape5_38.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_47 = new ModelRenderer(this, 0, 32);
-        this.shape5_47.setRotationPoint(-8.0F, -24.0F, 9.0F);
-        this.shape5_47.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_4 = new ModelRenderer(this, 0, 32);
-        this.shape5_4.setRotationPoint(-24.0F, -56.0F, -8.0F);
-        this.shape5_4.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_30 = new ModelRenderer(this, 0, 32);
-        this.shape5_30.setRotationPoint(-40.0F, -24.0F, -8.0F);
-        this.shape5_30.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_18 = new ModelRenderer(this, 0, 32);
-        this.shape5_18.setRotationPoint(24.00000000000001F, -24.0F, 8.0F);
-        this.shape5_18.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_2 = new ModelRenderer(this, 0, 32);
-        this.shape5_2.setRotationPoint(8.0F, -72.0F, -8.0F);
-        this.shape5_2.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_51 = new ModelRenderer(this, 0, 32);
-        this.shape5_51.setRotationPoint(-8.0F, -24.0F, -40.00000000000001F);
-        this.shape5_51.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_7 = new ModelRenderer(this, 0, 32);
-        this.shape5_7.setRotationPoint(7.999999999999997F, -24.0F, 24.0F);
-        this.shape5_7.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_14 = new ModelRenderer(this, 0, 32);
-        this.shape5_14.setRotationPoint(7.999999999999997F, -40.0F, -40.0F);
-        this.shape5_14.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_12 = new ModelRenderer(this, 0, 32);
-        this.shape5_12.setRotationPoint(7.999999999999997F, -40.0F, 24.0F);
-        this.shape5_12.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_9 = new ModelRenderer(this, 0, 32);
-        this.shape5_9.setRotationPoint(7.999999999999997F, -24.0F, -40.0F);
-        this.shape5_9.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_23 = new ModelRenderer(this, 0, 32);
-        this.shape5_23.setRotationPoint(24.00000000000001F, -40.0F, -40.0F);
-        this.shape5_23.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_29 = new ModelRenderer(this, 0, 32);
-        this.shape5_29.setRotationPoint(-40.0F, -24.0F, -24.0F);
-        this.shape5_29.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_20 = new ModelRenderer(this, 0, 32);
-        this.shape5_20.setRotationPoint(24.00000000000001F, -24.0F, -24.0F);
-        this.shape5_20.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_39 = new ModelRenderer(this, 0, 32);
-        this.shape5_39.setRotationPoint(-24.0F, -24.0F, -8.0F);
-        this.shape5_39.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_42 = new ModelRenderer(this, 0, 32);
-        this.shape5_42.setRotationPoint(-24.0F, -40.0F, -40.0F);
-        this.shape5_42.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_27 = new ModelRenderer(this, 0, 32);
-        this.shape5_27.setRotationPoint(-40.0F, -24.0F, 8.0F);
-        this.shape5_27.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_15 = new ModelRenderer(this, 0, 32);
-        this.shape5_15.setRotationPoint(7.999999999999997F, -40.0F, -24.0F);
-        this.shape5_15.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_10 = new ModelRenderer(this, 0, 32);
-        this.shape5_10.setRotationPoint(7.999999999999997F, -24.0F, -24.0F);
-        this.shape5_10.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape1_4 = new ModelRenderer(this, 0, 0);
-        this.shape1_4.setRotationPoint(-8.0F, -56.0F, -8.0F);
-        this.shape1_4.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_37 = new ModelRenderer(this, 0, 32);
-        this.shape5_37.setRotationPoint(-24.0F, -24.0F, -40.0F);
-        this.shape5_37.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_17 = new ModelRenderer(this, 0, 32);
-        this.shape5_17.setRotationPoint(24.00000000000001F, -24.0F, 24.0F);
-        this.shape5_17.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_6 = new ModelRenderer(this, 0, 32);
-        this.shape5_6.setRotationPoint(8.0F, -56.0F, -8.0F);
-        this.shape5_6.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_45 = new ModelRenderer(this, 0, 32);
-        this.shape5_45.setRotationPoint(-8.0F, -40.0F, 25.0F);
-        this.shape5_45.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_19 = new ModelRenderer(this, 0, 32);
-        this.shape5_19.setRotationPoint(24.00000000000001F, -24.0F, -40.0F);
-        this.shape5_19.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape1_3 = new ModelRenderer(this, 0, 0);
-        this.shape1_3.setRotationPoint(-8.0F, -24.0F, -8.0F);
-        this.shape1_3.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_8 = new ModelRenderer(this, 0, 32);
-        this.shape5_8.setRotationPoint(7.999999999999997F, -24.0F, 8.0F);
-        this.shape5_8.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape1_2 = new ModelRenderer(this, 0, 0);
-        this.shape1_2.setRotationPoint(-8.0F, -40.0F, -8.0F);
-        this.shape1_2.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_24 = new ModelRenderer(this, 0, 32);
-        this.shape5_24.setRotationPoint(24.00000000000001F, -40.0F, -24.0F);
-        this.shape5_24.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_31 = new ModelRenderer(this, 0, 32);
-        this.shape5_31.setRotationPoint(-40.0F, -40.0F, 24.0F);
-        this.shape5_31.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_52 = new ModelRenderer(this, 0, 32);
-        this.shape5_52.setRotationPoint(-8.0F, -40.0F, -40.00000000000001F);
-        this.shape5_52.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_50 = new ModelRenderer(this, 0, 32);
-        this.shape5_50.setRotationPoint(-8.0F, -24.0F, -24.000000000000046F);
-        this.shape5_50.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_49 = new ModelRenderer(this, 0, 32);
-        this.shape5_49.setRotationPoint(-8.0F, -40.0F, -24.000000000000046F);
-        this.shape5_49.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_21 = new ModelRenderer(this, 0, 32);
-        this.shape5_21.setRotationPoint(24.00000000000001F, -24.0F, -8.0F);
-        this.shape5_21.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_5 = new ModelRenderer(this, 0, 32);
-        this.shape5_5.setRotationPoint(-8.0F, -56.0F, 8.0F);
-        this.shape5_5.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape1_1 = new ModelRenderer(this, 0, 0);
-        this.shape1_1.setRotationPoint(-8.0F, -8.0F, -8.0F);
-        this.shape1_1.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape1 = new ModelRenderer(this, 0, 0);
-        this.shape1.setRotationPoint(-8.0F, 8.0F, -8.0F);
-        this.shape1.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_34 = new ModelRenderer(this, 0, 32);
-        this.shape5_34.setRotationPoint(-40.0F, -40.0F, -8.0F);
-        this.shape5_34.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_1 = new ModelRenderer(this, 0, 32);
-        this.shape5_1.setRotationPoint(-8.0F, -72.0F, 8.0F);
-        this.shape5_1.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_48 = new ModelRenderer(this, 0, 32);
-        this.shape5_48.setRotationPoint(-8.0F, -40.0F, 9.0F);
-        this.shape5_48.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_26 = new ModelRenderer(this, 0, 32);
-        this.shape5_26.setRotationPoint(-40.0F, -24.0F, 24.0F);
-        this.shape5_26.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_33 = new ModelRenderer(this, 0, 32);
-        this.shape5_33.setRotationPoint(-40.0F, -40.0F, -24.0F);
-        this.shape5_33.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_28 = new ModelRenderer(this, 0, 32);
-        this.shape5_28.setRotationPoint(-40.0F, -24.0F, -40.0F);
-        this.shape5_28.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_25 = new ModelRenderer(this, 0, 32);
-        this.shape5_25.setRotationPoint(24.00000000000001F, -40.0F, -8.0F);
-        this.shape5_25.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_43 = new ModelRenderer(this, 0, 32);
-        this.shape5_43.setRotationPoint(-24.0F, -40.0F, -24.0F);
-        this.shape5_43.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_36 = new ModelRenderer(this, 0, 32);
-        this.shape5_36.setRotationPoint(-24.0F, -24.0F, 8.0F);
-        this.shape5_36.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_32 = new ModelRenderer(this, 0, 32);
-        this.shape5_32.setRotationPoint(-40.0F, -40.0F, 8.0F);
-        this.shape5_32.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape1_5 = new ModelRenderer(this, 0, 32);
-        this.shape1_5.setRotationPoint(-8.0F, -72.0F, -8.0F);
-        this.shape1_5.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_16 = new ModelRenderer(this, 0, 32);
-        this.shape5_16.setRotationPoint(7.999999999999997F, -40.0F, -8.0F);
-        this.shape5_16.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5 = new ModelRenderer(this, 0, 32);
-        this.shape5.setRotationPoint(-8.0F, -72.0F, -24.0F);
-        this.shape5.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_40 = new ModelRenderer(this, 0, 32);
-        this.shape5_40.setRotationPoint(-24.0F, -40.0F, 24.0F);
-        this.shape5_40.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_13 = new ModelRenderer(this, 0, 32);
-        this.shape5_13.setRotationPoint(7.999999999999997F, -40.0F, 8.0F);
-        this.shape5_13.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_41 = new ModelRenderer(this, 0, 32);
-        this.shape5_41.setRotationPoint(-24.0F, -40.0F, 8.0F);
-        this.shape5_41.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_3 = new ModelRenderer(this, 0, 32);
-        this.shape5_3.setRotationPoint(-8.0F, -56.0F, -24.0F);
-        this.shape5_3.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
-        this.shape5_46 = new ModelRenderer(this, 0, 32);
-        this.shape5_46.setRotationPoint(-8.0F, -24.0F, 25.0F);
-        this.shape5_46.addBox(0.0F, 0.0F, 0.0F, 16, 16, 16, 0.0F);
+        this.generate();
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.shape5_22.render(f5);
-        this.shape5_35.render(f5);
-        this.shape5_11.render(f5);
-        this.shape5_44.render(f5);
-        this.shape5_38.render(f5);
-        this.shape5_47.render(f5);
-        this.shape5_4.render(f5);
-        this.shape5_30.render(f5);
-        this.shape5_18.render(f5);
-        this.shape5_2.render(f5);
-        this.shape5_51.render(f5);
-        this.shape5_7.render(f5);
-        this.shape5_14.render(f5);
-        this.shape5_12.render(f5);
-        this.shape5_9.render(f5);
-        this.shape5_23.render(f5);
-        this.shape5_29.render(f5);
-        this.shape5_20.render(f5);
-        this.shape5_39.render(f5);
-        this.shape5_42.render(f5);
-        this.shape5_27.render(f5);
-        this.shape5_15.render(f5);
-        this.shape5_10.render(f5);
-        this.shape1_4.render(f5);
-        this.shape5_37.render(f5);
-        this.shape5_17.render(f5);
-        this.shape5_6.render(f5);
-        this.shape5_45.render(f5);
-        this.shape5_19.render(f5);
-        this.shape1_3.render(f5);
-        this.shape5_8.render(f5);
-        this.shape1_2.render(f5);
-        this.shape5_24.render(f5);
-        this.shape5_31.render(f5);
-        this.shape5_52.render(f5);
-        this.shape5_50.render(f5);
-        this.shape5_49.render(f5);
-        this.shape5_21.render(f5);
-        this.shape5_5.render(f5);
-        this.shape1_1.render(f5);
-        this.shape1.render(f5);
-        this.shape5_34.render(f5);
-        this.shape5_1.render(f5);
-        this.shape5_48.render(f5);
-        this.shape5_26.render(f5);
-        this.shape5_33.render(f5);
-        this.shape5_28.render(f5);
-        this.shape5_25.render(f5);
-        this.shape5_43.render(f5);
-        this.shape5_36.render(f5);
-        this.shape5_32.render(f5);
-        this.shape1_5.render(f5);
-        this.shape5_16.render(f5);
-        this.shape5.render(f5);
-        this.shape5_40.render(f5);
-        this.shape5_13.render(f5);
-        this.shape5_41.render(f5);
-        this.shape5_3.render(f5);
-        this.shape5_46.render(f5);
+    public void render(@Nonnull Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        for(ModelRenderer modelRenderer:this.modelRenderers){
+            modelRenderer.render(f5);
+        }
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+    public void generate()
+    {
+        BlockPos position = new BlockPos(0,-1,0);
+        Random rand = Kanake.rand;
+        int i = rand.nextInt(3) + 5;
+        for (int i2 = position.getY() - 3 + i; i2 <= position.getY() + i; ++i2)
+        {
+            int k2 = i2 - (position.getY() + i);
+            int l2 = 1 - k2 / 2;
+            for (int i3 = position.getX() - l2; i3 <= position.getX() + l2; ++i3)
+            {
+                int j1 = i3 - position.getX();
+
+                for (int k1 = position.getZ() - l2; k1 <= position.getZ() + l2; ++k1)
+                {
+                    int l1 = k1 - position.getZ();
+
+                    if (Math.abs(j1) != l2 || Math.abs(l1) != l2 || rand.nextInt(2) != 0 && k2 != 0)
+                    {
+                        this.newLeavesBox(i3, i2, k1);
+                    }
+                }
+            }
+        }
+        for (int j2 = 0; j2 < i; ++j2)
+        {
+            BlockPos upN = position.up(j2);
+            this.newLogBox(upN.getX(), upN.getY(), upN.getZ());
+        }
     }
 }

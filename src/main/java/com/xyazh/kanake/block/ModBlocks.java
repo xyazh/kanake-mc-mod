@@ -8,7 +8,6 @@ import com.xyazh.kanake.block.blocks.clean.BlockClean;
 import com.xyazh.kanake.block.blocks.crystaler.BlockCrystaler;
 import com.xyazh.kanake.block.blocks.crystaler.TileCrystaler;
 import com.xyazh.kanake.block.blocks.manatable.*;
-import com.xyazh.kanake.block.blocks.platform.BlockPlatform;
 import com.xyazh.kanake.block.blocks.teleportation.BlockTeleportation;
 import com.xyazh.kanake.init.ModCreativeTab;
 import net.minecraft.block.Block;
@@ -45,7 +44,4 @@ public class ModBlocks {
 	public static final Block COMPRESSED1X_QUARTZ_BLOCK = new BlockBase("compressed1x_quartz_block", Material.IRON)
 			.setOreDict(new String[]{"compressed1xQuartzBlock"})
 			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
-
-	public static final Block PLATFORM = new BlockPlatform("platform");
-
 }
