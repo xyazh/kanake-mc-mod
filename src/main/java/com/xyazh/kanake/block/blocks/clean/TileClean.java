@@ -66,7 +66,7 @@ public class TileClean extends TileEntity implements ITickable {
     public void update() {
         this.checkEnd();
         double sy = 128;
-        if (this.world.provider != null) {
+        if ((!this.world.isRemote) && this.world.provider != null) {
             sy = this.world.provider.getCloudHeight();
             if(sy<128){
                 sy = 128;

@@ -138,6 +138,13 @@ public class RegistrationEntities {
                 true,
                 0xcccccc, 0x00ff00
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityLaunch.class)
+                .id(new ResourceLocation(Kanake.MODID, "launch"), 249)
+                .name("launch")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 
     @SubscribeEvent

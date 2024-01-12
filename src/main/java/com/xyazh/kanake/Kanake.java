@@ -71,6 +71,7 @@ public class Kanake
         network.registerMessage(new KooriEntityHandler(), KooriEntityPacket.class, 3, Side.CLIENT);
         network.registerMessage(new ManaHandler(), ManaPacket.class, 4, Side.CLIENT);
         network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 5, Side.CLIENT);
+        network.registerMessage(new FlyHandler(), FlyPacket.class, 6, Side.SERVER);
 
         //GameRegistry.registerTileEntity(TileClean.class, new ResourceLocation(Kanake.MODID, "tile_clean"));
         if(Side.CLIENT.equals(event.getSide())){

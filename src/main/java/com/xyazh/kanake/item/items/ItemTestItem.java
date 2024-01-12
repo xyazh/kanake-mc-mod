@@ -42,13 +42,22 @@ public class ItemTestItem extends ItemBase {
                 world.spawnEntity(entity);
             }
         }*/
+        if (!world.isRemote) {
+            Vec3d m = Vec3d.fromPitchYaw(
+                    (float) (player.rotationPitch),
+                    (float) (player.rotationYaw));
+            EntityShoot entity = new EntityLaunch(world);
+            entity.entityShoot(player, m);
+            world.spawnEntity(entity);
+            player.startRiding(entity);
+        }
         return super.onItemRightClick(world, player, hand);
     }
 
     @Nonnull
     @Override
     public EnumActionResult onItemUse(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        worldIn.setTileEntity(pos,new TileClean());
+        worldIn.setTileEntity(pos, new TileClean());
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 

@@ -6,6 +6,7 @@ import com.xyazh.kanake.damage.CleanDamage;
 import com.xyazh.kanake.damage.KillSlimeDamage;
 import com.xyazh.kanake.item.ModItems;
 import com.xyazh.kanake.item.bauble.ItemFlyNecklace;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -13,6 +14,7 @@ import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -52,25 +54,6 @@ public class Event {
             ItemStack itemStack = new ItemStack(ModItems.HEART);
             entityItem.setItem(itemStack);
             event.getDrops().add(entityItem);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onFall(LivingFallEvent event){
-        EntityLivingBase entity = event.getEntityLiving();
-        for(ItemStack itemStack:entity.getHeldEquipment()){
-            if (itemStack.getItem() instanceof ItemFlyNecklace){
-                event.setCanceled(true);
-                return;
-            }
-        }
-        if(!Kanake.HAS_BAUBLES){
-            return;
-        }
-        if(entity instanceof EntityPlayer){
-            if(baubles.api.BaublesApi.isBaubleEquipped((EntityPlayer) entity,ModItems.FLY_NECKLACE)>=0){
-                event.setCanceled(true);
-            }
         }
     }
 
