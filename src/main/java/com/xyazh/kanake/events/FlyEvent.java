@@ -79,7 +79,6 @@ public class FlyEvent {
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
             if(!SPACE_KEY_DOWN){
-                System.out.println("Space key down");
                 FlyPacket packet = new FlyPacket();
                 packet.keyDown = true;
                 PLAYER_MAP.put(player, true);
@@ -88,7 +87,6 @@ public class FlyEvent {
             SPACE_KEY_DOWN = true;
         }else {
             if(SPACE_KEY_DOWN){
-                System.out.println("Space key up");
                 FlyPacket packet = new FlyPacket();
                 packet.keyDown = false;
                 PLAYER_MAP.put(player, false);

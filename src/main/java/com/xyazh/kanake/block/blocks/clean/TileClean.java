@@ -92,6 +92,7 @@ public class TileClean extends TileEntity implements ITickable {
             this.vecPos.x = this.pos.getX();
             this.vecPos.y = this.pos.getY();
             this.vecPos.z = this.pos.getZ();
+            this.world.getChunkProvider();
             for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, atkAABB, (e) -> {
                 if(e instanceof EntityPlayer){
                     return false;

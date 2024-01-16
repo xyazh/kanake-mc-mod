@@ -116,9 +116,6 @@ public class ModItems {
     public static final Item WS_MAGIC_SWORD = new ItemWSMagicSword("ws_magic_sword")
             .setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
-    public static final Item HEART = new ItemBase("heart")
-            .setOreDict(new String[]{"heart","forge:heart","heartHuman","humanHeart"})
-            .setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item DUST_MAGIC= new ItemBase("dust_magic")
             .setOreDict(new String[]{"dustMagic"})
             .setCreativeTab(ModCreativeTab.SBW_CREATIVE);

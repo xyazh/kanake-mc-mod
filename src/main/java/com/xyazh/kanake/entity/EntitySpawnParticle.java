@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntitySpawnParticle extends Entity implements IEntityAdditionalSpawnData {
     protected double x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
-    protected int age = 0;
+    public int age = 0;
     protected int itemId = 0;
 
     public EntitySpawnParticle(World worldIn) {

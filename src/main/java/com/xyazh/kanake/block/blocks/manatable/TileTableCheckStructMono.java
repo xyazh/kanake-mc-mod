@@ -193,18 +193,32 @@ public class TileTableCheckStructMono extends TileTableMono{
                     blockPosD1,blockPosS3,blockPosS2,blockPosS1
             };
             for(BlockPos p:blockPos){
-                if(!(world.getTileEntity(p) instanceof TileTableMono)){
-                    world.setBlockState(p, ModBlocks.T_MONO.getDefaultState());
-                }
+                this.initSubTile(p);
             }
         }else if(this.isStructuralIntegrityS){
             BlockPos[] blockPos = {blockPosAA,blockPosAS,blockPosSA,blockPosSS};
             for(BlockPos p:blockPos){
-                if(!(world.getTileEntity(p) instanceof TileTableMono)){
-                    world.setBlockState(p, ModBlocks.T_MONO.getDefaultState());
-                }
+                this.initSubTile(p);
             }
         }
+    }
+
+    protected void initSubTile(BlockPos pos){
+        TileEntity te = this.world.getTileEntity(pos);
+        TileTableMono tileTableMono;
+        if(te instanceof TileTableMono){
+            tileTableMono = (TileTableMono) te;
+        }else {
+            this.world.setBlockState(pos, ModBlocks.T_MONO.getDefaultState());
+            te = this.world.getTileEntity(pos);
+            if(te instanceof TileTableMono){
+                tileTableMono = (TileTableMono) te;
+            }else {
+                tileTableMono = new TileTableMono();
+                this.world.setTileEntity(pos,tileTableMono);
+            }
+        }
+        tileTableMono.coreBlockPos = this.pos;
     }
 
     public LinkedList<TileTableMono> getSubTile(){

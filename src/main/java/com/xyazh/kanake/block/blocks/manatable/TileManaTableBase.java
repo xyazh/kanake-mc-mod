@@ -16,6 +16,10 @@ import javax.annotation.Nonnull;
 public class TileManaTableBase extends TileBase implements ITickable {
     protected ItemStack[] itemStacks = {ItemStack.EMPTY};
 
+    public void onInvChanges(){
+
+    }
+
     @Override
     public void update() {
     }
@@ -34,6 +38,7 @@ public class TileManaTableBase extends TileBase implements ITickable {
     @Override
     //取出槽位中的Item
     public ItemStack removeStackFromSlot(int index) {
+        this.onInvChanges();
         ItemStack itemStack = this.itemStacks[0];
         this.itemStacks[0] = ItemStack.EMPTY;
         return itemStack;
@@ -42,6 +47,7 @@ public class TileManaTableBase extends TileBase implements ITickable {
     @Nonnull
     //添加槽位中的Item
     public ItemStack addStackFromSlot(int index,ItemStack itemStack){
+        this.onInvChanges();
         if(itemStacks[0].equals(ItemStack.EMPTY)){
             int count = itemStack.getCount();
             int maxCount = this.getInventoryStackLimit();
@@ -97,6 +103,7 @@ public class TileManaTableBase extends TileBase implements ITickable {
     @Override
     //取出一定数量的物品
     public ItemStack decrStackSize(int index, int count) {
+        this.onInvChanges();
         if(this.isEmpty()){
             return ItemStack.EMPTY;
         }
@@ -114,6 +121,7 @@ public class TileManaTableBase extends TileBase implements ITickable {
     @Override
     //设置槽位中的物品
     public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
+        this.onInvChanges();
         this.itemStacks[0] = stack;
         this.itemStacks[0].setCount(1);
     }
@@ -138,6 +146,7 @@ public class TileManaTableBase extends TileBase implements ITickable {
 
     @Override
     public void clear() {
+        this.onInvChanges();
         this.itemStacks[0] = ItemStack.EMPTY;
     }
 
@@ -147,21 +156,30 @@ public class TileManaTableBase extends TileBase implements ITickable {
         return "mana_table";
     }
 
-    public void readFromNBT(@Nonnull NBTTagCompound compound)
-    {
-        super.readFromNBT(compound);
+    public void readItemStacks(@Nonnull NBTTagCompound compound){
         NonNullList<ItemStack> itemStackList = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, itemStackList);
         itemStacks[0]=itemStackList.get(0);
+    }
+
+    public NBTTagCompound writeItemStacks(@Nonnull NBTTagCompound compound){
+        NonNullList<ItemStack> itemStackList = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        itemStackList.set(0,itemStacks[0]);
+        ItemStackHelper.saveAllItems(compound, itemStackList);
+        return compound;
+    }
+
+    public void readFromNBT(@Nonnull NBTTagCompound compound)
+    {
+        super.readFromNBT(compound);
+        this.readItemStacks(compound);
     }
 
     @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-        NonNullList<ItemStack> itemStackList = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
-        itemStackList.set(0,itemStacks[0]);
-        ItemStackHelper.saveAllItems(compound, itemStackList);
+        compound = writeItemStacks(compound);
         return compound;
     }
 }

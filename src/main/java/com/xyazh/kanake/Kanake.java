@@ -81,10 +81,6 @@ public class Kanake
         }
 
         ModWorlds.registerAllDim();
-
-        MonoRecipes.addMonoRecipes();
-        MyBrewing.addBrewingRecipes();
-        MyFurnace.addFurnaceRecipes();
     }
 
     @SideOnly(Side.CLIENT)
@@ -122,6 +118,9 @@ public class Kanake
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         RegistryHandler.postInitReg();
+        MonoRecipes.addMonoRecipes();
+        MyBrewing.addBrewingRecipes();
+        MyFurnace.addFurnaceRecipes();
     }
 
     @EventHandler

@@ -48,13 +48,6 @@ public class Event {
                 event.getDrops().add(entityItem);
             }
         }
-        if(entity instanceof EntityPlayer || entity instanceof EntityVillager){
-            EntityItem entityItem = new EntityItem(entity.world);
-            entityItem.setPosition(entity.posX,entity.posY,entity.posZ);
-            ItemStack itemStack = new ItemStack(ModItems.HEART);
-            entityItem.setItem(itemStack);
-            event.getDrops().add(entityItem);
-        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
