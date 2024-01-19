@@ -11,6 +11,7 @@ import com.xyazh.kanake.particle.ModParticles;
 import com.xyazh.kanake.proxy.ProxyBase;
 import com.xyazh.kanake.recipes.brewing.MyBrewing;
 import com.xyazh.kanake.recipes.furnace.MyFurnace;
+import com.xyazh.kanake.recipes.mono.MonoFunctions;
 import com.xyazh.kanake.recipes.mono.MonoRecipes;
 import com.xyazh.kanake.util.Reference;
 import com.xyazh.kanake.world.ModWorlds;
@@ -56,16 +57,13 @@ public class Kanake
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        HAS_BAUBLES = Loader.isModLoaded("baubles");
-
-        LoopThread.creatThread();
-
         logger = event.getModLog();
-        RegistryHandler.preInitRegistries(event);
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
-
-        ConfigLoader configLoader = new ConfigLoader(event);
-
+        HAS_BAUBLES = Loader.isModLoaded("baubles");
+        ConfigLoader.init(event);
+        LoopThread.creatThread();
+        MonoFunctions.addFunc();
+        RegistryHandler.preInitRegistries(event);
         GameRegistry.registerWorldGenerator(new GenOreHarmoniumCrystal(),130);
 
         network.registerMessage(new KooriEntityHandler(), KooriEntityPacket.class, 3, Side.CLIENT);
@@ -73,7 +71,6 @@ public class Kanake
         network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 5, Side.CLIENT);
         network.registerMessage(new FlyHandler(), FlyPacket.class, 6, Side.SERVER);
 
-        //GameRegistry.registerTileEntity(TileClean.class, new ResourceLocation(Kanake.MODID, "tile_clean"));
         if(Side.CLIENT.equals(event.getSide())){
             preInitClient(event);
         }else {

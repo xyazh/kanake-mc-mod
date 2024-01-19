@@ -1,5 +1,6 @@
 package com.xyazh.kanake.block.blocks.manatable;
 
+import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.entity.EntitySpawnParticle;
 import com.xyazh.kanake.recipes.mono.MonoRecipeHelper;
 import com.xyazh.kanake.recipes.mono.MonoRecipe;

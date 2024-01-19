@@ -25,6 +25,11 @@ public class MonoWorkingRecipe {
     public boolean isFail = false;
     public boolean isFinish = false;
     private RecipeSlot workingSlot = null;
+    @Nonnull
+    public MonoFunction fucFinish = new MonoFunction("finish");
+    @Nonnull
+    public MonoFunction fucFail = new MonoFunction("fail");
+
     protected TileTableCoreMono coreMono;
     public MonoWorkingRecipe(TileTableCoreMono coreMono){
         this.coreMono = coreMono;
@@ -36,11 +41,13 @@ public class MonoWorkingRecipe {
 
     protected void onFinish(){
         this.isFinish = true;
+        boolean success = this.fucFinish.callFuc(this);
         this.coreMono.setInventorySlotContents(0,this.outItem.copy());
     }
 
     protected void onFail(){
         this.isFail = true;
+        boolean success = this.fucFail.callFuc(this);
     }
 
     public void doWork(){
@@ -125,12 +132,14 @@ public class MonoWorkingRecipe {
         this.clear();
         this.coreItem = coreItem;
         this.outItem = outItem;
+        this.fucFinish = recipe.getFinishFuc(this.coreMono,outTiles);
+        this.fucFail = recipe.getFailFuc(this.coreMono,outTiles);
         for (int i = 0; i < outTiles.size(); i++) {
             TileTableMono tileTableMono = outTiles.get(i);
             RecipeSlot slot = new RecipeSlot(i);
             slot.pos = tileTableMono.getPos();
             slot.itemStack = tileTableMono.getStackInSlot(0);
-            slot.time = recipe.getTime(slot.itemStack);
+            slot.time = recipe.getTime(this.coreMono,outTiles,slot.itemStack);
             this.map.put(slot.pos, slot);
         }
     }
@@ -142,6 +151,8 @@ public class MonoWorkingRecipe {
         this.isFail = false;
         this.isFinish = false;
         this.workingSlot = null;
+        this.fucFinish = new MonoFunction("finish");
+        this.fucFail = new MonoFunction("fail");
     }
 
     protected boolean checkItemStack(ItemStack itemStack1, ItemStack itemStack2) {
@@ -170,6 +181,8 @@ public class MonoWorkingRecipe {
         }
         this.isFail = subCompound.getBoolean("isFail");
         this.isFinish = subCompound.getBoolean("isFinish");
+        this.fucFinish.readFromNBT(subCompound);
+        this.fucFail.readFromNBT(subCompound);
     }
 
     @Nonnull
@@ -185,6 +198,8 @@ public class MonoWorkingRecipe {
         }
         subCompound.setBoolean("isFail",this.isFail);
         subCompound.setBoolean("isFinish",this.isFinish);
+        subCompound = this.fucFinish.writeToNBT(subCompound);
+        subCompound = this.fucFail.writeToNBT(subCompound);
         compound.setTag("mono_working_recipe", subCompound);
         return compound;
     }

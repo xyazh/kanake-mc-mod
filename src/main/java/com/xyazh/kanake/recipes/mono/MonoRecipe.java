@@ -2,6 +2,8 @@ package com.xyazh.kanake.recipes.mono;
 
 import com.google.common.collect.Lists;
 import com.xyazh.kanake.Kanake;
+import com.xyazh.kanake.block.blocks.manatable.TileTableCoreMono;
+import com.xyazh.kanake.block.blocks.manatable.TileTableMono;
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -54,9 +56,20 @@ public class MonoRecipe {
         return output;
     }
 
-    public int getTime(ItemStack itemStack){
+    public int getTime(TileTableCoreMono coreMono, LinkedList<TileTableMono> outTiles, ItemStack itemStack){
         return 60;
     }
+
+    public MonoFunction getFailFuc(TileTableCoreMono coreMono, LinkedList<TileTableMono> outTiles){
+        return new MonoFunction("fail");
+    }
+
+    public MonoFunction getFinishFuc(TileTableCoreMono coreMono, LinkedList<TileTableMono> outTiles){
+        MonoFunction monoFunction = new MonoFunction("finish");
+        monoFunction.func.add("explosion");
+        return monoFunction;
+    }
+
 
     @Nonnull
     public ItemStack getCraftingResult() {
