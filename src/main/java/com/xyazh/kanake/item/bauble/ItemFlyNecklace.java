@@ -36,28 +36,6 @@ public class ItemFlyNecklace extends ItemBaubleBase{
         super.onUnequipped(itemstack, player);
     }
 
-    @Nonnull
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer player, @Nonnull EnumHand hand)
-    {
-        ItemStack itemStack = new ItemStack(this);
-        boolean flag = false;
-        double mana = ManaData.get(player);
-        if(player.isCreative()){
-            flag = true;
-        }else if(mana>=4){
-            flag = true;
-            ManaData.sub(player,4);
-        }
-        if(flag){
-            Vec3d m = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYaw);
-            player.motionX += m.x/4;
-            player.motionY += m.y/4+0.4;
-            player.motionZ += m.z/4;
-        }
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
-    }
-
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack stack) {
         return true;

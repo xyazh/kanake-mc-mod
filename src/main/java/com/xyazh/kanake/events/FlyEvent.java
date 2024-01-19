@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
@@ -27,9 +28,6 @@ public class FlyEvent {
 
     @SubscribeEvent
     public static void flyPlayer(TickEvent.PlayerTickEvent event){
-        if(!Kanake.HAS_BAUBLES){
-            return;
-        }
         if(!PLAYER_MAP.containsKey(event.player)){
             return;
         }
@@ -37,14 +35,27 @@ public class FlyEvent {
             if((!event.player.isCreative())&&ManaData.get(event.player)<=0){
                 return;
             }
-            if(baubles.api.BaublesApi.isBaubleEquipped(event.player, ModItems.FLY_NECKLACE)>=0){
-                event.player.motionY += 0.05;
-                event.player.motionY = Math.min(3,event.player.motionY);
+            boolean flag = false;
+            if(Kanake.HAS_BAUBLES){
+                if(baubles.api.BaublesApi.isBaubleEquipped(event.player, ModItems.FLY_NECKLACE)>=0){
+                    flag = true;
+                }
             }
-            if(!event.player.isCreative()){
-                if(Kanake.rand.nextFloat() <= 0.01){
-                    if(event.player instanceof EntityPlayerMP){
-                        ManaData.subSync((EntityPlayerMP) event.player, Kanake.rand.nextFloat() + 0.5);
+            if(!flag){
+                if(event.player.getHeldItemMainhand().getItem() instanceof ItemFlyNecklace){
+                    flag = true;
+                }else if(event.player.getHeldItemOffhand().getItem() instanceof ItemFlyNecklace){
+                    flag = true;
+                }
+            }
+            if(flag){
+                event.player.motionY += 0.1;
+                event.player.motionY = Math.min(1.5,event.player.motionY);
+                if(!event.player.isCreative()){
+                    if(Kanake.rand.nextFloat() <= 0.05){
+                        if(event.player instanceof EntityPlayerMP){
+                            ManaData.subSync((EntityPlayerMP) event.player, Kanake.rand.nextFloat() + 0.5);
+                        }
                     }
                 }
             }
