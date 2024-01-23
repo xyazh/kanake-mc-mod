@@ -14,13 +14,13 @@ import java.util.Random;
 public class GenOreHarmoniumCrystal implements IWorldGenerator {
     private final PublicBlockPos blockPos = new PublicBlockPos(0,0,0);
     private final IBlockState blockState = ModBlocks.HARMONIUM_CRYSTAL_ORE.getDefaultState();
-    private final WorldGenMinable worldGenMinable = new WorldGenMinable(blockState,7);
+    private final WorldGenMinable worldGenMinable = new WorldGenMinable(blockState,4);
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        for(int n=0;n<30;n++){
+        for(int n=0;n<15;n++){
             blockPos.x = (chunkX << 4) + random.nextInt(16);
             blockPos.z = (chunkZ << 4) + random.nextInt(16);
-            blockPos.y = random.nextInt(118)+2;
+            blockPos.y = random.nextInt(62)+2;
             worldGenMinable.generate(world,random,blockPos);
         }
     }

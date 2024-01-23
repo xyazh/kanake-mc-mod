@@ -92,7 +92,6 @@ public class Kanake
                 shaderProgram.unUse();
             }
         }*/
-        //net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(TileClean.class, new RenderClean());
     }
 
     public void preInitServer(FMLPreInitializationEvent event){

@@ -38,7 +38,7 @@ public class MonoRecipe {
     }
 
     public void onFail(MonoWorkingRecipe workingRecipe){
-
+        workingRecipe.coreMono.removeStackFromSlot(0);
     }
 
     public MonoRecipe(@Nonnull ResourceLocation id,@Nonnull Object coreItem, @Nonnull ItemStack result, Object[] recipe) {
