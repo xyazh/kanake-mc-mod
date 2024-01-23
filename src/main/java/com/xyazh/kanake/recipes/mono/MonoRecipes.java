@@ -1,71 +1,67 @@
 package com.xyazh.kanake.recipes.mono;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import com.xyazh.kanake.Kanake;
+import net.minecraft.util.ResourceLocation;
 
 public class MonoRecipes {
     public static void addMonoRecipes() {
         //火之调和水晶
-        MonoRecipeHelper.addStringRecipes("<ore:gemHarmoniumCrystal>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_harmonium_crystal_fire"),
+                "<ore:gemHarmoniumCrystal>|" +
                 "<ore:shardFire>,<ore:shardFire>,<ore:shardFire>,<ore:shardFire>|" +
                 "<kanake:harmonium_crystal_fire>");
         //冰之调和水晶
-        MonoRecipeHelper.addStringRecipes("<ore:gemHarmoniumCrystal>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_harmonium_crystal_ice"),
+                "<ore:gemHarmoniumCrystal>|" +
                 "<ore:shardIce>,<ore:shardIce>,<ore:shardIce>,<ore:shardIce>|" +
                 "<kanake:harmonium_crystal_ice>");
         //蕴魔调和水晶
-        MonoRecipeHelper.addStringRecipes("<ore:gemHarmoniumCrystal>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_harmonium_crystal_magic"),
+                "<ore:gemHarmoniumCrystal>|" +
                 "<ore:shardMagic>,<ore:shardMagic>,<ore:shardMagic>,<ore:shardMagic>|" +
                 "<kanake:harmonium_crystal_magic>");
         //末影调和水晶
-        MonoRecipeHelper.addStringRecipes("<ore:gemHarmoniumCrystal>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_harmonium_crystal_end"),
+                "<ore:gemHarmoniumCrystal>|" +
                 "<ore:shardEnder>,<ore:shardEnder>,<ore:shardEnder>,<ore:shardEnder>|" +
                 "<kanake:harmonium_crystal_end>");
-        //毒之调和水晶
-        MonoRecipeHelper.addStringRecipes("<ore:gemHarmoniumCrystal>|" +
-                "<minecraft:spider_eye>,<minecraft:spider_eye>,<minecraft:spider_eye>,<minecraft:spider_eye>|" +
-                "<kanake:harmonium_crystal_poison>");
-        //毒之调和水晶
-        MonoRecipeHelper.addStringRecipes("<ore:gemHarmoniumCrystal>|" +
-                "<minecraft:poisonous_potato>,<minecraft:poisonous_potato>,<minecraft:poisonous_potato>,<minecraft:poisonous_potato>|" +
-                "<kanake:harmonium_crystal_poison>");
 
         //史莱姆核心|火
-        MonoRecipeHelper.addStringRecipes("<ore:slimeCore>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_slime_core_fire"),
+                "<ore:slimeCore>|" +
                 "<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>," +
                 "<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>," +
                 "<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>,<kanake:harmonium_crystal_fire>|" +
                 "<kanake:slime_core_fire>");
         //史莱姆核心|冰
-        MonoRecipeHelper.addStringRecipes("<ore:slimeCore>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_slime_core_ice"),
+                "<ore:slimeCore>|" +
                 "<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>," +
                 "<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>," +
                 "<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>,<kanake:harmonium_crystal_ice>|" +
                 "<kanake:slime_core_ice>");
         //史莱姆核心|魔法
-        MonoRecipeHelper.addStringRecipes("<ore:slimeCore>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_slime_core_magic"),
+                "<ore:slimeCore>|" +
                 "<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>," +
                 "<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>," +
                 "<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>,<kanake:harmonium_crystal_magic>|" +
                 "<kanake:slime_core_magic>");
-        //史莱姆核心|毒
-        MonoRecipeHelper.addStringRecipes("<ore:slimeCore>|" +
-                "<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>," +
-                "<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>," +
-                "<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>,<kanake:harmonium_crystal_poison>|" +
-                "<kanake:slime_core_poison>");
         //史莱姆核心|末影
-        MonoRecipeHelper.addStringRecipes("<ore:slimeCore>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_slime_core_end"),
+                "<ore:slimeCore>|" +
                 "<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>," +
                 "<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>," +
                 "<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>,<kanake:harmonium_crystal_end>|" +
                 "<kanake:slime_core_end>");
 
         //废怯铁锭
-        MonoRecipeHelper.addStringRecipes("<ore:ingotIron>|" +
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_ws_ingot"),
+                "<ore:ingotIron>|" +
                 "<kanake:ws_kakera>,<kanake:ws_kakera>,<kanake:ws_kakera>,<kanake:ws_kakera>,<kanake:ws_kakera>,<kanake:ws_kakera>," +
                 "<kanake:ws_ingot>");
         //魔法铁锭
-        MonoRecipeHelper.addStringRecipes("<kanake:ws_ingot>|<ore:dustMagic>|<kanake:ws_magic_ingot>");
+        MonoRecipeManager.addStringRecipe(new ResourceLocation(Kanake.MODID,"recipe_ws_magic_ingot"),
+                "<kanake:ws_ingot>|<ore:dustMagic>|<kanake:ws_magic_ingot>");
     }
 }

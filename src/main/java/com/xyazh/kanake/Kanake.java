@@ -1,7 +1,5 @@
 package com.xyazh.kanake;
 
-import com.xyazh.kanake.block.blocks.clean.TileClean;
-import com.xyazh.kanake.block.blocks.clean.render.RenderClean;
 import com.xyazh.kanake.common.ConfigLoader;
 import com.xyazh.kanake.gen.GenOreHarmoniumCrystal;
 import com.xyazh.kanake.init.LoopThread;
@@ -11,11 +9,9 @@ import com.xyazh.kanake.particle.ModParticles;
 import com.xyazh.kanake.proxy.ProxyBase;
 import com.xyazh.kanake.recipes.brewing.MyBrewing;
 import com.xyazh.kanake.recipes.furnace.MyFurnace;
-import com.xyazh.kanake.recipes.mono.MonoFunctions;
 import com.xyazh.kanake.recipes.mono.MonoRecipes;
 import com.xyazh.kanake.util.Reference;
 import com.xyazh.kanake.world.ModWorlds;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -62,7 +58,6 @@ public class Kanake
         HAS_BAUBLES = Loader.isModLoaded("baubles");
         ConfigLoader.init(event);
         LoopThread.creatThread();
-        MonoFunctions.addFunc();
         RegistryHandler.preInitRegistries(event);
         GameRegistry.registerWorldGenerator(new GenOreHarmoniumCrystal(),130);
 

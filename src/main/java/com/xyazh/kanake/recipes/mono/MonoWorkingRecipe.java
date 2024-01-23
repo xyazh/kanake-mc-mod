@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
@@ -25,10 +26,9 @@ public class MonoWorkingRecipe {
     public boolean isFail = false;
     public boolean isFinish = false;
     private RecipeSlot workingSlot = null;
-    @Nonnull
-    public MonoFunction fucFinish = new MonoFunction("finish");
-    @Nonnull
-    public MonoFunction fucFail = new MonoFunction("fail");
+    @Nullable
+    public MonoRecipe recipe = null;
+
 
     protected TileTableCoreMono coreMono;
     public MonoWorkingRecipe(TileTableCoreMono coreMono){
@@ -41,13 +41,17 @@ public class MonoWorkingRecipe {
 
     protected void onFinish(){
         this.isFinish = true;
-        boolean success = this.fucFinish.callFuc(this);
+        if(this.recipe!=null){
+            this.recipe.onFinish(this);
+        }
         this.coreMono.setInventorySlotContents(0,this.outItem.copy());
     }
 
     protected void onFail(){
+        if(this.recipe!=null){
+            this.recipe.onFail(this);
+        }
         this.isFail = true;
-        boolean success = this.fucFail.callFuc(this);
     }
 
     public void doWork(){
@@ -132,8 +136,7 @@ public class MonoWorkingRecipe {
         this.clear();
         this.coreItem = coreItem;
         this.outItem = outItem;
-        this.fucFinish = recipe.getFinishFuc(this.coreMono,outTiles);
-        this.fucFail = recipe.getFailFuc(this.coreMono,outTiles);
+        this.recipe = recipe;
         for (int i = 0; i < outTiles.size(); i++) {
             TileTableMono tileTableMono = outTiles.get(i);
             RecipeSlot slot = new RecipeSlot(i);
@@ -151,8 +154,6 @@ public class MonoWorkingRecipe {
         this.isFail = false;
         this.isFinish = false;
         this.workingSlot = null;
-        this.fucFinish = new MonoFunction("finish");
-        this.fucFail = new MonoFunction("fail");
     }
 
     protected boolean checkItemStack(ItemStack itemStack1, ItemStack itemStack2) {
@@ -181,8 +182,12 @@ public class MonoWorkingRecipe {
         }
         this.isFail = subCompound.getBoolean("isFail");
         this.isFinish = subCompound.getBoolean("isFinish");
-        this.fucFinish.readFromNBT(subCompound);
-        this.fucFail.readFromNBT(subCompound);
+        String recipeID = subCompound.getString("recipeID");
+        if(!recipeID.equals("")){
+            ResourceLocation resourceLocation = new ResourceLocation(recipeID);
+            this.recipe = MonoRecipeManager.RECIPES.get(resourceLocation);
+        }
+
     }
 
     @Nonnull
@@ -198,8 +203,9 @@ public class MonoWorkingRecipe {
         }
         subCompound.setBoolean("isFail",this.isFail);
         subCompound.setBoolean("isFinish",this.isFinish);
-        subCompound = this.fucFinish.writeToNBT(subCompound);
-        subCompound = this.fucFail.writeToNBT(subCompound);
+        if(this.recipe!=null){
+            subCompound.setString("recipeID",this.recipe.id.toString());
+        }
         compound.setTag("mono_working_recipe", subCompound);
         return compound;
     }

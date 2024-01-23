@@ -1,6 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0":"kanake:items/harmonium_crystal_poison"
-  }
-}

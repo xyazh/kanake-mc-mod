@@ -46,7 +46,6 @@ public class ModItems {
     public static final Item HARMONIUM_CRYSTAL_FIRE = new ItemBase("harmonium_crystal_fire").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_ICE = new ItemBase("harmonium_crystal_ice").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_MAGIC = new ItemBase("harmonium_crystal_magic").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
-    public static final Item HARMONIUM_CRYSTAL_POISON = new ItemBase("harmonium_crystal_poison").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_END = new ItemBase("harmonium_crystal_end").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item SLIME_CORE = new ItemBase("slime_core")
             .setOreDict(new String[]{"slimeCore","coreSlime"})
@@ -54,7 +53,6 @@ public class ModItems {
     public static final Item SLIME_CORE_FIRE = new ItemBase("slime_core_fire").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item SLIME_CORE_ICE = new ItemBase("slime_core_ice").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item SLIME_CORE_MAGIC = new ItemBase("slime_core_magic").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
-    public static final Item SLIME_CORE_POISON = new ItemBase("slime_core_poison").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
     public static final Item SLIME_CORE_END = new ItemBase("slime_core_end").setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
     public static final Item POTION_SMALL_MP = new ItemPotionMp("potion_small_mp",10).setCreativeTab(ModCreativeTab.SBW_CREATIVE);

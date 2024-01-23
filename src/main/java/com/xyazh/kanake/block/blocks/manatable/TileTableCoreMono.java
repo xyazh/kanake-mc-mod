@@ -1,8 +1,7 @@
 package com.xyazh.kanake.block.blocks.manatable;
 
-import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.entity.EntitySpawnParticle;
-import com.xyazh.kanake.recipes.mono.MonoRecipeHelper;
+import com.xyazh.kanake.recipes.mono.MonoRecipeManager;
 import com.xyazh.kanake.recipes.mono.MonoRecipe;
 import com.xyazh.kanake.recipes.mono.MonoWorkingRecipe;
 import net.minecraft.item.Item;
@@ -45,7 +44,7 @@ public class TileTableCoreMono extends TileTableCheckStructMono {
 
     public void newRecipe(LinkedList<TileTableMono> subTiles) {
         LinkedList<TileTableMono> outTiles = new LinkedList<>();
-        MonoRecipe recipe = MonoRecipeHelper.findRecipe(this.itemStacks[0],subTiles,this.world,this,outTiles);
+        MonoRecipe recipe = MonoRecipeManager.findRecipe(this.itemStacks[0],subTiles,this.world,this,outTiles);
         if (recipe == null) {
             return;
         }

@@ -1,15 +1,15 @@
 package com.xyazh.kanake.recipes.mono;
 
-import com.google.common.collect.Lists;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.manatable.TileTableCoreMono;
 import com.xyazh.kanake.block.blocks.manatable.TileTableMono;
-import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.RecipeMatcher;
@@ -23,15 +23,28 @@ public class MonoRecipe {
     protected ItemStack output;
     protected Ingredient coreItem;
     protected NonNullList<Ingredient> input = NonNullList.create();
+    public final ResourceLocation id;
 
     @Nonnull
     public ItemStack getOutItem(){
         return this.output;
     }
 
-    public MonoRecipe(@Nonnull Object coreItem, @Nonnull ItemStack result, Object[] recipe) {
+    public void onFinish(MonoWorkingRecipe workingRecipe){
+        TileTableCoreMono coreMono = workingRecipe.coreMono;
+        World world = coreMono.getWorld();
+        BlockPos pos = coreMono.getPos();
+        world.createExplosion(null,pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5, 0,true);
+    }
+
+    public void onFail(MonoWorkingRecipe workingRecipe){
+
+    }
+
+    public MonoRecipe(@Nonnull ResourceLocation id,@Nonnull Object coreItem, @Nonnull ItemStack result, Object[] recipe) {
         this.coreItem = CraftingHelper.getIngredient(coreItem);
         this.output = result.copy();
+        this.id = id;
         for (Object in : recipe) {
             Ingredient ing = CraftingHelper.getIngredient(in);
             if (ing != null) {
@@ -40,9 +53,10 @@ public class MonoRecipe {
         }
     }
 
-    public MonoRecipe(@Nonnull Object coreItem, @Nonnull ItemStack result, Collection<Object> recipe) {
+    public MonoRecipe(@Nonnull ResourceLocation id,@Nonnull Object coreItem, @Nonnull ItemStack result, Collection<Object> recipe) {
         this.coreItem = CraftingHelper.getIngredient(coreItem);
         this.output = result.copy();
+        this.id = id;
         for (Object in : recipe) {
             Ingredient ing = CraftingHelper.getIngredient(in);
             if (ing != null) {
@@ -59,17 +73,6 @@ public class MonoRecipe {
     public int getTime(TileTableCoreMono coreMono, LinkedList<TileTableMono> outTiles, ItemStack itemStack){
         return 60;
     }
-
-    public MonoFunction getFailFuc(TileTableCoreMono coreMono, LinkedList<TileTableMono> outTiles){
-        return new MonoFunction("fail");
-    }
-
-    public MonoFunction getFinishFuc(TileTableCoreMono coreMono, LinkedList<TileTableMono> outTiles){
-        MonoFunction monoFunction = new MonoFunction("finish");
-        monoFunction.func.add("explosion");
-        return monoFunction;
-    }
-
 
     @Nonnull
     public ItemStack getCraftingResult() {
@@ -92,7 +95,7 @@ public class MonoRecipe {
     }
 
     @Nullable
-    public static MonoRecipe factory(String recipe) {
+    public static MonoRecipe factory(ResourceLocation id,String recipe) {
         String[] parts = recipe.split("\\|");
         if (parts.length != 3) {
             return null;
@@ -139,7 +142,7 @@ public class MonoRecipe {
             }
         }
 
-        return new MonoRecipe(coreItem, outItemStack, recipeItems);
+        return new MonoRecipe(id,coreItem, outItemStack, recipeItems);
     }
 }
 
