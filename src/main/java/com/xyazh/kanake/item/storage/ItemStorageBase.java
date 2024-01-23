@@ -1,5 +1,6 @@
 package com.xyazh.kanake.item.storage;
 
+import com.xyazh.kanake.api.IManaStorage;
 import com.xyazh.kanake.item.items.ItemBase;
 import com.xyazh.kanake.item.tools.ItemToolBase;
 import net.minecraft.client.resources.I18n;

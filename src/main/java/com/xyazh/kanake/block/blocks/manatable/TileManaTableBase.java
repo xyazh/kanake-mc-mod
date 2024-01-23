@@ -100,6 +100,7 @@ public class TileManaTableBase extends TileBase implements ITickable {
         return this.itemStacks[0];
     }
 
+    @Nonnull
     @Override
     //取出一定数量的物品
     public ItemStack decrStackSize(int index, int count) {

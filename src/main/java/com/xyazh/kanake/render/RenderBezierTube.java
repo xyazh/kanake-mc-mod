@@ -9,10 +9,11 @@ public class RenderBezierTube {
     public final Vec3d p2 = new Vec3d();
     public final Vec3d p3 = new Vec3d();
     public final Vec3d p4 = new Vec3d();
+    public final Vec3d color = new Vec3d(255, 0,255);
+    public int a = 255;
     public static final Vec3d VN1 = new Vec3d(0,1,0);
-    public static final Vec3d VN2 = new Vec3d(0.05,1,0.05);
     public double step = 0.01;
-    public double width = 0.05;
+    public double width = 0.1;
 
     public RenderBezierTube(){
 
@@ -87,14 +88,14 @@ public class RenderBezierTube {
             thisCtx3.add(n2);
             thisCtx4.sub(thisC,n1);
             thisCtx4.add(n2);
-            bufferbuilder.pos(lastCtx1.x, lastCtx1.y, lastCtx1.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(lastCtx2.x, lastCtx2.y, lastCtx2.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(thisCtx2.x, thisCtx2.y, thisCtx2.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(lastCtx3.x, lastCtx3.y, lastCtx3.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(thisCtx3.x, thisCtx3.y, thisCtx3.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(lastCtx4.x, lastCtx4.y, lastCtx4.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(thisCtx4.x, thisCtx4.y, thisCtx4.z).color(0, 0,0, 255).endVertex();
-            bufferbuilder.pos(lastCtx1.x, lastCtx1.y, lastCtx1.z).color(0, 0,0, 255).endVertex();
+            bufferbuilder.pos(lastCtx1.x, lastCtx1.y, lastCtx1.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(lastCtx2.x, lastCtx2.y, lastCtx2.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(thisCtx2.x, thisCtx2.y, thisCtx2.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(lastCtx3.x, lastCtx3.y, lastCtx3.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(thisCtx3.x, thisCtx3.y, thisCtx3.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(lastCtx4.x, lastCtx4.y, lastCtx4.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(thisCtx4.x, thisCtx4.y, thisCtx4.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
+            bufferbuilder.pos(lastCtx1.x, lastCtx1.y, lastCtx1.z).color((int) color.x, (int)color.y,(int)color.z, a).endVertex();
             t += this.step;
         }
     }

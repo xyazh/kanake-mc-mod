@@ -1,17 +1,22 @@
 package com.xyazh.kanake.block.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 
 public class TileBase extends TileEntityLockable implements ISidedInventory{
@@ -65,9 +70,10 @@ public class TileBase extends TileEntityLockable implements ISidedInventory{
         return ItemStack.EMPTY;
     }
 
+    @Nonnull
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
 
@@ -121,9 +127,15 @@ public class TileBase extends TileEntityLockable implements ISidedInventory{
     }
 
 
+    @Nonnull
     @Override
     public Container createContainer(@Nonnull InventoryPlayer playerInventory, @Nonnull EntityPlayer playerIn) {
-        return null;
+        return new Container() {
+            @Override
+            public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
+                return false;
+            }
+        };
     }
 
     @Nonnull

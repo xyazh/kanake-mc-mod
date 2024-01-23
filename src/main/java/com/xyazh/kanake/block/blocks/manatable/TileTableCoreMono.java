@@ -1,11 +1,14 @@
 package com.xyazh.kanake.block.blocks.manatable;
 
+import com.xyazh.kanake.block.blocks.manastorage.TileManaStorage;
 import com.xyazh.kanake.entity.EntitySpawnParticle;
 import com.xyazh.kanake.recipes.mono.MonoRecipeManager;
 import com.xyazh.kanake.recipes.mono.MonoRecipe;
 import com.xyazh.kanake.recipes.mono.MonoWorkingRecipe;
+import com.xyazh.kanake.util.PublicBlockPos;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
 import java.util.LinkedList;
@@ -27,11 +30,11 @@ public class TileTableCoreMono extends TileTableCheckStructMono {
         this.selectWorkStatus();
     }
 
-    protected void selectWorkStatus(){
-        if(this.monoWorkingRecipe.isWorking()){
+    protected void selectWorkStatus() {
+        if (this.monoWorkingRecipe.isWorking()) {
             this.monoWorkingRecipe.doWork();
             this.workParticle(Integer.MAX_VALUE);
-        }else if(this.shouldFindRecipe){
+        } else if (this.shouldFindRecipe) {
             this.findingRecipe();
         }
     }
@@ -44,20 +47,20 @@ public class TileTableCoreMono extends TileTableCheckStructMono {
 
     public void newRecipe(LinkedList<TileTableMono> subTiles) {
         LinkedList<TileTableMono> outTiles = new LinkedList<>();
-        MonoRecipe recipe = MonoRecipeManager.findRecipe(this.itemStacks[0],subTiles,this.world,this,outTiles);
+        MonoRecipe recipe = MonoRecipeManager.findRecipe(this.itemStacks[0], subTiles, this.world, this, outTiles);
         if (recipe == null) {
             return;
         }
         this.monoWorkingRecipe.clear();
-        this.monoWorkingRecipe.load(this.getStackInSlot(0),outTiles,recipe.getOutItem(),recipe);
+        this.monoWorkingRecipe.load(this.getStackInSlot(0), outTiles, recipe.getOutItem(), recipe);
     }
 
     public void workParticle(int age) {
-        if(this.particle != null){
+        if (this.particle != null) {
             return;
         }
         TileTableMono workingTile = this.monoWorkingRecipe.getWorkingTile();
-        if(workingTile == null){
+        if (workingTile == null) {
             return;
         }
         int itemId = Item.getIdFromItem(workingTile.itemStacks[0].getItem());
@@ -73,15 +76,13 @@ public class TileTableCoreMono extends TileTableCheckStructMono {
         this.world.spawnEntity(particle);
     }
 
-    public void readFromNBT(@Nonnull NBTTagCompound compound)
-    {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.monoWorkingRecipe.readFromNBT(compound);
     }
 
     @Nonnull
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound)
-    {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound = this.monoWorkingRecipe.writeToNBT(compound);
         return compound;

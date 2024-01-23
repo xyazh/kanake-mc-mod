@@ -66,7 +66,7 @@ public class EntitySpawnParticle extends Entity implements IEntityAdditionalSpaw
         rx1 = Kanake.rand.nextGaussian()*dn;
         ry1 = Kanake.rand.nextGaussian()*dn;
         rz1 = Kanake.rand.nextGaussian()*dn;
-        for(int i=0;i<10;i++){
+        for(int i=0;i<5;i++){
             this.world.spawnParticle(ModParticles.MANA_PARTICLES,
                     this.x1+rx,this.y1+ry,this.z1+rz,
                     this.x2+rx1,this.y2+ry1,this.z2+rz1,
