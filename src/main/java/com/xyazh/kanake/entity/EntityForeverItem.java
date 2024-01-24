@@ -1,24 +1,27 @@
 package com.xyazh.kanake.entity;
 
+import com.xyazh.kanake.block.blocks.manatable.ITileForeverEntity;
 import com.xyazh.kanake.block.blocks.manatable.TileManaWithForeverEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public class EntityForeverItem extends EntityItem {
-    public TileManaWithForeverEntity tileEntity = null;
+    public ITileForeverEntity tileEntity = null;
 
     public EntityForeverItem(World worldIn) {
         super(worldIn);
     }
 
-    public EntityForeverItem(World worldIn, TileManaWithForeverEntity tileEntity) {
+    public EntityForeverItem(World worldIn, ITileForeverEntity tileEntity) {
         super(worldIn);
         this.tileEntity = tileEntity;
     }
 
-    public void onCollideWithPlayer(EntityPlayer entityIn)
+    public void onCollideWithPlayer(@Nonnull EntityPlayer entityIn)
     {
     }
 
@@ -34,7 +37,7 @@ public class EntityForeverItem extends EntityItem {
         }
     }
 
-    public void move(MoverType type, double x, double y, double z)
+    public void move(@Nonnull MoverType type, double x, double y, double z)
     {
     }
 

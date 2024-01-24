@@ -32,7 +32,7 @@ public class BlockTableMono extends BlockManaTableBase{
     public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tileEntity1 = worldIn.getTileEntity(pos);
         if(!(tileEntity1 instanceof TileManaWithForeverEntity)){
-            return true;
+            return false;
         }
         TileManaWithForeverEntity tileEntity = (TileManaWithForeverEntity) tileEntity1;
         boolean isTileEmpty,isPlayerEmpty;

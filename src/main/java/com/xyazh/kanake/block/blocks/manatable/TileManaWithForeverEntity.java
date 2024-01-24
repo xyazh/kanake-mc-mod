@@ -3,18 +3,18 @@ package com.xyazh.kanake.block.blocks.manatable;
 import com.xyazh.kanake.entity.EntityForeverItem;
 import net.minecraft.item.ItemStack;
 
-public class TileManaWithForeverEntity extends TileManaTableBase{
+public class TileManaWithForeverEntity extends TileManaTableBase implements ITileForeverEntity{
     public EntityForeverItem feItemEntity = null;
 
     public boolean checkItem(ItemStack itemStack){
         return itemStacks[0].equals(itemStack);
     }
 
-    protected double getFEY(){
+    public double getFEY(){
         return 1;
     }
 
-    protected void setFeEntity(){
+    public void setFeEntity(){
         if(world.isRemote){
             return;
         }
@@ -30,8 +30,6 @@ public class TileManaWithForeverEntity extends TileManaTableBase{
             this.world.spawnEntity(this.feItemEntity);
         }
     }
-
-    int t = 20;
 
     @Override
     public void update() {

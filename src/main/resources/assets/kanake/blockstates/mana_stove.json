@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "kanake:mana_stove", "y": 90},
+    "facing=south": { "model": "kanake:mana_stove", "y": 270 },
+    "facing=west":  { "model": "kanake:mana_stove" },
+    "facing=east":  { "model": "kanake:mana_stove", "y": 180 }
+  }
+}

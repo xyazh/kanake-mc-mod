@@ -157,15 +157,7 @@ public class MonoWorkingRecipe {
     }
 
     protected boolean checkItemStack(ItemStack itemStack1, ItemStack itemStack2) {
-        if(itemStack1 == itemStack2){
-            return true;
-        }
-        if (itemStack1.getItem() != itemStack2.getItem()) {
-            return false;
-        }
-        NBTTagCompound compound1 = itemStack1.getTagCompound();
-        NBTTagCompound compound2 = itemStack2.getTagCompound();
-        return Objects.equals(compound1, compound2);
+        return ItemStack.areItemStacksEqual(itemStack1,itemStack2);
     }
 
     public void readFromNBT(@Nonnull NBTTagCompound compound) {

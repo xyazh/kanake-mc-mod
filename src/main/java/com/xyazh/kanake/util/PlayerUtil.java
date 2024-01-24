@@ -81,7 +81,7 @@ public class PlayerUtil {
     }
 
     public static boolean isMainHandEmpty(EntityPlayer player){
-        return ItemStack.EMPTY.equals(player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
+        return player.getHeldItem(EnumHand.MAIN_HAND).isEmpty();
     }
 
     public static ItemStack countMainHandItemStack(EntityPlayer player,int n){

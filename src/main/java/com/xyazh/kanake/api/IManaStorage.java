@@ -10,6 +10,9 @@ public interface IManaStorage {
     //将容器存满
     void setFull();
 
+    //将容器清空
+    void clearMana();
+
     //返回还有多少空余
     double remain();
 

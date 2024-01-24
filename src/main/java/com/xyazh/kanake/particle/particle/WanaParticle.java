@@ -35,6 +35,7 @@ public class WanaParticle extends BaseParticle{
         this.motionZ = 0;
         this.setPosition(xCoordIn,yCoordIn+0.1,zCoordIn);
         this.setAlphaF(0);
+        this.canCollide = false;
     }
 
     public void onUpdate()

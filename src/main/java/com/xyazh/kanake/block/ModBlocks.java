@@ -8,6 +8,7 @@ import com.xyazh.kanake.block.blocks.clean.BlockClean;
 import com.xyazh.kanake.block.blocks.crystaler.BlockCrystaler;
 import com.xyazh.kanake.block.blocks.crystaler.TileCrystaler;
 import com.xyazh.kanake.block.blocks.manastorage.BlockManaStorage;
+import com.xyazh.kanake.block.blocks.manastove.BlockManaStove;
 import com.xyazh.kanake.block.blocks.manatable.*;
 import com.xyazh.kanake.block.blocks.teleportation.BlockTeleportation;
 import com.xyazh.kanake.init.ModCreativeTab;
@@ -47,5 +48,8 @@ public class ModBlocks {
 			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
 	public static final Block MANA_STORAGE = new BlockManaStorage("mana_storage", Material.ROCK)
+			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+
+	public static final Block MANA_STOVE = new BlockManaStove("mana_stove", Material.ROCK)
 			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 }

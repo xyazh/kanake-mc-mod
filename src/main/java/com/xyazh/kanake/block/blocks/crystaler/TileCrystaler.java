@@ -22,7 +22,7 @@ public class TileCrystaler extends TileManaWithForeverEntity {
     private final int maxWorkTime = 2400;
     private int workTime = maxWorkTime;
 
-    protected double getFEY() {
+    public double getFEY() {
         return 0;
     }
 

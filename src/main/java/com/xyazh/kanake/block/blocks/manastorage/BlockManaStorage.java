@@ -2,13 +2,11 @@ package com.xyazh.kanake.block.blocks.manastorage;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.BlockBase;
-import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;

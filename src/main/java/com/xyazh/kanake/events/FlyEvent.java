@@ -49,10 +49,10 @@ public class FlyEvent {
                 }
             }
             if(flag){
-                event.player.motionY += 0.1;
-                event.player.motionY = Math.min(1.5,event.player.motionY);
+                event.player.motionY += 0.08;
+                event.player.motionY = Math.min(1.2,event.player.motionY);
                 if(!event.player.isCreative()){
-                    if(Kanake.rand.nextFloat() <= 0.05){
+                    if(Kanake.rand.nextFloat() <= 0.025){
                         if(event.player instanceof EntityPlayerMP){
                             ManaData.subSync((EntityPlayerMP) event.player, Kanake.rand.nextFloat() + 0.5);
                         }

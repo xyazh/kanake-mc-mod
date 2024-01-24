@@ -1,10 +1,13 @@
 package com.xyazh.kanake.item.storage;
 
+import com.xyazh.kanake.api.IItemManaStorage;
+import com.xyazh.kanake.api.IManaStorage;
 import com.xyazh.kanake.data.ManaData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -17,44 +20,54 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemManaContainer extends ItemStorageBase{
+public class ItemManaContainer extends ItemStorageBase {
     public ItemManaContainer(String name) {
         super(name, 200);
     }
 
-    public ItemManaContainer(String name,int maxMana) {
+    public ItemManaContainer(String name, int maxMana) {
         super(name, maxMana);
     }
 
     @Nonnull
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(itemStack.getItem().equals(this)){
-            int mana = (int) ManaData.remain(player);
-            int last = this.subEnergy(itemStack,mana);
-            ManaData.add(player,mana - last);
+        if (itemStack.getItem().equals(this)) {
+            TileEntity te = worldIn.getTileEntity(pos);
+            if (te instanceof IManaStorage) {
+                IManaStorage storage = (IManaStorage) te;
+                if (player.isSneaking()) {
+                    int mana = this.getMana(itemStack);
+                    mana = (int)storage.receiveMana(mana);
+                    this.setMana(itemStack,mana);
+                } else {
+                    int mana = this.remain(itemStack);
+                    mana = (int)storage.extractMana(mana);
+                    this.addMana(itemStack,mana);
+                }
+            }
         }
         return EnumActionResult.SUCCESS;
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer player, @Nonnull EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(itemStack.getItem().equals(this)){
+        if (itemStack.getItem().equals(this)) {
             if (player.isSneaking()) {
-                if(player.isCreative()){
+                if (player.isCreative()) {
                     this.setFull(itemStack);
-                }else{
+                } else {
                     int mana = this.remain(itemStack);
-                    int last = (int)ManaData.sub(player,mana);
-                    this.addEnergy(itemStack,mana - last);
+                    int last = (int) ManaData.sub(player, mana);
+                    this.addMana(itemStack, mana - last);
                 }
             } else {
                 int mana = (int) ManaData.remain(player);
-                int last = this.subEnergy(itemStack,mana);
-                ManaData.add(player,mana - last);
+                int last = this.subMana(itemStack, mana);
+                ManaData.add(player, mana - last);
             }
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -66,17 +79,11 @@ public class ItemManaContainer extends ItemStorageBase{
         tooltip.add(I18n.format("tooltip.mana.mana_container.0"));
         tooltip.add(I18n.format("tooltip.mana.mana_container.1"));
         tooltip.add(I18n.format(""));
-        super.addInformation(stack,world,tooltip,flag);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public String getEnergyNameFormat() {
-        return I18n.format("tooltip.mana.storage");
+        super.addInformation(stack, world, tooltip, flag);
     }
 
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack stack) {
-        return this.getEnergy(stack)>3;
+        return this.getMana(stack) > 3;
     }
 }
