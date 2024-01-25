@@ -1,4 +1,4 @@
-package com.xyazh.kanake.particle.particle;
+package com.xyazh.kanake.particle.particles;
 
 import com.xyazh.kanake.particle.ParticleTempData;
 import com.xyazh.kanake.util.Vec3d;

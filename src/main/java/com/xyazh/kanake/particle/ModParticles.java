@@ -2,10 +2,9 @@ package com.xyazh.kanake.particle;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.network.SpawnParticlesPacket;
-import com.xyazh.kanake.particle.particle.*;
+import com.xyazh.kanake.particle.particles.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumParticleTypes;
@@ -16,11 +15,10 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class ModParticles {
     private static final ParticleManager particleManager = Minecraft.getMinecraft().effectRenderer;
-    private static int next_id = new Random().nextInt(90000) + 10000;
+    private static int next_id = -1;
     private static final Map<Integer, IParticleFactory> idParticles = new HashMap<>();
     public static final Map<Integer, EnumParticleTypes> myParticles = new HashMap<>();
 
@@ -40,21 +38,21 @@ public class ModParticles {
     public static final EnumParticleTypes TP_PARTICLES1 = register(new TpParticle1.Factory(), "tp1_particle", false);
     public static final EnumParticleTypes KAKERA_PARTICLES = register(new KakeraParticle.Factory(), "kakera_particle", true);
     public static final EnumParticleTypes BIIMU_PARTICLES = register(new BiimuParticle.Factory(), "biimu_particle", true);
-    public static int nextPerticlesID() {
-        while (true) {
-            try {
-                Particle particle = particleManager.spawnEffectParticle(next_id, 0, 0, 0, 0, 0, 0);
-                if (particle == null) {
-                    particleManager.clearEffects(null);
-                    return next_id;
-                }
-                particle.setMaxAge(0);
-                particle.setExpired();
-            } catch (Exception ignored) {
+    public static final EnumParticleTypes HEAL_PARTICLES = register(new HealParticles.HealParticlesFactory(),"heal_particle", false);
 
-            } finally {
-                next_id += 1;
+    public static int nextParticlesID() {
+        if(next_id < 0){
+            for(EnumParticleTypes particleTypes:EnumParticleTypes.values()){
+                next_id = Math.max(particleTypes.getParticleID(),next_id);
             }
+        }
+        next_id += 1;
+        return next_id;
+    }
+
+    public static void appendAllParticlesToMyMap(){
+        for(EnumParticleTypes particleTypes:EnumParticleTypes.values()){
+            myParticles.put(particleTypes.getParticleID(),particleTypes);
         }
     }
 
@@ -66,15 +64,15 @@ public class ModParticles {
     }
 
     public static EnumParticleTypes register(IParticleFactory particleFactory, String name, boolean shouldIgnoreRangeIn) {
-        int id = nextPerticlesID();
+        int id = nextParticlesID();
         idParticles.put(id, particleFactory);
-        Kanake.logger.info("Perticles:{}|{}", id, name);
+        Kanake.logger.info("Particles:{}|{}", id, name);
         EnumParticleTypes particleTypes = EnumParticleTypesHelper.addParticleType(name, id, shouldIgnoreRangeIn);
         ModParticles.myParticles.put(id,particleTypes);
         return particleTypes;
     }
 
-    public static void remoteSpawnParticle(World world,EnumParticleTypes particleTypes,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,int n){
+    public static void remoteSpawnParticle(World world,int n,EnumParticleTypes particleTypes,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed){
         SpawnParticlesPacket spawnParticlesPacket = new SpawnParticlesPacket();
         spawnParticlesPacket.id = particleTypes.getParticleID();
         spawnParticlesPacket.x = xCoord;
@@ -91,7 +89,7 @@ public class ModParticles {
         }
     }
 
-    public static void remoteSpawnParticle(World world,EnumParticleTypes particleTypes,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,int n,int d){
+    public static void remoteSpawnParticle(World world,EnumParticleTypes particleTypes,int n,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,int d){
         SpawnParticlesPacket spawnParticlesPacket = new SpawnParticlesPacket();
         spawnParticlesPacket.id = particleTypes.getParticleID();
         spawnParticlesPacket.x = xCoord;

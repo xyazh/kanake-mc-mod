@@ -92,7 +92,6 @@ public class TileClean extends TileEntity implements ITickable {
             this.vecPos.x = this.pos.getX();
             this.vecPos.y = this.pos.getY();
             this.vecPos.z = this.pos.getZ();
-            this.world.getChunkProvider();
             for (EntityLivingBase entity : world.getEntitiesWithinAABB(EntityLivingBase.class, atkAABB, (e) -> {
                 if(e instanceof EntityPlayer){
                     return false;
@@ -102,7 +101,7 @@ public class TileClean extends TileEntity implements ITickable {
                 return p1.length() <= this.range;
             })) {
                 if (Kanake.rand.nextInt(100) < 10) {
-                    DamageSource damageSource = new CleanDamage();
+                    DamageSource damageSource = CleanDamage.CLEAN_DAMAGE;
                     float health = entity.getHealth();
                     entity.attackEntityFrom(damageSource,DAMAGE);
                     if(entity.getHealth()-health<DAMAGE){
