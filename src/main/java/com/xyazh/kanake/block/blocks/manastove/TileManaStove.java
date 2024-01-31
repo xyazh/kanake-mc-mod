@@ -1,7 +1,10 @@
 package com.xyazh.kanake.block.blocks.manastove;
 
+import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.api.IManaStorage;
 import com.xyazh.kanake.block.blocks.manatable.TileManaWithForeverEntity;
+import com.xyazh.kanake.entity.EntityForeverItem;
+import com.xyazh.kanake.particle.ModParticles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,25 +22,44 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     protected double manaStored = 0;
     public boolean shouldSync = false;
 
-    public TileManaStove(){
+    public TileManaStove() {
         super();
         this.maxManaStored = 200;
     }
 
     @Override
     public double getFEY() {
-        return -0.25;
+        return 0;
+    }
+
+    @Override
+    public void setFeEntityData(EntityForeverItem feItemEntity) {
+        super.setFeEntityData(feItemEntity);
+        feItemEntity.setStatic(0,true);
     }
 
     @Override
     public void update() {
         super.update();
         this.trySync();
-        if(this.workingTime-->0){
-            this.receiveMana(0.015);
+        if (world.isRemote) {
+            if (this.workingTime > 0) {
+                for(int i=0;i<2;i++){
+                    this.world.spawnParticle(ModParticles.HONOO_PARTICLES,
+                            pos.getX() + 0.25 + Kanake.rand.nextFloat() / 2, pos.getY() + 0.1875, pos.getZ() + 0.25 + Kanake.rand.nextFloat() / 2,
+                            0, 0, 0);
+                }
+            }
         }
-        if(this.workingTime<=0 && !this.isEmpty() && !this.isFull()){
-            ItemStack itemStack = this.decrStackSize(0,1);
+        for(int i=0;i<4;i++){
+            if (this.workingTime-- > 0) {
+                this.receiveMana(0.015);
+            }else {
+                break;
+            }
+        }
+        if (this.workingTime <= 0 && !this.isEmpty() && !this.isFull()) {
+            ItemStack itemStack = this.decrStackSize(0, 1);
             this.workingTime = TileEntityFurnace.getItemBurnTime(itemStack);
         }
     }
@@ -55,7 +77,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     //取出槽位中的Item
     public ItemStack removeStackFromSlot(int index) {
         this.onInvChanges();
-        if(itemStacks[0].isEmpty()){
+        if (itemStacks[0].isEmpty()) {
             return ItemStack.EMPTY;
         }
         ItemStack itemStack = this.itemStacks[0];
@@ -65,24 +87,24 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
 
     @Nonnull
     //添加槽位中的Item
-    public ItemStack addStackFromSlot(int index,ItemStack itemStack){
+    public ItemStack addStackFromSlot(int index, ItemStack itemStack) {
         this.onInvChanges();
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             itemStacks[0] = itemStack;
             return ItemStack.EMPTY;
         }
-        if(!itemStacks[0].isStackable()){
+        if (!itemStacks[0].isStackable()) {
             return itemStack;
         }
-        if(ItemStack.areItemStackTagsEqual(itemStack,itemStacks[0])){
+        if (ItemStack.areItemStackTagsEqual(itemStack, itemStacks[0])) {
             int maxSize = itemStacks[0].getMaxStackSize();
             int size1 = itemStacks[0].getCount();
             int size2 = itemStack.getCount();
             size1 += size2;
-            size2 = Math.max(0,size1-maxSize);
-            size1 = Math.min(maxSize,size1);
+            size2 = Math.max(0, size1 - maxSize);
+            size1 = Math.min(maxSize, size1);
             itemStacks[0].setCount(size1);
-            if(size2<=0){
+            if (size2 <= 0) {
                 return ItemStack.EMPTY;
             }
             itemStack.setCount(size2);
@@ -94,16 +116,16 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     //是否可以放入物品
     public boolean canInsertItem(int index, @Nonnull ItemStack itemStack, @Nonnull EnumFacing direction) {
         int burnTime = TileEntityFurnace.getItemBurnTime(itemStack);
-        if(burnTime <= 0){
+        if (burnTime <= 0) {
             return false;
         }
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             return true;
         }
-        if(!itemStacks[0].isStackable()){
+        if (!itemStacks[0].isStackable()) {
             return false;
         }
-        if(ItemStack.areItemStackTagsEqual(itemStack,itemStacks[0])){
+        if (ItemStack.areItemStackTagsEqual(itemStack, itemStacks[0])) {
             int maxSize = itemStacks[0].getMaxStackSize();
             int size1 = itemStacks[0].getCount();
             return maxSize > size1;
@@ -141,12 +163,12 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     //取出一定数量的物品
     public ItemStack decrStackSize(int index, int count) {
         this.onInvChanges();
-        if(this.isEmpty()){
+        if (this.isEmpty()) {
             return ItemStack.EMPTY;
         }
         ItemStack itemStack = this.itemStacks[0];
         int thisCount = itemStack.getCount();
-        if(thisCount <= count){
+        if (thisCount <= count) {
             return this.removeStackFromSlot(0);
         }
         itemStack.setCount(thisCount - count);
@@ -211,7 +233,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
         if (this.shouldSync) {
             this.shouldSync = false;
             IBlockState state = this.world.getBlockState(this.pos);
-            this.world.notifyBlockUpdate(this.pos,state,state, Constants.BlockFlags.SEND_TO_CLIENTS);
+            this.world.notifyBlockUpdate(this.pos, state, state, Constants.BlockFlags.SEND_TO_CLIENTS);
         }
     }
 

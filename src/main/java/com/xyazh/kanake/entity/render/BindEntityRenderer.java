@@ -1,9 +1,6 @@
 package com.xyazh.kanake.entity.render;
 
-import com.xyazh.kanake.entity.EntityEye;
-import com.xyazh.kanake.entity.EntityTreeMan;
-import com.xyazh.kanake.entity.EntityWSSoul;
-import com.xyazh.kanake.entity.EntityWSSoulBullet;
+import com.xyazh.kanake.entity.*;
 import com.xyazh.kanake.util.Reference;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -18,6 +15,7 @@ public class BindEntityRenderer {
         RenderingRegistry.registerEntityRenderingHandler(EntityWSSoulBullet.class, RenderWSButtleForSoul::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityEye.class, RenderEye::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityTreeMan.class, RenderTreeMan::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityForeverItem.class, RenderForeverItem::new);
     }
 
 }

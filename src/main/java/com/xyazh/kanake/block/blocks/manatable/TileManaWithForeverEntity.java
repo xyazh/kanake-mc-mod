@@ -14,6 +14,15 @@ public class TileManaWithForeverEntity extends TileManaTableBase implements ITil
         return 1;
     }
 
+    public void setFeEntityData(EntityForeverItem feItemEntity){
+
+    }
+
+    @Override
+    public boolean isDead() {
+        return this.world.getTileEntity(this.pos) != this;
+    }
+
     public void setFeEntity(){
         if(world.isRemote){
             return;
@@ -27,6 +36,7 @@ public class TileManaWithForeverEntity extends TileManaTableBase implements ITil
             this.feItemEntity.setPosition(this.pos.getX()+0.5,this.pos.getY()+this.getFEY(),this.pos.getZ()+0.5);
             this.feItemEntity.setEntityInvulnerable(true);
             this.feItemEntity.setInfinitePickupDelay();
+            this.setFeEntityData(this.feItemEntity);
             this.world.spawnEntity(this.feItemEntity);
         }
     }

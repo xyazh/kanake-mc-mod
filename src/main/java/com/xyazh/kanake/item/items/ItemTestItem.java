@@ -7,16 +7,21 @@ import com.xyazh.kanake.entity.*;
 import com.xyazh.kanake.util.TpHelper;
 import com.xyazh.kanake.world.ModWorlds;
 import com.xyazh.kanake.world.provider.ProviderArea;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nonnull;
 
@@ -54,34 +59,47 @@ public class ItemTestItem extends ItemBase {
             world.spawnEntity(entity);
             player.startRiding(entity);
         }*/
-
         return super.onItemRightClick(world, player, hand);
     }
 
     @Nonnull
     @Override
     public EnumActionResult onItemUse(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote){
-            ChunkProviderServer chunkProvider = (ChunkProviderServer) worldIn.getChunkProvider();
-            int chunkX = pos.getX()>>4;
-            int chunkZ = pos.getZ()>>4;
-            Chunk chunkToRegenerate = chunkProvider.getLoadedChunk(chunkX, chunkZ);
-            if (chunkToRegenerate != null) {
-                chunkToRegenerate.markDirty();
-                chunkToRegenerate.setModified(true);
-                chunkToRegenerate.populate(chunkProvider,chunkProvider.chunkGenerator);
-                int x = chunkX<<4;
-                int z = chunkZ<<4;
-                for(int i=0;i<16;i++){
-                    for(int k=0;k<16;k++){
-                        for(int y=0;y<256;y++){
-                            BlockPos blockPos = new BlockPos(x+i,y,z+k);
-                            worldIn.setBlockState(blockPos,chunkToRegenerate.getBlockState(blockPos));
-                        }
+        if(worldIn.isRemote){
+            return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        }
+        int chunkX, chunkZ;
+        chunkX = pos.getX() >> 4;
+        chunkZ = pos.getZ() >> 4;
+        IChunkProvider provider = worldIn.getChunkProvider();
+        Chunk thisChunk = provider.getLoadedChunk(chunkX, chunkZ);
+        if (thisChunk == null) {
+            return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+        }
+        IChunkGenerator generator = worldIn.provider.createChunkGenerator();
+        Chunk chunk = generator.generateChunk(chunkX, chunkZ);
+        generator.generateStructures(chunk, chunkX, chunkZ);
+        chunk.populate(provider,generator);
+        int posX, posZ;
+        posX = chunkX << 4;
+        posZ = chunkZ << 4;
+        for (int i = 0; i < 16; i++) {
+            for (int y = 0; y < 256; y++) {
+                for (int k = 0; k < 16; k++) {
+                    int x = posX + i;
+                    int z = posZ + k;
+                    BlockPos blockPos = new BlockPos(x, y, z);
+                    IBlockState oldState = thisChunk.getBlockState(x,y,z);
+                    IBlockState newState = chunk.getBlockState(x, y, z);
+                    if(Block.getStateId(oldState)==Block.getStateId(newState)){
+                        continue;
                     }
+                    thisChunk.setBlockState(blockPos,newState);
+                    worldIn.notifyBlockUpdate(blockPos,oldState,newState,2);
                 }
             }
         }
+        thisChunk.setBiomeArray(chunk.getBiomeArray());
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 

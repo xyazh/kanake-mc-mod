@@ -166,17 +166,6 @@ public class BlockManaStove extends BlockBase implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(@Nonnull IBlockState stateIn, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Random rand)
     {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if(te instanceof TileManaStove){
-            TileManaStove manaStove = (TileManaStove) te;
-            if(manaStove.workingTime > 0){
-                for(int i=0;i<10;i++){
-                    worldIn.spawnParticle(ModParticles.WANA_PARTICLES,
-                            pos.getX()+0.25+rand.nextFloat()/2,pos.getY()+0.1875,pos.getZ()+0.25+rand.nextFloat()/2,
-                            0,0,0);
-                }
-            }
-        }
     }
 
     @Nullable

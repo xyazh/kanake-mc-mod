@@ -7,4 +7,6 @@ public interface ITileForeverEntity {
     boolean checkItem(ItemStack itemStack);
     double getFEY();
     void setFeEntity();
+    void setFeEntityData(EntityForeverItem feItemEntity);
+    boolean isDead();
 }
