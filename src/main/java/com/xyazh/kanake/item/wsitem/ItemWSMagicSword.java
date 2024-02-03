@@ -19,7 +19,7 @@ public class ItemWSMagicSword extends ItemSwordBase {
         super(name,ToolMaterial.IRON);
     }
 
-    public boolean hitEntity(@Nonnull ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
+    public boolean hitEntity(@Nonnull ItemStack stack, EntityLivingBase target, @Nonnull EntityLivingBase attacker)
     {
         target.hurtResistantTime = 0;
         target.attackEntityFrom(new MagicDamage().setAttacker(attacker),16);

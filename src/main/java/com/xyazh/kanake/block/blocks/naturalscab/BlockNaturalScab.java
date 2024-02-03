@@ -28,21 +28,7 @@ public class BlockNaturalScab extends BlockTableMono {
 
     public void updateTick(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand)
     {
-        int x,y,z;
-        x = pos.getX();
-        y = pos.getY();
-        z = pos.getZ();
-        for(int i=-1;i<=1;i++){
-            for(int j=-1;j<=1;j++){
-                for(int k=-1;k<=1;k++){
-                    BlockPos newPos = new BlockPos(x+i,y+j,z+k);
-                }
-            }
-        }
-        TileEntity te =  worldIn.getTileEntity(pos);
-        if(te instanceof TileNaturalScab){
-            TileNaturalScab naturalScab = (TileNaturalScab) te;
-        }
+
     }
 
     @Nullable

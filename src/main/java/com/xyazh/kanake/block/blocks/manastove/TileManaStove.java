@@ -64,13 +64,6 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
         }
     }
 
-    public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        this.manaStored = compound.getDouble("manaStored");
-        this.shouldSync = compound.getBoolean("shouldSync");
-        this.workingTime = compound.getInteger("workingTime");
-    }
-
 
     @Nonnull
     @Override
@@ -195,6 +188,14 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
         super.clear();
     }
 
+    @Override
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        this.manaStored = compound.getDouble("manaStored");
+        this.shouldSync = compound.getBoolean("shouldSync");
+        this.workingTime = compound.getInteger("workingTime");
+    }
+
     @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
@@ -249,6 +250,11 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     }
 
     @Override
+    public boolean isManaEmpty() {
+        return this.getManaStored()<=0;
+    }
+
+    @Override
     public void clearMana() {
         this.manaStored = 0;
         this.setShouldSync();
@@ -261,6 +267,11 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
 
     @Override
     public boolean canWork(Object object) {
+        return true;
+    }
+
+    @Override
+    public boolean canExtract(Object object) {
         return true;
     }
 

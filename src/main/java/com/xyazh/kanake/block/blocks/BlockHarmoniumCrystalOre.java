@@ -26,7 +26,7 @@ public class BlockHarmoniumCrystalOre extends BlockBase{
             return ModItems.HARMONIUM_CRYSTAL;
     }
 
-    public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
+    public void onEntityWalk(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Entity entityIn)
     {
         if(entityIn instanceof EntitySlime){
             entityIn.attackEntityFrom(DamageSource.CACTUS,2);

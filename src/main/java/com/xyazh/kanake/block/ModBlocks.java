@@ -37,7 +37,7 @@ public class ModBlocks {
 			.setOreDict(new String[]{"blockQuartz"})
 			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
-	public static final Block MONO = new BlockTableCoerMono("mono", Material.IRON, TileTableCoreMono.class)
+	public static final Block MONO = new BlockTableCoreMono("mono", Material.IRON, TileTableCoreMono.class)
 			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
 
 	public static final Block CRYSTALER = new BlockCrystaler("crystaler", Material.IRON, TileCrystaler.class)

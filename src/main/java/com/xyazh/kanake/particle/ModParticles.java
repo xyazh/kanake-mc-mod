@@ -90,7 +90,7 @@ public class ModParticles {
         }
     }
 
-    public static void remoteSpawnParticle(World world,EnumParticleTypes particleTypes,int n,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,int d){
+    public static void remoteSpawnParticle(World world,int n,EnumParticleTypes particleTypes,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,int d){
         SpawnParticlesPacket spawnParticlesPacket = new SpawnParticlesPacket();
         spawnParticlesPacket.id = particleTypes.getParticleID();
         spawnParticlesPacket.x = xCoord;

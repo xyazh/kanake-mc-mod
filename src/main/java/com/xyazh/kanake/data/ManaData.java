@@ -12,6 +12,10 @@ public class ManaData {
         return ManaData.get(player)>= ManaData.getMax(player);
     }
 
+    public static boolean isEmpty(EntityPlayer player){
+        return ManaData.get(player) <= 0;
+    }
+
     public static void setFull(EntityPlayer player){
         ManaData.set(player,ManaData.getMax(player));
     }

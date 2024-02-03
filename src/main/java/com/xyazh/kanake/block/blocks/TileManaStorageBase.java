@@ -82,6 +82,11 @@ public class TileManaStorageBase extends TileBase implements ITickable, IManaSto
     }
 
     @Override
+    public boolean isManaEmpty() {
+        return this.getManaStored()<=0;
+    }
+
+    @Override
     public void clearMana() {
         this.manaStored = 0;
         this.setShouldSync();
@@ -94,6 +99,11 @@ public class TileManaStorageBase extends TileBase implements ITickable, IManaSto
 
     @Override
     public boolean canWork(Object object) {
+        return true;
+    }
+
+    @Override
+    public boolean canExtract(Object object) {
         return true;
     }
 

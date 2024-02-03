@@ -6,7 +6,10 @@ import com.xyazh.kanake.block.blocks.clean.render.RenderClean;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
@@ -20,13 +23,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class BlockClean extends BlockBase implements ITileEntityProvider {
     public BlockClean(String name) {
         super(name, Material.ROCK);
         setResistance(Float.MAX_VALUE);
-        setBlockUnbreakable();
+        setLightLevel(1F);
+        setHardness(50.0F);
+        setResistance(2000.0F);
         GameRegistry.registerTileEntity(TileClean.class, new ResourceLocation(Kanake.MODID, name));
         if (!Kanake.proxy.isServer()) {
             this.bindTileRender();
@@ -64,5 +70,10 @@ public class BlockClean extends BlockBase implements ITileEntityProvider {
     }
 
     public void onEntityCollidedWithBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Entity entityIn) {
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World player, List<String> tooltip, @Nonnull ITooltipFlag advanced){
+        tooltip.add(I18n.format("tile.clean.desc"));
     }
 }

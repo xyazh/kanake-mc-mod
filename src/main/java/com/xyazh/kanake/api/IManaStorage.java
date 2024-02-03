@@ -1,7 +1,5 @@
 package com.xyazh.kanake.api;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 
 public interface IManaStorage {
     //是否存满
@@ -9,6 +7,8 @@ public interface IManaStorage {
 
     //将容器存满
     void setFull();
+
+    boolean isManaEmpty();
 
     //将容器清空
     void clearMana();
@@ -18,6 +18,9 @@ public interface IManaStorage {
 
     //能否工作
     boolean canWork(Object object);
+
+    //能否提取
+    boolean canExtract(Object object);
 
     //接收Mana,传入需要接收的的，返回剩下没接收的
     double receiveMana(double n);

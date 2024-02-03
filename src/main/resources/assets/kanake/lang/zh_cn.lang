@@ -15,6 +15,7 @@ tile.crystaler.desc.5= 迷宫 魔法结晶
 tile.compressed1x_quartz_block.name=压缩下界石英块
 tile.tp.name=传送阵
 tile.clean.name=块-清洗
+tile.clean.desc=对范围内执行清洗
 tile.mana_storage.name=魔力储存器
 tile.mana_stove.name=魔力能源炉
 
