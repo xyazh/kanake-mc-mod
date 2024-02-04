@@ -145,6 +145,17 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+
+        EntityRegistry.registerModEntity(new ResourceLocation(Kanake.MODID,"shield"),
+                EntityShield.class,
+                "shield",
+                250,
+                Kanake.instance,
+                50,
+                3,
+                true,
+                0xcccccc, 0x00ffff
+        );
     }
 
     @SubscribeEvent

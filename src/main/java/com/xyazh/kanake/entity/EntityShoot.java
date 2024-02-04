@@ -210,7 +210,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
         if(source.isExplosion()&&amount>=20){
-            this.setDead();
+            this.isDead = true;
         }
         return true;
     }

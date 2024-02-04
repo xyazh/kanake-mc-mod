@@ -4,6 +4,7 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.clean.TileClean;
 import com.xyazh.kanake.damage.CleanDamage;
 import com.xyazh.kanake.damage.KillSlimeDamage;
+import com.xyazh.kanake.entity.EntityShield;
 import com.xyazh.kanake.entity.EntityShoot;
 import com.xyazh.kanake.entity.EntityWSKnight;
 import com.xyazh.kanake.item.ModItems;
@@ -20,14 +21,18 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Kanake.MODID)
 public class Event {
@@ -99,5 +104,10 @@ public class Event {
             event.setCanceled(false);
             event.setAmount(TileClean.DAMAGE);
         }
+    }
+
+    @SubscribeEvent()
+    public static void getCollisionBoxes(GetCollisionBoxesEvent event){
+
     }
 }

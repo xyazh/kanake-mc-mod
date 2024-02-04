@@ -1,11 +1,7 @@
 package com.xyazh.kanake.entity.render;
 
 
-import com.xyazh.kanake.entity.EntityEye;
 import com.xyazh.kanake.entity.EntityTreeMan;
-import com.xyazh.kanake.render.RenderBezierTube;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

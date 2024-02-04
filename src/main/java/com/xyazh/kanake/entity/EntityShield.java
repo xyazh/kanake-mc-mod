@@ -1,13 +1,14 @@
 package com.xyazh.kanake.entity;
 
 import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityShulker;
-import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -18,12 +19,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EntityTreeMan extends EntityGolem {
-    public EntityTreeMan(World worldIn) {
+public class EntityShield extends EntityMob {
+
+    public EntityShield(World worldIn) {
         super(worldIn);
     }
 
-
+    @Override
+    public void setEntityBoundingBox(@Nonnull AxisAlignedBB bb) {
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(
+                this.posX-8,this.posY-8,this.posZ-8,
+                this.posX+8,this.posY+8,this.posZ+8
+        );
+        super.setEntityBoundingBox(axisAlignedBB);
+    }
 
     protected void applyEntityAttributes()
     {
@@ -39,7 +48,7 @@ public class EntityTreeMan extends EntityGolem {
 
     @Override
     public void addVelocity(double x, double y, double z) {
-        super.addVelocity(0, y, 0);
+        super.addVelocity(0, 0, 0);
     }
 
     @Override
@@ -47,11 +56,16 @@ public class EntityTreeMan extends EntityGolem {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
-
+    public boolean hasNoGravity() {
+        return true;
     }
 
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+    }
+
+    @Override
     public void onLivingUpdate()
     {
         super.onLivingUpdate();
@@ -68,6 +82,7 @@ public class EntityTreeMan extends EntityGolem {
         this.prevRenderYawOffset = 0;
     }
 
+    @Override
     protected boolean canTriggerWalking()
     {
         return false;
@@ -79,46 +94,24 @@ public class EntityTreeMan extends EntityGolem {
         this.newPosRotationIncrements = 0;
     }
 
+    @Override
     public void applyEntityCollision(@Nonnull Entity entityIn)
     {
     }
 
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox()
+    @Override
+    protected void collideWithEntity(@Nonnull Entity entityIn)
     {
-        return this.isEntityAlive() ? this.getEntityBoundingBox() : null;
-    }
-
-    public float getCollisionBorderSize()
-    {
-        return 0.0F;
     }
 
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount)
     {
-        if(source.isMagicDamage()){
-            amount = 0;
-        }
-        if(source.isFireDamage()){
-            this.setFire(Integer.MAX_VALUE);
-            amount *= 3;
-        }
-        if(source.isProjectile()){
-            amount /= 10;
-        }
-        if(!(source.isExplosion()||source.isDamageAbsolute())){
-            Entity entity = source.getTrueSource();
-            if(entity != null){
-                for(ItemStack itemStack:entity.getHeldEquipment()){
-                    if (itemStack.getItem().getToolClasses(itemStack).contains("axe")){
-                        amount *= 2;
-                        break;
-                    }
-                }
-            }else {
-                amount /= 2;
-            }
-        }
         return super.attackEntityFrom(source,amount);
+    }
+
+    @Override
+    protected void onDeathUpdate() {
+        this.deathTime = 20;
+        super.onDeathUpdate();
     }
 }

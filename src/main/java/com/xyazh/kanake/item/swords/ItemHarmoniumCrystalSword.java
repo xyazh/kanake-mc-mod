@@ -18,7 +18,7 @@ public class ItemHarmoniumCrystalSword extends ItemSwordBase{
     }
 
     @Override
-    public boolean hitEntity(@Nonnull ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+    public boolean hitEntity(@Nonnull ItemStack stack, EntityLivingBase target, @Nonnull EntityLivingBase attacker) {
         if(!target.world.isRemote && (target instanceof EntitySlime)){
             target.attackEntityFrom(new KillSlimeDamage().setAttacker(attacker),Float.MAX_VALUE);
         }
