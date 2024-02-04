@@ -17,6 +17,7 @@ tile.tp.name=传送阵
 tile.clean.name=块-清洗
 tile.clean.desc=对范围内执行清洗
 tile.mana_storage.name=魔力储存器
+tile.inf_mana_storage.name=无限魔力储存器
 tile.mana_stove.name=魔力能源炉
 
 item.test.name=测试物品

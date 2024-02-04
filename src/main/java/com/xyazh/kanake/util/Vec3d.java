@@ -1,9 +1,17 @@
 package com.xyazh.kanake.util;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+
+
 public class Vec3d {
     public double x;
     public double y;
     public double z;
+
+    public static Vec3d fromEntityPos(Entity entity){
+        return new Vec3d(entity.posX,entity.posY,entity.posZ);
+    }
 
     public static double delivery(Vec3d t1, Vec3d t2){
         double dx,dy,dz;
@@ -15,6 +23,18 @@ public class Vec3d {
 
     public Vec3d() { }
 
+    public Vec3d(net.minecraft.util.math.Vec3d vec3d) {
+        this.x = vec3d.x;
+        this.y = vec3d.y;
+        this.z = vec3d.z;
+    }
+
+    public Vec3d(BlockPos pos) {
+        this.x = pos.getX();
+        this.y = pos.getY();
+        this.z = pos.getZ();
+    }
+
     public Vec3d(double x, double y, double z) {
         this.x = x;
         this.y = y;
@@ -22,6 +42,12 @@ public class Vec3d {
     }
 
     public void set(Vec3d v) {
+        this.x = v.x;
+        this.y = v.y;
+        this.z = v.z;
+    }
+
+    public void set(net.minecraft.util.math.Vec3d v) {
         this.x = v.x;
         this.y = v.y;
         this.z = v.z;
@@ -72,10 +98,20 @@ public class Vec3d {
         if(l==0){
             return;
         }
-        double norm = 1.0 / l;
-        this.x = this.x * norm;
-        this.y = this.y * norm;
-        this.z = this.z * norm;
+        this.x = this.x / l;
+        this.y = this.y / l;
+        this.z = this.z / l;
+    }
+
+    public double normalizeAndLength() {
+        double l = length();
+        if(l==0){
+            return l;
+        }
+        this.x = this.x / l;
+        this.y = this.y / l;
+        this.z = this.z / l;
+        return l;
     }
 
     public void cross(Vec3d v1, Vec3d v2) {

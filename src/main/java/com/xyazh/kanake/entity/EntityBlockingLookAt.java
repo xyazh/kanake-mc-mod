@@ -14,11 +14,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityBlockingLookAt extends EntityShoot {
-    protected Entity target = null;
-    protected int lockAge = 5;
+    public Entity target = null;
+    public int lockAge = 5;
     public double speed = 2.0;
 
     public EntityBlockingLookAt(World worldIn) {
@@ -125,5 +126,10 @@ public class EntityBlockingLookAt extends EntityShoot {
             }
         }
         return flag;
+    }
+
+    @Override
+    public boolean isImmuneToExplosions() {
+        return true;
     }
 }

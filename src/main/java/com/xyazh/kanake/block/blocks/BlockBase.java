@@ -12,6 +12,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 public class BlockBase extends Block implements IHasModel
@@ -25,12 +27,16 @@ public class BlockBase extends Block implements IHasModel
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		ModBlocks.BLOCKS.add(this);
-		this.itemBlockBase = new ItemBlockBase(this);
+		this.itemBlockBase = this.getItemBlockBase();
 		this.itemBlockBase.setRegistryName(name);
 		ModItems.ITEMS.add(this.itemBlockBase);
 		setHardness(5.0F);
 		setResistance(15.0F);
 		setLightOpacity(1);
+	}
+
+	public ItemBlockBase getItemBlockBase(){
+		return new ItemBlockBase(this);
 	}
 
 	public BlockBase setOreDict(String[] oreDictName){

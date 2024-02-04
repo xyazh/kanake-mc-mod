@@ -22,7 +22,7 @@ public class ItemSpadeBase extends ItemSpade implements IHasModel {
 		super(material);
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+		setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 		toolMaterial = material;
 		ModItems.ITEMS.add(this);
 	}

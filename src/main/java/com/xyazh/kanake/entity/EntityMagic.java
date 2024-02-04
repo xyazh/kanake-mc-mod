@@ -2,6 +2,7 @@ package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityMagic extends EntityShoot{

@@ -7,6 +7,7 @@ import com.xyazh.kanake.block.blocks.BlockNFire;
 import com.xyazh.kanake.block.blocks.clean.BlockClean;
 import com.xyazh.kanake.block.blocks.crystaler.BlockCrystaler;
 import com.xyazh.kanake.block.blocks.crystaler.TileCrystaler;
+import com.xyazh.kanake.block.blocks.manastorage.BlockInfManaStorage;
 import com.xyazh.kanake.block.blocks.manastorage.BlockManaStorage;
 import com.xyazh.kanake.block.blocks.manastove.BlockManaStove;
 import com.xyazh.kanake.block.blocks.manatable.*;
@@ -25,31 +26,35 @@ public class ModBlocks {
 	public static final Block N_ICE = new BlockNIce("n_ice");
 	public static final Block TP = new BlockTeleportation("tp");
 
-	public static final Block CLEAN = new BlockClean("clean").setCreativeTab(ModCreativeTab.SBW_CREATIVE);;
+	public static final Block CLEAN = new BlockClean("clean")
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);;
 
 	public static final Block HARMONIUM_CRYSTAL_ORE =  new BlockHarmoniumCrystalOre("harmonium_crystal_ore")
 			.setOreDict(new String[]{"oreHarmoniumCrystal"});
 
-	public static final Block MANA_TABLE_SHOW = new BlockShowcase("mono_table", Material.IRON, TileManaWithForeverEntity.class)
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+	public static final Block MANA_TABLE_SHOW = new BlockShowcase("mono_table", Material.ROCK, TileManaWithForeverEntity.class)
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
-	public static final Block T_MONO = new BlockTableMono("t_mono", Material.IRON, TileTableMono.class)
+	public static final Block T_MONO = new BlockTableMono("t_mono", Material.ROCK, TileTableMono.class)
 			.setOreDict(new String[]{"blockQuartz"})
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
-	public static final Block MONO = new BlockTableCoreMono("mono", Material.IRON, TileTableCoreMono.class)
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+	public static final Block MONO = new BlockTableCoreMono("mono", Material.ROCK, TileTableCoreMono.class)
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
-	public static final Block CRYSTALER = new BlockCrystaler("crystaler", Material.IRON, TileCrystaler.class)
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+	public static final Block CRYSTALER = new BlockCrystaler("crystaler", Material.ROCK, TileCrystaler.class)
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
-	public static final Block COMPRESSED1X_QUARTZ_BLOCK = new BlockBase("compressed1x_quartz_block", Material.IRON)
+	public static final Block COMPRESSED1X_QUARTZ_BLOCK = new BlockBase("compressed1x_quartz_block", Material.ROCK)
 			.setOreDict(new String[]{"compressed1xQuartzBlock"})
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
 	public static final Block MANA_STORAGE = new BlockManaStorage("mana_storage", Material.ROCK)
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+
+	public static final Block INF_MANA_STORAGE = new BlockInfManaStorage("inf_mana_storage", Material.ROCK)
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
 	public static final Block MANA_STOVE = new BlockManaStove("mana_stove", Material.ROCK)
-			.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 }

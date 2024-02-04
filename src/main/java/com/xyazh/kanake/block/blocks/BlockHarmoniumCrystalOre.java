@@ -17,7 +17,7 @@ import java.util.Random;
 public class BlockHarmoniumCrystalOre extends BlockBase{
     public BlockHarmoniumCrystalOre(String name) {
         super(name, Blocks.EMERALD_ORE.getDefaultState().getMaterial());
-        this.setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+        this.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     }
 
     @Nonnull

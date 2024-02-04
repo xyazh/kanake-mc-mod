@@ -189,10 +189,6 @@ public class EntityWSSoulBullet extends EntityLiving implements IProjectile {
         return true;
     }
 
-    public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        return true;
-    }
-
     @Override
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         this.setPosition(x, y, z);

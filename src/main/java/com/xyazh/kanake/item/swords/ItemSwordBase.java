@@ -24,7 +24,7 @@ public class ItemSwordBase extends ItemSword implements IHasModel {
 		super(material);
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+		setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 		toolMaterial = material;
 		ModItems.ITEMS.add(this);
 	}

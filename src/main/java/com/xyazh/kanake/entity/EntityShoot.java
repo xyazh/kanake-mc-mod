@@ -1,27 +1,27 @@
 package com.xyazh.kanake.entity;
 
-import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.util.Vec3d;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
-public class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData {
+public abstract class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData {
     protected int livingMaxAge = 5000;
     protected int livingAge = 0;
     protected Vec3d forward = new Vec3d(0,1,0);
@@ -29,15 +29,11 @@ public class EntityShoot extends Entity implements IProjectile, IEntityAdditiona
     public EntityLivingBase shootingEntity = null;
     protected BlockPos blockPos = null;
     protected double dy = 0;
-
+    protected int explosionKeepAge = 0;
 
     public EntityShoot(World worldIn) {
         super(worldIn);
         this.setSize(0.01f, 0.01f);
-    }
-
-    @Override
-    protected void entityInit() {
     }
 
     protected boolean isHurt(){
@@ -64,6 +60,7 @@ public class EntityShoot extends Entity implements IProjectile, IEntityAdditiona
         this.motionX = this.speed * forward.x;
         this.motionZ = this.speed * forward.z;
         this.blockPos = this.getPosition();
+        this.explosionKeepAge -= 1;
         if(this.hasNoGravity()){
             this.motionY = this.speed * forward.y;
         }else{
@@ -73,8 +70,18 @@ public class EntityShoot extends Entity implements IProjectile, IEntityAdditiona
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
     }
 
+    public void setForwardUnlimited(Vec3d forward) {
+        this.forward.set(forward);
+    }
+
     public void setForward(Vec3d forward) {
-        this.forward = forward.normalize();
+        this.forward.set(forward);
+        this.forward.normalize();
+    }
+
+    public void setForward(net.minecraft.util.math.Vec3d forward) {
+        this.forward.set(forward);
+        this.forward.normalize();
     }
 
     public void setLivingMaxAge(int livingMaxAge) {
@@ -102,6 +109,26 @@ public class EntityShoot extends Entity implements IProjectile, IEntityAdditiona
     }
 
     public void entityShoot(EntityLivingBase owner, Vec3d direction){
+        double x,y,z;
+        x = owner.posX + 0.5*direction.x;
+        y = owner.posY + 1 + 0.5*direction.y;
+        z = owner.posZ + 0.5*direction.z;
+        this.setForward(direction);
+        this.shoot(x,y,z);
+        this.shootingEntity = owner;
+    }
+
+    public void entityShoot(EntityLivingBase owner, net.minecraft.util.math.Vec3d direction, float velocity, float inaccuracy){
+        double x,y,z;
+        x = owner.posX + 0.5*direction.x;
+        y = owner.posY + 1 + 0.5*direction.y;
+        z = owner.posZ + 0.5*direction.z;
+        this.setForward(direction);
+        this.shoot(x,y,z,velocity,inaccuracy);
+        this.shootingEntity = owner;
+    }
+
+    public void entityShoot(EntityLivingBase owner, net.minecraft.util.math.Vec3d direction){
         double x,y,z;
         x = owner.posX + 0.5*direction.x;
         y = owner.posY + 1 + 0.5*direction.y;
@@ -178,5 +205,13 @@ public class EntityShoot extends Entity implements IProjectile, IEntityAdditiona
             UUID id = new UUID(highBits, lowBits);
             this.shootingEntity = this.world.getPlayerEntityByUUID(id);
         }
+    }
+
+    @Override
+    public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
+        if(source.isExplosion()&&amount>=20){
+            this.setDead();
+        }
+        return true;
     }
 }

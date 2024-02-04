@@ -138,6 +138,8 @@ public class TileClean extends TileEntity implements ITickable {
                 if (this.storageTile.isManaEmpty() || !this.storageTile.canExtract(this)) {
                     this.storageTile = null;
                 }
+            }else {
+                this.storageTile = null;
             }
         }
         if(flag){
@@ -157,7 +159,7 @@ public class TileClean extends TileEntity implements ITickable {
                 this.storageEntity = null;
             }
         }
-        if(this.storageTile==null&&this.storageEntity ==null){
+        if(this.storageTile == null && this.storageEntity == null){
             this.findStorage();
         }
     }

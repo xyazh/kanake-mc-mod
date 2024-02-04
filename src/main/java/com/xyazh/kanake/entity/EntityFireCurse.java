@@ -19,6 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityFireCurse extends EntityShoot{
@@ -130,4 +131,6 @@ public class EntityFireCurse extends EntityShoot{
             this.world.setBlockState(pos, ModBlocks.N_FIRE.getDefaultState(), 11);
         }
     }
+
+
 }

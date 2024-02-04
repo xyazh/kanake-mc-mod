@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityFireBallLookAt extends EntityFireBall{
@@ -87,5 +88,10 @@ public class EntityFireBallLookAt extends EntityFireBall{
             entityLivingBase.setFire(3);
         }
         return flag;
+    }
+
+    @Override
+    public boolean isImmuneToExplosions() {
+        return true;
     }
 }

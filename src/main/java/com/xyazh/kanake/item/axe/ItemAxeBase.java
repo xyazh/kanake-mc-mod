@@ -22,7 +22,7 @@ public class ItemAxeBase extends ItemAxe implements IHasModel {
 		super(material, damage,speed);
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(ModCreativeTab.SBW_CREATIVE);
+		setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 		toolMaterial = material;
 		ModItems.ITEMS.add(this);
 	}

@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityExplosionLookAt extends EntityFireBallLookAt{
@@ -25,5 +26,10 @@ public class EntityExplosionLookAt extends EntityFireBallLookAt{
         if(!this.world.isRemote){
             this.world.createExplosion(this.shootingEntity==null?this:this.shootingEntity,this.posX,this.posY,this.posZ,3,true);
         }
+    }
+
+    @Override
+    public boolean isImmuneToExplosions() {
+        return true;
     }
 }

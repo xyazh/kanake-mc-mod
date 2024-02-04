@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModCreativeTab {
-    public static final CreativeTabs SBW_CREATIVE = new CreativeTabs(CreativeTabs.getNextID(), "knkcreative")
+    public static final CreativeTabs KNK_CREATIVE = new CreativeTabs(CreativeTabs.getNextID(), "knkcreative")
     {
         @SideOnly(Side.CLIENT)
         public ItemStack getTabIconItem()
