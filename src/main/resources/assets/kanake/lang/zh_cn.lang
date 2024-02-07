@@ -19,6 +19,7 @@ tile.clean.desc=对范围内执行清洗
 tile.mana_storage.name=魔力储存器
 tile.inf_mana_storage.name=无限魔力储存器
 tile.mana_stove.name=魔力能源炉
+tile.pure_hana.name=纯净水晶花
 
 item.test.name=测试物品
 item.rune.name=符文纸
@@ -36,6 +37,7 @@ item.rune_blocking_look_at.name=对抗符文
 item.rune_tp.desc.0=未绑定
 item.rune_tp.desc.1=已绑定
 item.harmonium_crystal.name=调和水晶
+item.harmonium_crystal_pure.name=纯净调和水晶
 item.harmonium_crystal_axe.name=调和水晶斧
 item.harmonium_crystal_hoe.name=调和水晶锄
 item.harmonium_crystal_pickaxe.name=调和水晶镐
@@ -84,6 +86,7 @@ item.ws_magic_sword.desc=额外魔法伤害 +8
 item.pollute_salt.name=污染盐
 item.heart.name=心脏
 item.dust_magic.name=魔力粉
+item.pure_hana.name=纯净水晶花种子
 
 
 entity.ws_knight.name=废怯骑士

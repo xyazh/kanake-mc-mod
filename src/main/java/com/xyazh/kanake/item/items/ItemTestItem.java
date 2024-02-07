@@ -50,7 +50,7 @@ public class ItemTestItem extends ItemBase {
                 world.spawnEntity(entity);
             }
         }*/
-        /*if (!world.isRemote) {
+        if (!world.isRemote) {
             Vec3d m = Vec3d.fromPitchYaw(
                     (float) (player.rotationPitch),
                     (float) (player.rotationYaw));
@@ -58,7 +58,7 @@ public class ItemTestItem extends ItemBase {
             entity.entityShoot(player, m);
             world.spawnEntity(entity);
             player.startRiding(entity);
-        }*/
+        }
         return super.onItemRightClick(world, player, hand);
     }
 

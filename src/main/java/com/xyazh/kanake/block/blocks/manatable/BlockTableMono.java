@@ -54,7 +54,7 @@ public class BlockTableMono extends BlockManaTableBase{
 
     @Nonnull
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    public Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune)
     {
         return Item.getItemFromBlock(Blocks.QUARTZ_BLOCK);
     }

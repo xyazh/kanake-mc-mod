@@ -93,7 +93,7 @@ public class TileTableCheckStructMono extends TileTableMono{
                 blockPosD1,blockPosS3,blockPosS2,blockPosS1
         };
         for(BlockPos p:blockPos){
-            if(!(this.pos.getX() >> 4 == p.getX() >> 4) || (this.pos.getZ() >> 4 == p.getZ() >> 4)){
+            if(!((this.pos.getX() >> 4 == p.getX() >> 4) || (this.pos.getZ() >> 4) == (p.getZ() >> 4))){
                 this.isOutTheChunk = true;
                 return false;
             }
@@ -139,7 +139,7 @@ public class TileTableCheckStructMono extends TileTableMono{
         z = this.pos.getZ();
         BlockPos[] blockPos = {blockPosAA,blockPosAS,blockPosSA,blockPosSS};
         for(BlockPos p:blockPos){
-            if(!(this.pos.getX() >> 4 == p.getX() >> 4) || (this.pos.getZ() >> 4 == p.getZ() >> 4)){
+            if(!((this.pos.getX() >> 4 == p.getX() >> 4) || (this.pos.getZ() >> 4 == p.getZ() >> 4))){
                 this.isOutTheChunk = true;
                 return false;
             }

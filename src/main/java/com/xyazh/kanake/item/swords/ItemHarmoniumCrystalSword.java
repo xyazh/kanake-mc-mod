@@ -26,7 +26,6 @@ public class ItemHarmoniumCrystalSword extends ItemSwordBase{
     }
 
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-        /*添加自定义物品信息（tooltip），当鼠标指针移动到物品上就会显示出来*/
         tooltip.add(I18n.format("item.harmonium_crystal.desc"));
     }
 }

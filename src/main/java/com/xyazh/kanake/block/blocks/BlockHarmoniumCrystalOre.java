@@ -21,7 +21,7 @@ public class BlockHarmoniumCrystalOre extends BlockBase{
     }
 
     @Nonnull
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    public Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune)
     {
             return ModItems.HARMONIUM_CRYSTAL;
     }

@@ -33,7 +33,7 @@ public class BlockCrystaler extends BlockShowcase {
         super(name, material, tileEntityClass);
     }
 
-    public int quantityDropped(Random random)
+    public int quantityDropped(@Nonnull Random random)
     {
         return 0;
     }
@@ -52,18 +52,16 @@ public class BlockCrystaler extends BlockShowcase {
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
-        return BlockRenderLayer.TRANSLUCENT;
+        return BlockRenderLayer.CUTOUT;
     }
 
-
-
-    public boolean isFullCube(IBlockState state)
+    public boolean isFullCube(@Nonnull IBlockState state)
     {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(@Nonnull IBlockState state) {
         return false;
     }
 
@@ -73,7 +71,7 @@ public class BlockCrystaler extends BlockShowcase {
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(@Nonnull IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, @Nonnull EnumFacing side) {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         return !iblockstate.isFullCube() && iblockstate.getBlock() != this;
     }

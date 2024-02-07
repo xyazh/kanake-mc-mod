@@ -38,6 +38,9 @@ public class ModItems {
     public static final Item HARMONIUM_CRYSTAL = new ItemBase("harmonium_crystal")
             .setOreDict(new String[]{"gemCrystal", "gemQuartz", "gemHarmoniumCrystal"})
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item PURE_HARMONIUM_CRYSTAL =  new ItemBase("harmonium_crystal_pure")
+            .setOreDict(new String[]{"gemPureCrystal", "gemPureQuartz", "gemPureHarmoniumCrystal"})
+            .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_AXE = new ItemHarmoniumCrystalAxe("harmonium_crystal_axe").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_HOE = new ItemHarmoniumCrystalHoe("harmonium_crystal_hoe").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_PICKAXE = new ItemHarmoniumCrystalPickaxe("harmonium_crystal_pickaxe").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
@@ -108,12 +111,10 @@ public class ModItems {
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item WS_POLLUTE_SALT = new ItemBase("pollute_salt")
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
-
     public static final Item WS_SWORD = new ItemWSSword("ws_sword")
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item WS_MAGIC_SWORD = new ItemWSMagicSword("ws_magic_sword")
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
-
     public static final Item DUST_MAGIC= new ItemBase("dust_magic")
             .setOreDict(new String[]{"dustMagic"})
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);

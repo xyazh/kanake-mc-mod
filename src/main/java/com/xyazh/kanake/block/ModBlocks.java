@@ -1,9 +1,6 @@
 package com.xyazh.kanake.block;
 
-import com.xyazh.kanake.block.blocks.BlockBase;
-import com.xyazh.kanake.block.blocks.BlockHarmoniumCrystalOre;
-import com.xyazh.kanake.block.blocks.BlockNIce;
-import com.xyazh.kanake.block.blocks.BlockNFire;
+import com.xyazh.kanake.block.blocks.*;
 import com.xyazh.kanake.block.blocks.clean.BlockClean;
 import com.xyazh.kanake.block.blocks.crystaler.BlockCrystaler;
 import com.xyazh.kanake.block.blocks.crystaler.TileCrystaler;
@@ -56,5 +53,8 @@ public class ModBlocks {
 			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
 	public static final Block MANA_STOVE = new BlockManaStove("mana_stove", Material.ROCK)
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+
+	public static final Block PURE_HANA = new BlockPureHana("pure_hana")
 			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 }

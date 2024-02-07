@@ -19,7 +19,6 @@ import java.util.Random;
 public class BlockBase extends Block implements IHasModel
 {
 	public ItemBlockBase itemBlockBase;
-	public String[] oreDictName = {};
 
 	public BlockBase(String name, Material material)
 	{
@@ -32,7 +31,6 @@ public class BlockBase extends Block implements IHasModel
 		ModItems.ITEMS.add(this.itemBlockBase);
 		setHardness(5.0F);
 		setResistance(15.0F);
-		setLightOpacity(1);
 	}
 
 	public ItemBlockBase getItemBlockBase(){
@@ -46,13 +44,13 @@ public class BlockBase extends Block implements IHasModel
 
 	@Nonnull
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune)
+	public Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune)
 	{
 		return super.getItemDropped(state, rand, fortune);
 	}
 
 	@Override
-	public int quantityDropped(Random rand) {
+	public int quantityDropped(@Nonnull Random rand) {
 		return super.quantityDropped(rand);
 	}
 	
