@@ -31,6 +31,7 @@ public class BiimuParticle extends BaseParticle {
         this.p1 = new Vec3d(rand.nextDouble(), 0, rand.nextDouble());
         this.p1.normalize();
         this.canCollide = false;
+        this.disLight = true;
     }
 
     public void onUpdate() {
