@@ -3,6 +3,7 @@ package com.xyazh.kanake.events;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.data.ManaAttribute;
 import com.xyazh.kanake.data.ManaData;
+import com.xyazh.kanake.hud.HUDMana;
 import com.xyazh.kanake.network.ManaPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,10 +69,10 @@ public class ManaEvent {
         double n,maxN;
         n = ManaData.get(mc.player);
         maxN = ManaData.getMax(mc.player);
-        if(com.xyazh.kanake.gui.ManaHUD.hud == null){
-            com.xyazh.kanake.gui.ManaHUD.hud = new com.xyazh.kanake.gui.ManaHUD();
+        if(HUDMana.hud == null){
+            HUDMana.hud = new HUDMana();
         }
-        com.xyazh.kanake.gui.ManaHUD.hud.renderHUD(n,maxN);
+        HUDMana.hud.renderHUD(n,maxN);
     }
 
     @SubscribeEvent

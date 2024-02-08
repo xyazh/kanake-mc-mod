@@ -2,6 +2,7 @@ package com.xyazh.kanake;
 
 import com.xyazh.kanake.common.ConfigLoader;
 import com.xyazh.kanake.gen.GenOreHarmoniumCrystal;
+import com.xyazh.kanake.gui.ModGuis;
 import com.xyazh.kanake.init.LoopThread;
 import com.xyazh.kanake.init.RegistryHandler;
 import com.xyazh.kanake.network.*;
@@ -102,9 +103,10 @@ public class Kanake
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        if(Side.CLIENT.equals(event.getSide())){
+        if(Side.CLIENT == event.getSide()){
             ModParticles.registerParticles();
         }
+        ModGuis.registerGuis();
     }
 
     @EventHandler

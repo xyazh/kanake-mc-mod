@@ -4,6 +4,7 @@ package com.xyazh.kanake.item.items;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.clean.TileClean;
 import com.xyazh.kanake.entity.*;
+import com.xyazh.kanake.gui.test.GuiHandlerTest;
 import com.xyazh.kanake.util.TpHelper;
 import com.xyazh.kanake.world.ModWorlds;
 import com.xyazh.kanake.world.provider.ProviderArea;
@@ -50,7 +51,7 @@ public class ItemTestItem extends ItemBase {
                 world.spawnEntity(entity);
             }
         }*/
-        if (!world.isRemote) {
+        /*if (!world.isRemote) {
             Vec3d m = Vec3d.fromPitchYaw(
                     (float) (player.rotationPitch),
                     (float) (player.rotationYaw));
@@ -58,6 +59,9 @@ public class ItemTestItem extends ItemBase {
             entity.entityShoot(player, m);
             world.spawnEntity(entity);
             player.startRiding(entity);
+        }*/
+        if (!world.isRemote){
+            player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
         }
         return super.onItemRightClick(world, player, hand);
     }

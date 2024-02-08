@@ -1,6 +1,7 @@
 package com.xyazh.kanake.events;
 
 import com.xyazh.kanake.Kanake;
+import com.xyazh.kanake.hud.HUDKoori;
 import com.xyazh.kanake.network.KooriEntityPacket;
 import com.xyazh.kanake.potion.buff.PotionKoori;
 import net.minecraft.entity.EntityLivingBase;
@@ -91,7 +92,7 @@ public class KooriEvent {
         }
         PotionEffect effect = mc.player.getActivePotionEffect(PotionKoori.POTION_KOORI);
         if(effect != null) {
-            com.xyazh.kanake.gui.KooriHUD hud = new com.xyazh.kanake.gui.KooriHUD();
+            HUDKoori hud = new HUDKoori();
             hud.renderHUD();
         }
     }
