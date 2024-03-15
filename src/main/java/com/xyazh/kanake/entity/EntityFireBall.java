@@ -17,6 +17,7 @@ import java.util.List;
 public class EntityFireBall extends EntityShoot{
     public EntityFireBall(World worldIn) {
         super(worldIn);
+        this.livingMaxAge = 40;
     }
 
     @Override

@@ -54,9 +54,16 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         return false;
     }
 
+    protected boolean customMotion(){
+        return false;
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if(this.customMotion()){
+            return;
+        }
         this.motionX = this.speed * forward.x;
         this.motionZ = this.speed * forward.z;
         this.blockPos = this.getPosition();

@@ -6,9 +6,11 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.tileentity.CommandBlockBaseLogic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -29,6 +31,13 @@ public class GuiContainerTest extends GuiContainer {
     }
 
     @Override
+    public void initGui() {
+        super.initGui();
+        Keyboard.enableRepeatEvents(true);
+        this.buttonList.clear();
+    }
+
+    @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(TEXTURE);
@@ -38,16 +47,6 @@ public class GuiContainerTest extends GuiContainer {
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
         this.drawTexturedModalRect(bufferbuilder, offsetX, offsetY, 0, 0, this.xSize, this.ySize);
-        for (int n = 0; n < 78; n++) {
-            int i, j;
-            i = (n / 26) * 42 + 25;
-            j = (n % 26) * 8 + 24;
-            if (n % 2 == 0) {
-                this.drawTexturedModalRect(bufferbuilder, offsetX + i, offsetY + j, 176, 0, 42, 8);
-            } else {
-                this.drawTexturedModalRect(bufferbuilder, offsetX + i, offsetY + j, 176, 8, 42, 8);
-            }
-        }
         tessellator.draw();
     }
 
