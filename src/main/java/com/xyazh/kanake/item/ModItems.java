@@ -23,6 +23,7 @@ public class ModItems {
     public static final List<Item> ITEMS = new ArrayList<Item>();
 
     public static final Item TEST_ITEM = new ItemTestItem("test").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item TEST_ITEM2 = new ItemTestItem2("test2").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE = new ItemBase("rune").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_EMPTY = new ItemBase("rune_empty").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL = new ItemFireBallRune("rune_fire_ball").setCreativeTab(ModCreativeTab.KNK_CREATIVE);

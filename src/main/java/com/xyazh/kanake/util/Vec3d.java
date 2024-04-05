@@ -3,11 +3,26 @@ package com.xyazh.kanake.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Random;
+
 
 public class Vec3d {
+    private static final Random rand = new Random();
     public double x;
     public double y;
     public double z;
+    public static Vec3d random() {
+        Vec3d vec3d = new Vec3d(rand.nextDouble()-0.5,rand.nextDouble()-0.5,rand.nextDouble()-0.5);
+        vec3d.normalize();
+        return vec3d;
+    }
+
+    public static Vec3d random(double scale) {
+        Vec3d vec3d = new Vec3d(rand.nextDouble()-0.5,rand.nextDouble()-0.5,rand.nextDouble()-0.5);
+        vec3d.normalize();
+        vec3d.mul(scale);
+        return vec3d;
+    }
 
     public static Vec3d fromEntityPos(Entity entity){
         return new Vec3d(entity.posX,entity.posY,entity.posZ);

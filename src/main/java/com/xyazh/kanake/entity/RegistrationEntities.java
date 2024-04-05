@@ -145,5 +145,12 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityEmptyMagic.class)
+                .id(new ResourceLocation(Kanake.MODID, "empty_magic"), 250)
+                .name("empty_magic")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }

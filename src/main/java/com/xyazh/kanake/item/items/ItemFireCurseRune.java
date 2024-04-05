@@ -20,7 +20,7 @@ public class ItemFireCurseRune extends ItemBase{
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand)
     {
         ItemStack itemStack = new ItemStack(this);
         boolean flag = false;
