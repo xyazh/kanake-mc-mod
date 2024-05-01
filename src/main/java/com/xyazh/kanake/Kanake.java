@@ -67,6 +67,7 @@ public class Kanake
         network.registerMessage(new ManaHandler(), ManaPacket.class, 4, Side.CLIENT);
         network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 5, Side.CLIENT);
         network.registerMessage(new FlyHandler(), FlyPacket.class, 6, Side.SERVER);
+        network.registerMessage(new EntityDataHandler(), EntityDataPacket.class, 7, Side.CLIENT);
 
         if(Side.CLIENT.equals(event.getSide())){
             preInitClient(event);

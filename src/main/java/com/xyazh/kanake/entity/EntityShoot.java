@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData {
-    protected int livingMaxAge = 5000;
+    protected int livingMaxAge = 1200;
     protected int livingAge = 0;
     protected Vec3d forward = new Vec3d(0,1,0);
     public double speed = 1.0;
@@ -61,6 +61,11 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if(this.livingAge++ > this.livingMaxAge){
+            if(!this.world.isRemote){
+                this.setDead();
+            }
+        }
         if(this.customMotion()){
             return;
         }

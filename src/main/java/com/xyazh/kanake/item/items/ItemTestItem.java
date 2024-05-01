@@ -38,8 +38,8 @@ public class ItemTestItem extends ItemBase {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         ItemStack itemStack = new ItemStack(this);
         //player.addPotionEffect(new PotionEffect(PotionKoori.POTION_KOORI,1000));
-        //int dim = ModWorlds.getDimIdByName(ProviderArea.providerName);
-        //TpHelper.changeDimension(player,dim);
+        /*int dim = ModWorlds.getDimIdByName(ProviderArea.providerName);
+        TpHelper.changeDimension(player,dim);8*/
         //ManaData.add(player,50);
         /*if(!world.isRemote){
             for(int i=0;i<100;i++){
@@ -60,16 +60,16 @@ public class ItemTestItem extends ItemBase {
             world.spawnEntity(entity);
             player.startRiding(entity);
         }*/
-        if (!world.isRemote){
+        /*if (!world.isRemote){
             player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
-        }
+        }*/
         return super.onItemRightClick(world, player, hand);
     }
 
     @Nonnull
     @Override
     public EnumActionResult onItemUse(@Nonnull EntityPlayer player, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(worldIn.isRemote){
+        /*if(worldIn.isRemote){
             return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
         }
         int chunkX, chunkZ;
@@ -103,7 +103,7 @@ public class ItemTestItem extends ItemBase {
                 }
             }
         }
-        thisChunk.setBiomeArray(chunk.getBiomeArray());
+        thisChunk.setBiomeArray(chunk.getBiomeArray());*/
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 

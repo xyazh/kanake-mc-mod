@@ -34,8 +34,47 @@ public class ItemTestItem2 extends ItemBase {
     public LinkedList<Integer> getOrder(){
         LinkedList<Integer> list = new LinkedList<>();
         list.add(1);
-        list.add(2);
-        list.add(3);
+        list.add(20);
+        list.add(16);
+        list.add(7);
+        list.add(19);
+        list.add(7);
+        list.add(0);
+        list.add(18);
+        list.add(7);
+        list.add(0);
+        list.add(18);
+        list.add(7);
+        list.add(0);
+        list.add(19);
+        list.add(7);
+        list.add(0);
+        list.add(19);
+        list.add(7);
+        list.add(0);
+        list.add(18);
+        list.add(7);
+        list.add(0);
+        list.add(18);
+        list.add(7);
+        list.add(0);
+        list.add(19);
+        list.add(7);
+        list.add(0);
+        list.add(19);
+        list.add(7);
+        list.add(0);
+        list.add(18);
+        list.add(7);
+        list.add(0);
+        list.add(18);
+        list.add(7);
+        list.add(0);
+        list.add(19);
+        list.add(7);
+        list.add(0);
+        list.add(19);
+
         return list;
     }
 
