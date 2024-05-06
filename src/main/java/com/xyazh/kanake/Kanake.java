@@ -66,7 +66,6 @@ public class Kanake
         network.registerMessage(new KooriEntityHandler(), KooriEntityPacket.class, 3, Side.CLIENT);
         network.registerMessage(new ManaHandler(), ManaPacket.class, 4, Side.CLIENT);
         network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 5, Side.CLIENT);
-        network.registerMessage(new FlyHandler(), FlyPacket.class, 6, Side.SERVER);
         network.registerMessage(new EntityDataHandler(), EntityDataPacket.class, 7, Side.CLIENT);
 
         if(Side.CLIENT.equals(event.getSide())){
@@ -106,6 +105,7 @@ public class Kanake
     {
         if(Side.CLIENT == event.getSide()){
             ModParticles.registerParticles();
+            ModParticles.appendAllParticlesToMyMap();
         }
         ModGuis.registerGuis();
     }
@@ -116,7 +116,6 @@ public class Kanake
         MonoRecipes.addMonoRecipes();
         MyBrewing.addBrewingRecipes();
         MyFurnace.addFurnaceRecipes();
-        ModParticles.appendAllParticlesToMyMap();
     }
 
     @EventHandler

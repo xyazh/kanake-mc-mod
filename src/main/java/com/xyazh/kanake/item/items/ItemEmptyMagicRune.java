@@ -1,7 +1,9 @@
 package com.xyazh.kanake.item.items;
 
 
+import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.entity.EntityEmptyMagic;
+import com.xyazh.kanake.gui.test.GuiHandlerTest;
 import com.xyazh.kanake.magic.Magic;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,9 +19,9 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import java.util.LinkedList;
 
-public class ItemTestItem2 extends ItemBase {
+public class ItemEmptyMagicRune extends ItemBase {
 
-    public ItemTestItem2(String name) {
+    public ItemEmptyMagicRune(String name) {
         super(name);
         this.setMaxStackSize(1);
     }
@@ -42,7 +44,9 @@ public class ItemTestItem2 extends ItemBase {
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
-        if(!world.isRemote){
+        if(player.isSneaking()){
+            player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
+        }else if(!world.isRemote){
             Vec3d m = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYaw);
             EntityEmptyMagic entity = new EntityEmptyMagic(world);
             entity.entityShoot(player,m);

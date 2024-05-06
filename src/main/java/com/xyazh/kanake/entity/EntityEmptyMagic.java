@@ -4,6 +4,7 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.damage.MagicDamage;
 import com.xyazh.kanake.magic.Magic;
 import com.xyazh.kanake.magic.command.Command;
+import com.xyazh.kanake.magic.command.CommandJmp;
 import com.xyazh.kanake.magic.command.CommandNop;
 import com.xyazh.kanake.network.EntityDataPacket;
 import com.xyazh.kanake.network.IEntityDataParameter;
@@ -28,10 +29,13 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
     protected final LinkedList<Integer> ORDER_QUEUE = new LinkedList<>();
     public LinkedList<Integer> order = new LinkedList<>();
     public LinkedList<Integer> callback = new LinkedList<>();
+    public float gdy = 0.0f;
+    public float g = -0.0018f;
     public int temperature = 0;
     public int lastOrderAge = 0;
     public boolean isSubMagic = false;
     public boolean settingDead = false;
+    public boolean isStop = false;
 
 
     public EntityEmptyMagic(World worldIn) {
@@ -88,9 +92,14 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
     }
 
     public void movingUpdate() {
-        this.motionX = this.forward.x * this.speed;
-        this.motionY = this.forward.y * this.speed;
-        this.motionZ = this.forward.z * this.speed;
+        double speed = this.speed;
+        if (this.isStop) {
+            speed = 0.0;
+        }
+        this.gdy += this.g;
+        this.motionX = this.forward.x * speed;
+        this.motionY = this.forward.y * speed + this.gdy;
+        this.motionZ = this.forward.z * speed;
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
     }
 
@@ -130,6 +139,21 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
                 this.callback.add(this.order.poll());
             }
             return;
+        }else if (command instanceof CommandJmp) {
+            CommandJmp jmp = (CommandJmp) command;
+            if(this.isSubMagic!=jmp.isSubMagic){
+                return;
+            }
+            for(int i = 0; i < jmp.jmp; i++){
+                if (this.order.size() <= 0) {
+                    return;
+                }
+                this.order.poll();
+            }
+            return;
+        }else if(command == Magic.CLEAR){
+            this.order.clear();
+            return;
         }
         this.ORDER_QUEUE.add(oid);
         if (!command.need_sync) {
@@ -160,7 +184,6 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
         EntityEmptyMagic entity = new EntityEmptyMagic(this.world);
         entity.order.addAll(this.order);
         entity.callback.addAll(this.callback);
-        entity.isSubMagic = true;
         entity.temperature = this.temperature;
         entity.lastOrderAge = this.lastOrderAge;
         entity.shootingEntity = this.shootingEntity;
@@ -211,7 +234,7 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
                 particle1 = ModParticles.SPARK_PARTICLES;
                 particle2 = ModParticles.SPARK_PARTICLES1;
             }
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 10; i++) {
                 this.world.spawnParticle(particle1, posX, posY, posZ, 0, 0, 0);
                 this.world.spawnParticle(particle2, posX, posY, posZ, 0, 0, 0);
             }
@@ -244,6 +267,10 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
         this.temperature = compound.getInteger("temperature");
         this.lastOrderAge = compound.getInteger("lastOrderAge");
         this.isSubMagic = compound.getBoolean("isSubMagic");
+        this.gdy = compound.getFloat("gdy");
+        this.g = compound.getFloat("g");
+        this.settingDead = compound.getBoolean("settingDead");
+        this.isStop = compound.getBoolean("isStop");
     }
 
     @Override
@@ -255,6 +282,10 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
         compound.setInteger("temperature", this.temperature);
         compound.setInteger("lastOrderAge", this.lastOrderAge);
         compound.setBoolean("isSubMagic", this.isSubMagic);
+        compound.setFloat("gdy", this.gdy);
+        compound.setFloat("g", this.g);
+        compound.setBoolean("settingDead", this.settingDead);
+        compound.setBoolean("isStop", this.isStop);
     }
 
 
@@ -266,5 +297,24 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
     @Override
     public void writeData(ByteBuf buf) {
 
+    }
+
+    public void writeSpawnData(ByteBuf buffer) {
+        super.writeSpawnData(buffer);
+        buffer.writeFloat(this.gdy);
+        buffer.writeFloat(this.g);
+        buffer.writeInt(this.temperature);
+        buffer.writeInt(this.lastOrderAge);
+        buffer.writeBoolean(this.isSubMagic);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buffer) {
+        super.readSpawnData(buffer);
+        this.gdy = buffer.readFloat();
+        this.g = buffer.readFloat();
+        this.temperature = buffer.readInt();
+        this.lastOrderAge = buffer.readInt();
+        this.isSubMagic = buffer.readBoolean();
     }
 }

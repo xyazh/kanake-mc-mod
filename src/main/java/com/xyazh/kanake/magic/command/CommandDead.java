@@ -2,9 +2,9 @@ package com.xyazh.kanake.magic.command;
 
 import net.minecraft.entity.Entity;
 
-public class CommandEnd extends OrderCommand {
+public class CommandDead extends OrderCommand {
 
-    public CommandEnd(int order, boolean need_sync) {
+    public CommandDead(int order, boolean need_sync) {
         super(order, need_sync);
     }
 

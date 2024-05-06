@@ -23,7 +23,8 @@ tile.pure_hana.name=纯净水晶花
 
 item.test.name=测试物品
 item.rune.name=符文纸
-item.rune_empty.name=空白符文
+item.rune_empty.name=空白符文纸
+item.rune_empty_magic.name=空白魔法符文
 item.rune_fire_ball.name=火球符文
 item.rune_fire_ball_look_at.name=火球符文（觅踪）
 item.rune_ice_bolt.name=冰箭符文

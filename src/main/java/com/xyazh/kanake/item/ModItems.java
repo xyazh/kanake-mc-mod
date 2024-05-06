@@ -23,9 +23,10 @@ public class ModItems {
     public static final List<Item> ITEMS = new ArrayList<Item>();
 
     public static final Item TEST_ITEM = new ItemTestItem("test").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
-    public static final Item TEST_ITEM2 = new ItemTestItem2("test2").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    //public static final Item TEST_ITEM2 = new ItemTestItem2("test2").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE = new ItemBase("rune").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_EMPTY = new ItemBase("rune_empty").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item RUNE_EMPTY_MAGIC = new ItemEmptyMagicRune("rune_empty_magic").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL = new ItemFireBallRune("rune_fire_ball").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL_LOOK_AT = new ItemFireBallLookAtRune("rune_fire_ball_look_at").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_ICE_BOLT = new ItemIceBoltRune("rune_ice_bolt").setCreativeTab(ModCreativeTab.KNK_CREATIVE);

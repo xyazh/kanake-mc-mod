@@ -8,7 +8,7 @@ public class Magic {
     public static final HashMap<Integer, Command> ORDER_MAP = new HashMap<>();
     
     //在原地生成一个魔法球体，并复制指令
-    public static final Command SPAWN = new CommandSpawn(0,false);
+    public static final Command SPAWN = new CommandSpawn(0,false,true);
     //增加一个方向为发射者朝向的小速度
     public static final Command SPEED_LOW = new CommandSpeed(1,true,0.5);
     //增加一个方向为发射者朝向的中速度
@@ -42,11 +42,33 @@ public class Magic {
     //使魔法大爆炸
     public static final Command EXPLODE_BIG_DEAD = new CommandExplodeDead(16,false,9);
     //结束魔法
-    public static final Command END = new CommandEnd(17,false);
+    public static final Command DEAD = new CommandDead(17,false);
     //使魔法温度升高
-    public static final Command HEAT = new CommandTemperature(18,false,100);
+    public static final Command HEAT = new CommandTemperature(18,true,100);
     //使魔法温度降低
-    public static final Command COOL = new CommandTemperature(19,false,-100);
+    public static final Command COOL = new CommandTemperature(19,true,-100);
     //下一条指令在魔法结束时执行效果
     public static final Command CALLBACK = new OrderCommand(20,false);
+    //使魔法停止
+    public static final Command STOP = new CommandStop(21,true,true);
+    //使魔法不受重力
+    public static final Command NO_GRAVITY = new CommandNoGravity(22,true);
+    //设置魔法为子魔法
+    public static final Command SET_SUB = new CommandSetSub(23,true,true);
+    //设置魔法不为子魔法
+    public static final Command SET_NOT_SUB = new CommandSetSub(24,true,false);
+    //生成朝向4个方向的魔法
+    public static final Command SPAWN_CROSS = new CommandCrossSpawn(25,false,true);
+    //子魔法跳过1个指令
+    public static final Command SUB_JMP = new CommandJmp(26,false,true,1);
+    //子魔法跳过10个指令
+    public static final Command SUB_JMP_10 = new CommandJmp(27,false,true,10);
+    //非子魔法跳过1个指令
+    public static final Command JMP = new CommandJmp(28,false,false,1);
+    //非子魔法跳过10个指令
+    public static final Command JMP_10 = new CommandJmp(29,false,false,10);
+    //使魔法取消停止
+    public static final Command NOT_STOP = new CommandStop(30,true,false);
+    //清除后续指令
+    public static final Command CLEAR = new OrderCommand(31,true);
 }

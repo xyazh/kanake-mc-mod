@@ -2,6 +2,8 @@ package com.xyazh.kanake.gui.test;
 
 import com.xyazh.kanake.Kanake;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -21,7 +23,14 @@ public class GuiHandlerTest implements IGuiHandler {
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
         if (ID == GUI_ID) {
-            return new ContainerTest();
+            ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
+            if (itemStack.isEmpty()){
+                itemStack = player.getHeldItem(EnumHand.OFF_HAND);
+            }
+            if(itemStack.isEmpty()){
+                return null;
+            }
+            return new ContainerTest(player,itemStack);
         }
         return null;
     }
@@ -31,7 +40,14 @@ public class GuiHandlerTest implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
         if (ID == GUI_ID) {
-            return new GuiContainerTest(new ContainerTest());
+            ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
+            if (itemStack.isEmpty()){
+                itemStack = player.getHeldItem(EnumHand.OFF_HAND);
+            }
+            if(itemStack.isEmpty()){
+                return null;
+            }
+            return new GuiContainerTest(new ContainerTest(player,itemStack));
         }
         return null;
     }

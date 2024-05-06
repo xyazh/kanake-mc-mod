@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import javax.annotation.Nullable;
 
 public class EntityDataPacket implements IMessage {
-    protected int id = -1;
-    protected Entity entity;
-    protected IEntityDataParameter parameter;
+    public int id = -1;
+    public Entity entity;
+    public IEntityDataParameter parameter;
     public final ByteBuf buffer = new PacketBuffer(Unpooled.buffer());
 
     @Nullable
@@ -22,10 +22,10 @@ public class EntityDataPacket implements IMessage {
         return null;
     }
 
-    protected EntityDataPacket() {
+    public EntityDataPacket() {
     }
 
-    protected EntityDataPacket(Entity entity, IEntityDataParameter parameter) {
+    public EntityDataPacket(Entity entity, IEntityDataParameter parameter) {
         this.id = entity.getEntityId();
         this.entity = entity;
         this.parameter = parameter;

@@ -12,7 +12,8 @@ public class CommandTemperature extends OrderCommand {
 
     public void execute(Entity entity) {
         if (entity instanceof EntityEmptyMagic) {
-            ((EntityEmptyMagic) entity).temperature += this.temperature;
+            EntityEmptyMagic entityEmptyMagic = (EntityEmptyMagic) entity;
+            entityEmptyMagic.temperature += this.temperature;
         }
     }
 }
