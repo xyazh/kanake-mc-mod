@@ -75,7 +75,7 @@ public class ItemManaContainer extends ItemStorageBase {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+    public void addInformation(@Nonnull ItemStack stack, World world, List<String> tooltip, @Nonnull ITooltipFlag flag) {
         tooltip.add(I18n.format("tooltip.mana.mana_container.0"));
         tooltip.add(I18n.format("tooltip.mana.mana_container.1"));
         tooltip.add(I18n.format(""));

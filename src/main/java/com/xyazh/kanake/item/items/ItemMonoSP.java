@@ -129,7 +129,7 @@ public class ItemMonoSP extends ItemBase {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(@Nonnull ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         tooltip.add(I18n.format("item.mono_sp.desc"));
     }
 }

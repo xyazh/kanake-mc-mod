@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.tileentity.CommandBlockBaseLogic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,6 +39,14 @@ public class GuiContainerTest extends GuiContainer {
     }
 
     @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+
+    @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(TEXTURE);
@@ -52,6 +61,6 @@ public class GuiContainerTest extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        // TODO
+        this.fontRenderer.drawString(I18n.format("gui.empty_magic_rune.title.1"), 8, 6, 4210752);
     }
 }

@@ -4,9 +4,11 @@ package com.xyazh.kanake.item.items;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.entity.EntityEmptyMagic;
 import com.xyazh.kanake.gui.test.GuiHandlerTest;
+import com.xyazh.kanake.gui.test.RuneItemStackHandler;
 import com.xyazh.kanake.magic.Magic;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -26,18 +28,20 @@ public class ItemEmptyMagicRune extends ItemBase {
         this.setMaxStackSize(1);
     }
 
-    public LinkedList<Integer> getOrder(){
+    public LinkedList<Integer> getOrder(@Nonnull ItemStack itemStack){
         LinkedList<Integer> list = new LinkedList<>();
-        list.add(Magic.NO_GRAVITY.order);
-        list.add(Magic.SPEED_LOW.order);
-        list.add(Magic.CALLBACK.order);
-        list.add(Magic.EXPLODE_BIG.order);
-        list.add(Magic.CALLBACK.order);
-        list.add(Magic.SPAWN.order);
-        list.add(Magic.CALLBACK.order);
-        list.add(Magic.CALLBACK.order);
-        list.add(Magic.CALLBACK.order);
-        list.add(Magic.SPAWN.order);
+        if(itemStack.isEmpty()){
+            return list;
+        }
+        RuneItemStackHandler magicInv = new RuneItemStackHandler(itemStack);
+        for(int i=0;i<magicInv.getSlots();i++){
+            Item item1 = magicInv.getStackInSlot(i).getItem();
+            if (!(item1 instanceof ItemEmblem)){
+                continue;
+            }
+            ItemEmblem emblem = (ItemEmblem) item1;
+            list.add(emblem.commandId);
+        }
         return list;
     }
 
@@ -50,7 +54,7 @@ public class ItemEmptyMagicRune extends ItemBase {
             Vec3d m = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYaw);
             EntityEmptyMagic entity = new EntityEmptyMagic(world);
             entity.entityShoot(player,m);
-            entity.setOrder(this.getOrder());
+            entity.setOrder(this.getOrder(player.getHeldItem(hand)));
             world.spawnEntity(entity);
         }
         return super.onItemRightClick(world, player, hand);

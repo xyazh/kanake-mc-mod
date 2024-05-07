@@ -165,12 +165,6 @@ public class TileClean extends TileEntity implements ITickable {
     }
 
     public void spawnParticle(int n, double x, double y, double z) {
-        int itemId = Item.getIdFromItem(ModItems.TEST_ITEM);
-        ModParticles.remoteSpawnParticle(
-                this.world, n, ModParticles.MANA_PARTICLES,
-                x, y, z,
-                this.pos.getX() + 0.5, this.pos.getY() + 1.5, this.pos.getZ() + 0.5,
-                itemId);
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 
@@ -47,7 +48,7 @@ public class ItemBase extends Item implements IHasModel {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag) {
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, @Nonnull ITooltipFlag flag) {
 
 	}
 }

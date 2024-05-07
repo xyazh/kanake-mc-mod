@@ -219,7 +219,7 @@ public class ItemTpRune extends ItemBase {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack itemStack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
         NBTTagCompound compound = itemStack.getTagCompound();
         if (compound == null || !compound.hasKey("tp_data")) {
             tooltip.add(I18n.format("item.rune_tp.desc.0"));

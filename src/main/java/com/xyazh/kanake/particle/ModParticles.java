@@ -1,19 +1,13 @@
 package com.xyazh.kanake.particle;
 
 import com.xyazh.kanake.Kanake;
-import com.xyazh.kanake.network.SpawnParticlesPacket;
 import com.xyazh.kanake.particle.particles.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ModParticles {
@@ -71,40 +65,4 @@ public class ModParticles {
         EnumParticleTypes particleTypes = EnumParticleTypesHelper.addParticleType(name, id, shouldIgnoreRangeIn);
         ModParticles.myParticles.put(id,particleTypes);
         return particleTypes;
-    }
-
-    public static void remoteSpawnParticle(World world,int n,EnumParticleTypes particleTypes,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed){
-        SpawnParticlesPacket spawnParticlesPacket = new SpawnParticlesPacket();
-        spawnParticlesPacket.id = particleTypes.getParticleID();
-        spawnParticlesPacket.x = xCoord;
-        spawnParticlesPacket.y = yCoord;
-        spawnParticlesPacket.z = zCoord;
-        spawnParticlesPacket.speedX = xSpeed;
-        spawnParticlesPacket.speedY = ySpeed;
-        spawnParticlesPacket.speedZ = zSpeed;
-        spawnParticlesPacket.n = n;
-        AxisAlignedBB aabb = new AxisAlignedBB(xCoord+32,yCoord+32,zCoord+32,xCoord-32,yCoord-32,zCoord-32);
-        List<EntityPlayerMP> playerMPS = world.getPlayers(EntityPlayerMP.class,(EntityPlayerMP e)-> aabb.contains(new Vec3d(e.posX,e.posY,e.posZ)));
-        for(EntityPlayerMP entityPlayerMP:playerMPS){
-            Kanake.network.sendTo(spawnParticlesPacket,entityPlayerMP);
-        }
-    }
-
-    public static void remoteSpawnParticle(World world,int n,EnumParticleTypes particleTypes,double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed,int d){
-        SpawnParticlesPacket spawnParticlesPacket = new SpawnParticlesPacket();
-        spawnParticlesPacket.id = particleTypes.getParticleID();
-        spawnParticlesPacket.x = xCoord;
-        spawnParticlesPacket.y = yCoord;
-        spawnParticlesPacket.z = zCoord;
-        spawnParticlesPacket.speedX = xSpeed;
-        spawnParticlesPacket.speedY = ySpeed;
-        spawnParticlesPacket.speedZ = zSpeed;
-        spawnParticlesPacket.n = n;
-        spawnParticlesPacket.txId = d;
-        AxisAlignedBB aabb = new AxisAlignedBB(xCoord+32,yCoord+32,zCoord+32,xCoord-32,yCoord-32,zCoord-32);
-        List<EntityPlayerMP> playerMPS = world.getPlayers(EntityPlayerMP.class,(EntityPlayerMP e)-> aabb.contains(new Vec3d(e.posX,e.posY,e.posZ)));
-        for(EntityPlayerMP entityPlayerMP:playerMPS){
-            Kanake.network.sendTo(spawnParticlesPacket,entityPlayerMP);
-        }
-    }
-}
+    }}

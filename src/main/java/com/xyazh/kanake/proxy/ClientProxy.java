@@ -8,6 +8,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ClientProxy extends ProxyBase {
     public static final List<KeyBinding> KEY_BINDINGS = new ArrayList<KeyBinding>();
@@ -20,7 +21,7 @@ public class ClientProxy extends ProxyBase {
 
 	public void registerItemRenderer(Item item, int meta, String id)
 	{
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), id));
 	}
 
 	public void registerItemRenderer(Item item, String name, int meta)

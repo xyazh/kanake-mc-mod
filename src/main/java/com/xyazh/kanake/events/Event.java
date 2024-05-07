@@ -6,7 +6,6 @@ import com.xyazh.kanake.damage.CleanDamage;
 import com.xyazh.kanake.damage.KillSlimeDamage;
 import com.xyazh.kanake.entity.EntityWSKnight;
 import com.xyazh.kanake.item.ModItems;
-import com.xyazh.kanake.particle.ModParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -58,9 +57,9 @@ public class Event {
                 ((EntityWSKnight) entity).heal(damage);
                 World world = entity.world;
                 int amount = (int) damage;
-                ModParticles.remoteSpawnParticle(world, amount,ModParticles.HEAL_PARTICLES,
+                /*ParticleUtil.remoteSpawnParticle(world, amount,ModParticles.HEAL_PARTICLES,
                         entity.posX, entity.posY, entity.posZ,
-                        0, 0, 0);
+                        0, 0, 0);*/
             }
         }
     }
