@@ -1,5 +1,8 @@
 package com.xyazh.kanake.entity;
 
+import com.xyazh.kanake.Kanake;
+import com.xyazh.kanake.network.EntityDataPacket;
+import com.xyazh.kanake.network.IEntityDataParameter;
 import com.xyazh.kanake.util.Vec3d;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -8,12 +11,10 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -21,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData {
+public abstract class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData, IEntityDataParameter {
     protected int livingMaxAge = 1200;
     protected int livingAge = 0;
     protected Vec3d forward = new Vec3d(0,1,0);
@@ -30,6 +31,8 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     protected BlockPos blockPos = null;
     protected double dy = 0;
     protected int explosionKeepAge = 0;
+    protected boolean shouldSync = false;
+    public Explosion lastExplosion = null;
 
     public EntityShoot(World worldIn) {
         super(worldIn);
@@ -61,6 +64,9 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if(this.shouldSync){
+            this.trySyncSpeed();
+        }
         if(this.livingAge++ > this.livingMaxAge){
             if(!this.world.isRemote){
                 this.setDead();
@@ -221,9 +227,55 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        if(source.isExplosion()&&amount>=20){
-            this.isDead = true;
+        if(source.isExplosion()){
+            if(amount>20){
+                this.isDead = true;
+            }else if(this.lastExplosion != null){
+                Vec3d vec3d = new Vec3d();
+                vec3d.set(this.lastExplosion.getPosition());
+                Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
+                thisPos.sub(vec3d);
+                thisPos.normalize();
+                thisPos.mul(this.speed * amount / 20);
+                Vec3d froward = new Vec3d();
+                froward.set(this.forward);
+                froward.mul(this.speed);
+                froward.add(thisPos);
+                this.speed = froward.normalizeAndLength();
+                this.forward = froward;
+                this.shouldSync = true;
+            }
         }
         return true;
+    }
+
+    public void trySyncSpeed(){
+        if(!this.world.isRemote){
+            this.shouldSync = false;
+            EntityDataPacket packet = EntityDataPacket.getPacket(this);
+            if (packet == null) {
+                return;
+            }
+            packet.buffer.writeInt(1);
+            packet.buffer.writeDouble(this.speed);
+            packet.buffer.writeDouble(this.forward.x);
+            packet.buffer.writeDouble(this.forward.y);
+            packet.buffer.writeDouble(this.forward.z);
+            Kanake.network.sendToAll(packet);
+        }
+   }
+
+    @Override
+    public int readData(ByteBuf buf) {
+        int type = buf.readInt();
+        if(type == 1){
+            this.speed = buf.readDouble();
+            this.forward = new Vec3d(
+                    buf.readDouble(),
+                    buf.readDouble(),
+                    buf.readDouble()
+            );
+        }
+        return type;
     }
 }

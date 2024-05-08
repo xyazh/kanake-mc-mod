@@ -2,16 +2,14 @@ package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -34,6 +32,7 @@ public class EntityBlockingLookAt extends EntityShoot {
         AxisAlignedBB aabb = new AxisAlignedBB(
                 this.posX + 16, this.posY + 16, this.posZ + 16,
                 this.posX - 16, this.posY - 16, this.posZ - 16);
+        Entity target = null;
         for (Entity entity :
                 this.world.getEntitiesWithinAABB(Entity.class, aabb, (e) -> e instanceof IProjectile || e instanceof EntityFireball || e instanceof EntityShulkerBullet)) {
             if(entity instanceof EntityBlockingLookAt){
@@ -41,9 +40,20 @@ public class EntityBlockingLookAt extends EntityShoot {
                     continue;
                 }
             }
-            this.target = entity;
-            break;
+            if(target == null){
+                target = entity;
+                continue;
+            }
+            Vec3d target1Pos = new Vec3d(entity.posX, entity.posY, entity.posZ);
+            Vec3d target2Pos = new Vec3d(target.posX, target.posY, target.posZ);
+            Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
+            target1Pos.sub(thisPos);
+            target2Pos.sub(thisPos);
+            if(target1Pos.length() < target2Pos.length()){
+                target = entity;
+            }
         }
+        this.target = target;
     }
 
     public boolean hasNoGravity() {
@@ -54,7 +64,7 @@ public class EntityBlockingLookAt extends EntityShoot {
     public void onUpdate() {
         super.onUpdate();
         if (world.isRemote) {
-            for (int i = 0; i <= 20; i++) {
+            for (int i = 0; i <= 10; i++) {
                 this.world.spawnParticle(ModParticles.MAGIC_PARTICLES, posX, posY, posZ, 0, 0, 0);
                 this.world.spawnParticle(ModParticles.MAGIC_PARTICLES1, posX, posY, posZ, 0, 0, 0);
             }
@@ -69,8 +79,11 @@ public class EntityBlockingLookAt extends EntityShoot {
             Vec3d targetPos = new Vec3d(this.target.posX, this.target.posY, this.target.posZ);
             Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
             this.speed += 0.002;
-            Vec3d motion = targetPos.subtract(thisPos).normalize();
-            motion = motion.scale(this.speed * 1.5);
+            Vec3d motion = new Vec3d();
+            motion.sub(targetPos, thisPos);
+            motion.normalize();
+            this.forward.set(motion);
+            motion.mul(this.speed * 1.5);
             this.motionX = motion.x;
             this.motionY = motion.y;
             this.motionZ = motion.z;
@@ -89,7 +102,7 @@ public class EntityBlockingLookAt extends EntityShoot {
 
     protected void setDeadParticle(){
         if (world.isRemote) {
-            for (int i = 0; i <= 200; i++) {
+            for (int i = 0; i <= 100; i++) {
                 this.world.spawnParticle(ModParticles.TEST_PARTICLES2, posX, posY, posZ, 0, 0, 0);
             }
         }

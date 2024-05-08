@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EntityEmptyMagic extends EntityShoot implements IEntityDataParameter {
+public class EntityEmptyMagic extends EntityShoot{
     protected final LinkedList<Integer> ORDER_QUEUE = new LinkedList<>();
     public LinkedList<Integer> order = new LinkedList<>();
     public LinkedList<Integer> callback = new LinkedList<>();
@@ -163,6 +163,7 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
         if (packet == null) {
             return;
         }
+        packet.buffer.writeInt(0);
         packet.buffer.writeInt(oid);
         Kanake.network.sendToAll(packet);
     }
@@ -290,13 +291,12 @@ public class EntityEmptyMagic extends EntityShoot implements IEntityDataParamete
 
 
     @Override
-    public void readData(ByteBuf buf) {
-        this.ORDER_QUEUE.add(buf.readInt());
-    }
-
-    @Override
-    public void writeData(ByteBuf buf) {
-
+    public int readData(ByteBuf buf) {
+        int type = super.readData(buf);
+        if(type == 0){
+            this.ORDER_QUEUE.add(buf.readInt());
+        }
+        return type;
     }
 
     public void writeSpawnData(ByteBuf buffer) {

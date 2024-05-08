@@ -1,20 +1,12 @@
 package com.xyazh.kanake.entity;
 
-import com.xyazh.kanake.particle.ModParticles;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
-import net.minecraft.init.Blocks;
+import com.xyazh.kanake.util.Vec3d;
+import net.minecraft.entity.*;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EntityFireBallLookAt extends EntityFireBall{
@@ -33,11 +25,23 @@ public class EntityFireBallLookAt extends EntityFireBall{
         AxisAlignedBB aabb = new AxisAlignedBB(
                 this.posX + 16, this.posY + 16, this.posZ + 16,
                 this.posX - 16, this.posY - 16, this.posZ - 16);
-        for (EntityLivingBase entityLivingBase :
+        EntityLivingBase target = null;
+        for (EntityLivingBase entity:
                 this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, (e) -> !e.equals(this.shootingEntity))) {
-            this.target = entityLivingBase;
-            break;
+            if(target == null){
+                target = entity;
+                continue;
+            }
+            com.xyazh.kanake.util.Vec3d target1Pos = new com.xyazh.kanake.util.Vec3d(entity.posX, entity.posY, entity.posZ);
+            com.xyazh.kanake.util.Vec3d target2Pos = new com.xyazh.kanake.util.Vec3d(target.posX, target.posY, target.posZ);
+            com.xyazh.kanake.util.Vec3d thisPos = new com.xyazh.kanake.util.Vec3d(this.posX, this.posY, this.posZ);
+            target1Pos.sub(thisPos);
+            target2Pos.sub(thisPos);
+            if(target1Pos.length() < target2Pos.length()){
+                target = entity;
+            }
         }
+        this.target = target;
     }
 
     public boolean hasNoGravity() {
@@ -52,8 +56,12 @@ public class EntityFireBallLookAt extends EntityFireBall{
         } else if (this.target != null) {
             Vec3d targetPos = new Vec3d(this.target.posX, this.target.posY, this.target.posZ);
             Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
-            Vec3d motion = targetPos.subtract(thisPos).normalize();
-            motion = motion.scale(this.speed * 1.5);
+            this.speed += 0.002;
+            Vec3d motion = new Vec3d();
+            motion.sub(targetPos, thisPos);
+            motion.normalize();
+            this.forward.set(motion);
+            motion.mul(this.speed * 1.5);
             this.motionX = motion.x;
             this.motionY = motion.y;
             this.motionZ = motion.z;

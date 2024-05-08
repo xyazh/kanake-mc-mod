@@ -35,7 +35,7 @@ public class EntityFireCurse extends EntityShoot{
     public void onUpdate() {
         super.onUpdate();
         if (world.isRemote) {
-            for (int i = 0; i <= 20; i++) {
+            for (int i = 0; i <= 10; i++) {
                 this.world.spawnParticle(ModParticles.SPARK_PARTICLES, posX, posY, posZ, 0, 0, 0);
                 this.world.spawnParticle(ModParticles.SPARK_PARTICLES1, posX, posY, posZ, 0, 0, 0);
             }
@@ -86,7 +86,7 @@ public class EntityFireCurse extends EntityShoot{
 
     protected void setDeadParticle(){
         if (world.isRemote) {
-            for (int i = 0; i <= 200; i++) {
+            for (int i = 0; i <= 100; i++) {
                 this.world.spawnParticle(ModParticles.TEST_PARTICLES, posX, posY, posZ, 0, 0, 0);
             }
         }

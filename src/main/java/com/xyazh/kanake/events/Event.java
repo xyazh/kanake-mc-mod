@@ -4,6 +4,7 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.clean.TileClean;
 import com.xyazh.kanake.damage.CleanDamage;
 import com.xyazh.kanake.damage.KillSlimeDamage;
+import com.xyazh.kanake.entity.EntityShoot;
 import com.xyazh.kanake.entity.EntityWSKnight;
 import com.xyazh.kanake.item.ModItems;
 import net.minecraft.entity.Entity;
@@ -12,8 +13,11 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -95,5 +99,17 @@ public class Event {
     @SubscribeEvent()
     public static void getCollisionBoxes(GetCollisionBoxesEvent event){
 
+    }
+
+    @SubscribeEvent()
+    public static void onExplosion(ExplosionEvent.Detonate event){
+        Explosion explosion = event.getExplosion();
+        for(Entity entity : event.getAffectedEntities()){
+            if(!(entity instanceof EntityShoot)){
+                continue;
+            }
+            EntityShoot shoot = (EntityShoot) entity;
+            shoot.lastExplosion = explosion;
+        }
     }
 }

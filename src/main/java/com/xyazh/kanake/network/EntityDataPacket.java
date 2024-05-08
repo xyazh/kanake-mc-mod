@@ -41,7 +41,6 @@ public class EntityDataPacket implements IMessage {
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(this.id);
-        this.parameter.writeData(this.buffer);
         buf.writeBytes(this.buffer);
     }
 
