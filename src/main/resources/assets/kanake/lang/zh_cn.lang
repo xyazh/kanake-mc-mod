@@ -36,6 +36,7 @@ item.rune_explosion_look_at.name=爆破符文（觅踪）
 item.rune_magic.name=魔弹符文
 item.rune_tp.name=传送符文
 item.rune_blocking_look_at.name=对抗符文
+item.rune_launch.name=发射符文
 item.rune_tp.desc.0=未绑定
 item.rune_tp.desc.1=已绑定
 item.harmonium_crystal.name=调和水晶

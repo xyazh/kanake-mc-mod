@@ -79,21 +79,6 @@ public class Kanake
 
     @SideOnly(Side.CLIENT)
     public void preInitClient(FMLPreInitializationEvent event){
-        /*
-        ShaderProgram shaderProgram = new ShaderProgram();
-        String vertexShaderSource = ResourceLocationHelper.loadResourceToStr(new ResourceLocation(Kanake.MODID,"shader/dis.vs"));
-        String fragmentShaderSource = ResourceLocationHelper.loadResourceToStr(new ResourceLocation(Kanake.MODID,"shader/dis.fs"));
-        if(vertexShaderSource != null && fragmentShaderSource!=null){
-            Shader v = Shader.craftVertexShaderFromString(ShaderDisSources.vertexShaderSource);
-            Shader f = Shader.craftFragmentShaderFromString(ShaderDisSources.fragmentShaderSource);
-            if(v!=null&& f!=null){
-                shaderProgram.addShader(v);
-                shaderProgram.addShader(f);
-                shaderProgram.link();
-                shaderProgram.use();
-                shaderProgram.unUse();
-            }
-        }*/
     }
 
     public void preInitServer(FMLPreInitializationEvent event){

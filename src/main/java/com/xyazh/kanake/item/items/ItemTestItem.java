@@ -10,6 +10,7 @@ import com.xyazh.kanake.world.ModWorlds;
 import com.xyazh.kanake.world.provider.ProviderArea;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,25 +42,25 @@ public class ItemTestItem extends ItemBase {
         /*int dim = ModWorlds.getDimIdByName(ProviderArea.providerName);
         TpHelper.changeDimension(player,dim);8*/
         //ManaData.add(player,50);
-        if(!world.isRemote){
+        /*if(!world.isRemote){
             for(int i=0;i<100;i++){
                 Vec3d m = Vec3d.fromPitchYaw(
                         (float) (player.rotationPitch + Kanake.rand.nextGaussian()*4),
                         (float) (player.rotationYaw + Kanake.rand.nextGaussian()*4));
-                EntityExplosion entity = new EntityExplosion(world);
+                EntityExplosionLookAt entity = new EntityExplosionLookAt(world);
                 entity.entityShoot(player,m);
                 world.spawnEntity(entity);
             }
-        }
-        /*if (!world.isRemote) {
+        }*/
+
+        if (!world.isRemote) {
             Vec3d m = Vec3d.fromPitchYaw(
                     (float) (player.rotationPitch),
                     (float) (player.rotationYaw));
-            EntityShoot entity = new EntityLaunch(world);
+            EntityShoot entity = new EntityDestroy(world);
             entity.entityShoot(player, m);
             world.spawnEntity(entity);
-            player.startRiding(entity);
-        }*/
+        }
         /*if (!world.isRemote){
             player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
         }*/

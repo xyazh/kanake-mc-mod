@@ -152,5 +152,12 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityDestroy.class)
+                .id(new ResourceLocation(Kanake.MODID, "destroy"), 251)
+                .name("destroy")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }

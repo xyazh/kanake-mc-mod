@@ -4,6 +4,7 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.particle.ModParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -21,17 +22,13 @@ public class SpawnParticlesHandler implements IMessageHandler<SpawnParticlesPack
                     //获取客户端（接收端）玩家对象
                     EntityPlayer player = Minecraft.getMinecraft().player;
                     World world = player.world;
-                    if(!ModParticles.myParticles.containsKey(message.id)){
-                        Kanake.logger.warn("Particles id:{} -Not Found",message.id);
+                    EnumParticleTypes particleTypes = ModParticles.myParticlesString.get(message.particleName);
+                    if(particleTypes == null){
+                        Kanake.logger.warn("particle name not found: " + message.particleName);
                         return;
                     }
-                    for(int i = 0;i<message.n;i++){
-                        if(message.txId>0){
-                            world.spawnParticle(ModParticles.myParticles.get(message.id), message.x, message.y, message.z, message.speedX, message.speedY, message.speedZ, message.txId);
-                        }else{
-                            world.spawnParticle(ModParticles.myParticles.get(message.id), message.x, message.y, message.z, message.speedX, message.speedY, message.speedZ);
-                        }
-
+                    for (int i = 0; i < message.count; i++){
+                        world.spawnParticle(particleTypes, message.x, message.y, message.z, message.xSpeed, message.ySpeed, message.zSpeed, message.parameters);
                     }
                 }
             });

@@ -13,6 +13,8 @@ import java.util.UUID;
 public class EntityLaunch extends EntityShoot{
     public EntityLaunch(World worldIn) {
         super(worldIn);
+        this.livingMaxAge = 1200;
+        this.speed = 0.7;
     }
 
     @Override

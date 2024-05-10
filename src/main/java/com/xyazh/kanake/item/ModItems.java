@@ -38,6 +38,7 @@ public class ModItems {
     public static final Item RUNE_MAGIC = new ItemMagicRune("rune_magic").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_TP = new ItemTpRune("rune_tp").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_BLOCKING_LOOK_AT = new ItemBlockingLookAtRune("rune_blocking_look_at").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item RUNE_LAUNCH = new ItemLaunchRune("rune_launch").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL = new ItemBase("harmonium_crystal")
             .setOreDict(new String[]{"gemCrystal", "gemQuartz", "gemHarmoniumCrystal"})
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);

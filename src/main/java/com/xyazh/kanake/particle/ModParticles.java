@@ -14,7 +14,8 @@ public class ModParticles {
     private static final ParticleManager particleManager = Minecraft.getMinecraft().effectRenderer;
     private static int next_id = -1;
     private static final Map<Integer, IParticleFactory> idParticles = new HashMap<>();
-    public static final Map<Integer, EnumParticleTypes> myParticles = new HashMap<>();
+    public static final Map<Integer, EnumParticleTypes> myParticlesInt = new HashMap<>();
+    public static final Map<String, EnumParticleTypes> myParticlesString = new HashMap<>();
 
     public static final EnumParticleTypes TEST_PARTICLES = register(new TestParticle.Factory(), "test_particle", true);
     public static final EnumParticleTypes TEST_PARTICLES1 = register(new TestParticle1.Factory(), "test1_particle", true);
@@ -47,7 +48,8 @@ public class ModParticles {
 
     public static void appendAllParticlesToMyMap(){
         for(EnumParticleTypes particleTypes:EnumParticleTypes.values()){
-            myParticles.put(particleTypes.getParticleID(),particleTypes);
+            myParticlesInt.put(particleTypes.getParticleID(),particleTypes);
+            myParticlesString.put(particleTypes.getParticleName(),particleTypes);
         }
     }
 
@@ -63,6 +65,7 @@ public class ModParticles {
         idParticles.put(id, particleFactory);
         Kanake.logger.info("Particles:{}|{}", id, name);
         EnumParticleTypes particleTypes = EnumParticleTypesHelper.addParticleType(name, id, shouldIgnoreRangeIn);
-        ModParticles.myParticles.put(id,particleTypes);
+        ModParticles.myParticlesInt.put(id,particleTypes);
+        ModParticles.myParticlesString.put(name,particleTypes);
         return particleTypes;
     }}

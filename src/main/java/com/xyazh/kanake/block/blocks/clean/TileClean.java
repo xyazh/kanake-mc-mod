@@ -4,14 +4,13 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.api.IManaStorage;
 import com.xyazh.kanake.damage.CleanDamage;
 import com.xyazh.kanake.data.ManaData;
-import com.xyazh.kanake.item.ModItems;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.util.ParticleUtil;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -165,6 +164,7 @@ public class TileClean extends TileEntity implements ITickable {
     }
 
     public void spawnParticle(int n, double x, double y, double z) {
+        ParticleUtil.remoteSpawnParticle(this.world, n, "mana_particle", x, y, z, this.pos.getX()+0.5, this.pos.getY()+0.5, this.pos.getZ()+0.5);
     }
 
     @Override

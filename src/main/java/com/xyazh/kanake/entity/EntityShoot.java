@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData, IEntityDataParameter {
-    protected int livingMaxAge = 1200;
+    protected int livingMaxAge = 600;
     protected int livingAge = 0;
     protected Vec3d forward = new Vec3d(0,1,0);
     public double speed = 1.0;
@@ -82,7 +82,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         if(this.hasNoGravity()){
             this.motionY = this.speed * forward.y;
         }else{
-            dy -= 0.0024;
+            dy -= 0.0054;
             this.motionY = this.speed * forward.y + dy;
         }
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -228,7 +228,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
         if(source.isExplosion()){
-            if(amount>20){
+            if(amount>25){
                 this.isDead = true;
             }else if(this.lastExplosion != null){
                 Vec3d vec3d = new Vec3d();

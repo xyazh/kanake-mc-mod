@@ -30,7 +30,7 @@ public class EntityEmptyMagic extends EntityShoot{
     public LinkedList<Integer> order = new LinkedList<>();
     public LinkedList<Integer> callback = new LinkedList<>();
     public float gdy = 0.0f;
-    public float g = -0.0018f;
+    public float g = -0.0048f;
     public int temperature = 0;
     public int lastOrderAge = 0;
     public boolean isSubMagic = false;

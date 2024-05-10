@@ -17,6 +17,7 @@ public class BindEntityRenderer {
         RenderingRegistry.registerEntityRenderingHandler(EntityTreeMan.class, RenderTreeMan::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityForeverItem.class, RenderForeverItem::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityShield.class,RenderShield::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityDestroy.class, RenderDestroy::new);
     }
 
 }
