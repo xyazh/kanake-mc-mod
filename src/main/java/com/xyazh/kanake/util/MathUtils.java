@@ -51,5 +51,4 @@ public class MathUtils {
         double term4 = a3 * t3;
         return term1 + term2 + term3 + term4;
     }
-
 }

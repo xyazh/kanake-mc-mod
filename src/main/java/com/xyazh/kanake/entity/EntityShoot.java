@@ -75,17 +75,20 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         if(this.customMotion()){
             return;
         }
-        this.motionX = this.speed * forward.x;
-        this.motionZ = this.speed * forward.z;
+        this.motionX += this.speed * forward.x;
+        this.motionZ += this.speed * forward.z;
         this.blockPos = this.getPosition();
         this.explosionKeepAge -= 1;
         if(this.hasNoGravity()){
-            this.motionY = this.speed * forward.y;
+            this.motionY += this.speed * forward.y;
         }else{
             dy -= 0.0054;
-            this.motionY = this.speed * forward.y + dy;
+            this.motionY += this.speed * forward.y + dy;
         }
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+        this.motionX = 0;
+        this.motionY = 0;
+        this.motionZ = 0;
     }
 
     public void setForwardUnlimited(Vec3d forward) {

@@ -1,6 +1,6 @@
 package com.xyazh.kanake.entity.render;
 
-import com.xyazh.kanake.entity.EntityDestroy;
+import com.xyazh.kanake.entity.EntityBall;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
@@ -12,20 +12,21 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class RenderDestroy extends Render<EntityDestroy> {
-    static final Vec3d vec3d = new Vec3d(0,0,0);
-    public RenderDestroy(RenderManager renderManager) {
+public class RenderBall extends Render<EntityBall> {
+    static final Vec3d VEC3D = new Vec3d(0, 0, 0);
+
+    public RenderBall(RenderManager renderManager) {
         super(renderManager);
     }
 
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull EntityDestroy entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityBall entity) {
         return null;
     }
 
     @Override
-    public void doRender(@Nonnull EntityDestroy entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(@Nonnull EntityBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
         Tessellator tessellator = Tessellator.getInstance();
         GlStateManager.disableTexture2D();
         GlStateManager.disableFog();
@@ -37,7 +38,7 @@ public class RenderDestroy extends Render<EntityDestroy> {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.color(0.0F, 0.0F, 0.0F, 1.0F);
-        this.render(tessellator,entity,x,y,z,entityYaw,partialTicks);
+        this.render(tessellator, entity, x, y, z, entityYaw, partialTicks);
         tessellator.draw();
         GlStateManager.enableCull();
         GlStateManager.enableLighting();
@@ -45,16 +46,16 @@ public class RenderDestroy extends Render<EntityDestroy> {
         GlStateManager.enableFog();
     }
 
-    private void render(Tessellator tessellator, EntityDestroy entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    private void render(Tessellator tessellator, EntityBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
         BufferBuilder builder1 = tessellator.getBuffer();
         builder1.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-        this.renderSphere(builder1, x, y, z, entity.radius,0,0,0,255);
-
+        this.renderSphere(builder1, x, y, z, entity.radius, entity.color >> 16 & 0xFF, entity.color >> 8 & 0xFF, entity.color & 0xFF, entity.alpha);
     }
 
-    private void renderSphere(BufferBuilder builder, double x, double y, double z, double radius, int r,int g,int b,int a) {
-        vec3d.set(x, y, z);
-        double distance = vec3d.length();
+    private void renderSphere(BufferBuilder builder, double x, double y, double z, double radius, int r, int g, int b, int a) {
+        y += 0.5;
+        VEC3D.set(x, y, z);
+        double distance = VEC3D.length();
         double l = Math.max(distance - radius, 0) / 9;
         int minStacks = 5;
         int maxStacks = 32;

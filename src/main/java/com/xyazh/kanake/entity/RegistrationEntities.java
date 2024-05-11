@@ -159,5 +159,12 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityBlackHole.class)
+                .id(new ResourceLocation(Kanake.MODID, "black_hole"), 252)
+                .name("black_hole")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }
