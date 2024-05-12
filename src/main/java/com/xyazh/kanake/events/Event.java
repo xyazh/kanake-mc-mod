@@ -2,21 +2,35 @@ package com.xyazh.kanake.events;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.clean.TileClean;
+import com.xyazh.kanake.block.blocks.rail.WSRailPoweredBase;
 import com.xyazh.kanake.damage.CleanDamage;
 import com.xyazh.kanake.damage.KillSlimeDamage;
 import com.xyazh.kanake.entity.EntityShoot;
 import com.xyazh.kanake.entity.EntityWSKnight;
 import com.xyazh.kanake.item.ModItems;
+import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.util.ParticleUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.BlockRailPowered;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +40,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = Kanake.MODID)
 public class Event {
+
     @SubscribeEvent
     public static void drop(LivingDropsEvent event) {
         Entity entity = event.getEntity();
@@ -61,9 +76,9 @@ public class Event {
                 ((EntityWSKnight) entity).heal(damage);
                 World world = entity.world;
                 int amount = (int) damage;
-                /*ParticleUtil.remoteSpawnParticle(world, amount,ModParticles.HEAL_PARTICLES,
+                ParticleUtil.remoteSpawnParticle(world, amount, ModParticles.HEAL_PARTICLES.getParticleName(),
                         entity.posX, entity.posY, entity.posZ,
-                        0, 0, 0);*/
+                        0, 0, 0);
             }
         }
     }
@@ -111,5 +126,39 @@ public class Event {
             EntityShoot shoot = (EntityShoot) entity;
             shoot.lastExplosion = explosion;
         }
+    }
+
+    @SubscribeEvent
+    public static void onMinecraftMove(MinecartUpdateEvent event) {
+        EntityMinecart minecraft = event.getMinecart();
+        BlockPos pos = event.getPos();
+        IBlockState state = minecraft.world.getBlockState(pos);
+        Block block = state.getBlock();
+        if(!(block instanceof WSRailPoweredBase)){
+            return;
+        }
+        WSRailPoweredBase rail = (WSRailPoweredBase) block;
+        double max = rail.getRailMaxSpeed(minecraft.world, minecraft, pos);
+        double a = rail.getAcceleration(minecraft.world, minecraft, pos);
+        if(minecraft.motionX >0){
+            minecraft.motionX += a;
+        }else if(minecraft.motionX < 0){
+            minecraft.motionX -= a;
+        }
+        if(minecraft.motionZ >0){
+            minecraft.motionZ += a;
+        }else if(minecraft.motionZ < 0){
+            minecraft.motionZ -= a;
+        }
+        minecraft.motionX = MathHelper.clamp(minecraft.motionX, -max, max);
+        minecraft.motionZ = MathHelper.clamp(minecraft.motionZ, -max, max);
+        double mX = minecraft.motionX;
+        double mZ = minecraft.motionZ;
+        if (minecraft.isBeingRidden())
+        {
+            mX *= 0.75D;
+            mZ *= 0.75D;
+        }
+        minecraft.move(MoverType.SELF, mX, 0.0D, mZ);
     }
 }

@@ -118,4 +118,6 @@ public class EntityFireBall extends EntityShoot{
             this.world.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
         }
     }
+
+
 }

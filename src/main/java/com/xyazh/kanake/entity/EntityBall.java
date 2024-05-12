@@ -1,27 +1,17 @@
 package com.xyazh.kanake.entity;
 
-import com.xyazh.kanake.util.Vec3d;
+import com.xyazh.kanake.Kanake;
+import com.xyazh.kanake.network.EntityDataPacket;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.UUID;
 
 
 public abstract class EntityBall extends EntityShoot {
     public float radius;
     public int color;
     public int alpha;
+    protected boolean shouldSyncRadius = false;
     public boolean hasNoGravity()
     {
         return true;
@@ -38,6 +28,9 @@ public abstract class EntityBall extends EntityShoot {
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if (this.shouldSyncRadius) {
+            this.trySyncRadius();
+        }
     }
 
     @Override
@@ -49,6 +42,9 @@ public abstract class EntityBall extends EntityShoot {
         this.radius = radius;
         float length = 2 * this.radius;
         this.setSize(length, length);
+        if(!this.world.isRemote){
+            this.shouldSyncRadius = true;
+        }
     }
 
     @Override
@@ -81,5 +77,27 @@ public abstract class EntityBall extends EntityShoot {
         this.setRadius(buffer.readFloat());
         this.color = buffer.readInt();
         this.alpha = buffer.readInt();
+    }
+
+    public void trySyncRadius() {
+        if (!this.world.isRemote) {
+            this.shouldSyncSpeed = false;
+            EntityDataPacket packet = EntityDataPacket.getPacket(this);
+            if (packet == null) {
+                return;
+            }
+            packet.buffer.writeInt(2);
+            packet.buffer.writeFloat(this.radius);
+            Kanake.network.sendToAll(packet);
+        }
+    }
+
+    @Override
+    public int readData(ByteBuf buf) {
+        int type = super.readData(buf);
+        if(type==2){
+            this.setRadius(buf.readFloat());
+        }
+        return type;
     }
 }

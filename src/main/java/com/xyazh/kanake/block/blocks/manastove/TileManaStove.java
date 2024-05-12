@@ -192,7 +192,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.manaStored = compound.getDouble("manaStored");
-        this.shouldSync = compound.getBoolean("shouldSync");
+        this.shouldSync = compound.getBoolean("shouldSyncSpeed");
         this.workingTime = compound.getInteger("workingTime");
     }
 
@@ -200,7 +200,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setDouble("manaStored", this.manaStored);
-        compound.setBoolean("shouldSync", this.shouldSync);
+        compound.setBoolean("shouldSyncSpeed", this.shouldSync);
         compound.setInteger("workingTime", this.workingTime);
         return compound;
     }

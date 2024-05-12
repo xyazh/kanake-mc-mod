@@ -57,7 +57,7 @@ public class ItemTestItem extends ItemBase {
             Vec3d m = Vec3d.fromPitchYaw(
                     (float) (player.rotationPitch),
                     (float) (player.rotationYaw));
-            EntityShoot entity = new EntityDestroy(world);
+            EntityShoot entity = new EntityBlackHole(world);
             entity.entityShoot(player, m);
             world.spawnEntity(entity);
         }

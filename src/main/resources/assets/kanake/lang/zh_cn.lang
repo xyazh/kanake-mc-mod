@@ -21,6 +21,11 @@ tile.mana_storage.name=魔力储存器
 tile.inf_mana_storage.name=无限魔力储存器
 tile.mana_stove.name=魔力能源炉
 tile.pure_hana.name=纯净水晶花
+tile.wooden_rail.name=木轨道
+tile.ws_rail.name=废怯铁轨道
+tile.ws_powered_rail.name=废怯铁动力轨道
+tile.ws_magic_rail.name=魔法铁轨道
+tile.ws_magic_powered_rail.name=魔法铁动力轨道
 
 item.test.name=测试物品
 item.rune.name=符文纸

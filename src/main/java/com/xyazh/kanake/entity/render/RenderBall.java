@@ -1,6 +1,8 @@
 package com.xyazh.kanake.entity.render;
 
 import com.xyazh.kanake.entity.EntityBall;
+import com.xyazh.kanake.libs.weaponlib.LaserBeamRenderer;
+import com.xyazh.kanake.render.InstancedRender;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
@@ -14,6 +16,7 @@ import javax.annotation.Nullable;
 
 public class RenderBall extends Render<EntityBall> {
     static final Vec3d VEC3D = new Vec3d(0, 0, 0);
+    static final LaserBeamRenderer RENDER = new LaserBeamRenderer();
 
     public RenderBall(RenderManager renderManager) {
         super(renderManager);
@@ -25,7 +28,7 @@ public class RenderBall extends Render<EntityBall> {
         return null;
     }
 
-    @Override
+    /*@Override
     public void doRender(@Nonnull EntityBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
         Tessellator tessellator = Tessellator.getInstance();
         GlStateManager.disableTexture2D();
@@ -44,6 +47,11 @@ public class RenderBall extends Render<EntityBall> {
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.enableFog();
+    }*/
+
+    @Override
+    public void doRender(@Nonnull EntityBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        RENDER.render();
     }
 
     private void render(Tessellator tessellator, EntityBall entity, double x, double y, double z, float entityYaw, float partialTicks) {

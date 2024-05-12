@@ -8,10 +8,14 @@ import com.xyazh.kanake.block.blocks.manastorage.BlockInfManaStorage;
 import com.xyazh.kanake.block.blocks.manastorage.BlockManaStorage;
 import com.xyazh.kanake.block.blocks.manastove.BlockManaStove;
 import com.xyazh.kanake.block.blocks.manatable.*;
+import com.xyazh.kanake.block.blocks.rail.WSRailBase;
+import com.xyazh.kanake.block.blocks.rail.WSRailPoweredBase;
 import com.xyazh.kanake.block.blocks.teleportation.BlockTeleportation;
 import com.xyazh.kanake.init.ModCreativeTab;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,4 +61,25 @@ public class ModBlocks {
 
 	public static final Block PURE_HANA = new BlockPureHana("pure_hana")
 			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+
+	public static final Block WS_WOOD_RAIL = new WSRailBase("wooden_rail")
+			.setISoundType(SoundType.WOOD)
+			.setRailMaxSpeed(0.3f)
+			.setCreativeTab(CreativeTabs.TRANSPORTATION);
+	public static final Block WS_WS_RAIL = new WSRailBase("ws_rail")
+			.setISoundType(SoundType.METAL)
+			.setRailMaxSpeed(1.5f)
+			.setCreativeTab(CreativeTabs.TRANSPORTATION);
+	public static final Block WS_WS_POWERED_RAIL = new WSRailPoweredBase("ws_powered_rail")
+			.setISoundType(SoundType.METAL)
+			.setRailMaxSpeed(1.5f)
+			.setCreativeTab(CreativeTabs.TRANSPORTATION);
+	public static final Block WS_MAGIC_RAIL = new WSRailBase("ws_magic_rail")
+			.setISoundType(SoundType.METAL)
+			.setRailMaxSpeed(4.5f)
+			.setCreativeTab(CreativeTabs.TRANSPORTATION);
+	public static final Block WS_MAGIC_POWERED_RAIL = new WSRailPoweredBase("ws_magic_powered_rail")
+			.setISoundType(SoundType.METAL)
+			.setRailMaxSpeed(4.5f)
+			.setCreativeTab(CreativeTabs.TRANSPORTATION);
 }

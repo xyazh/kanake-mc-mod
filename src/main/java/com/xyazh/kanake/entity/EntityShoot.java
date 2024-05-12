@@ -25,13 +25,12 @@ import java.util.UUID;
 public abstract class EntityShoot extends Entity implements IProjectile, IEntityAdditionalSpawnData, IEntityDataParameter {
     protected int livingMaxAge = 600;
     protected int livingAge = 0;
-    protected Vec3d forward = new Vec3d(0,1,0);
+    protected Vec3d forward = new Vec3d(0, 1, 0);
     public double speed = 1.0;
     public EntityLivingBase shootingEntity = null;
     protected BlockPos blockPos = null;
     protected double dy = 0;
-    protected int explosionKeepAge = 0;
-    protected boolean shouldSync = false;
+    protected boolean shouldSyncSpeed = false;
     public Explosion lastExplosion = null;
 
     public EntityShoot(World worldIn) {
@@ -39,12 +38,12 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         this.setSize(0.01f, 0.01f);
     }
 
-    protected boolean isHurt(){
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(posX+0.4,posY+0.4,posZ+0.4,posX-0.4,posY-0.4,posZ-0.4);
-        List<EntityLivingBase> entityLivingBases = world.getEntitiesWithinAABB(EntityLivingBase.class,axisAlignedBB);
+    protected boolean isHurt() {
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(posX + 0.4, posY + 0.4, posZ + 0.4, posX - 0.4, posY - 0.4, posZ - 0.4);
+        List<EntityLivingBase> entityLivingBases = world.getEntitiesWithinAABB(EntityLivingBase.class, axisAlignedBB);
         boolean flag = false;
-        for(EntityLivingBase entityLivingBase:entityLivingBases){
-            if(entityLivingBase.equals(this.shootingEntity)){
+        for (EntityLivingBase entityLivingBase : entityLivingBases) {
+            if (entityLivingBase.equals(this.shootingEntity)) {
                 continue;
             }
             flag = true;
@@ -52,43 +51,39 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         return flag;
     }
 
-    public boolean hasNoGravity()
-    {
+    public boolean hasNoGravity() {
         return false;
     }
 
-    protected boolean customMotion(){
+    protected boolean customMotion() {
         return false;
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if(this.shouldSync){
+        if (this.shouldSyncSpeed) {
             this.trySyncSpeed();
         }
-        if(this.livingAge++ > this.livingMaxAge){
-            if(!this.world.isRemote){
+        if (this.livingAge++ > this.livingMaxAge) {
+            if (!this.world.isRemote) {
                 this.setDead();
             }
         }
-        if(this.customMotion()){
+        this.blockPos = this.getPosition();
+        if (this.customMotion()) {
             return;
         }
-        this.motionX += this.speed * forward.x;
-        this.motionZ += this.speed * forward.z;
-        this.blockPos = this.getPosition();
-        this.explosionKeepAge -= 1;
-        if(this.hasNoGravity()){
-            this.motionY += this.speed * forward.y;
-        }else{
+        double motionX, motionY, motionZ;
+        motionX = this.speed * forward.x;
+        motionZ = this.speed * forward.z;
+        if (this.hasNoGravity()) {
+            motionY = this.speed * forward.y;
+        } else {
             dy -= 0.0054;
-            this.motionY += this.speed * forward.y + dy;
+            motionY = this.speed * forward.y + dy;
         }
-        this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-        this.motionX = 0;
-        this.motionY = 0;
-        this.motionZ = 0;
+        this.move(MoverType.SELF, this.motionX + motionX, this.motionY + motionY, this.motionZ + motionZ);
     }
 
     public void setForwardUnlimited(Vec3d forward) {
@@ -111,51 +106,51 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
 
     @Override
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        this.setPosition(x,y,z);
+        this.setPosition(x, y, z);
         this.speed = velocity;
     }
 
     public void shoot(double x, double y, double z) {
-        this.setPosition(x,y,z);
+        this.setPosition(x, y, z);
     }
 
-    public void entityShoot(EntityLivingBase owner, Vec3d direction,float velocity, float inaccuracy){
-        double x,y,z;
-        x = owner.posX + 0.5*direction.x;
-        y = owner.posY + 1 + 0.5*direction.y;
-        z = owner.posZ + 0.5*direction.z;
+    public void entityShoot(EntityLivingBase owner, Vec3d direction, float velocity, float inaccuracy) {
+        double x, y, z;
+        x = owner.posX + 0.5 * direction.x;
+        y = owner.posY + 1 + 0.5 * direction.y;
+        z = owner.posZ + 0.5 * direction.z;
         this.setForward(direction);
-        this.shoot(x,y,z,velocity,inaccuracy);
+        this.shoot(x, y, z, velocity, inaccuracy);
         this.shootingEntity = owner;
     }
 
-    public void entityShoot(EntityLivingBase owner, Vec3d direction){
-        double x,y,z;
-        x = owner.posX + 0.5*direction.x;
-        y = owner.posY + 1 + 0.5*direction.y;
-        z = owner.posZ + 0.5*direction.z;
+    public void entityShoot(EntityLivingBase owner, Vec3d direction) {
+        double x, y, z;
+        x = owner.posX + 0.5 * direction.x;
+        y = owner.posY + 1 + 0.5 * direction.y;
+        z = owner.posZ + 0.5 * direction.z;
         this.setForward(direction);
-        this.shoot(x,y,z);
+        this.shoot(x, y, z);
         this.shootingEntity = owner;
     }
 
-    public void entityShoot(EntityLivingBase owner, net.minecraft.util.math.Vec3d direction, float velocity, float inaccuracy){
-        double x,y,z;
-        x = owner.posX + 0.5*direction.x;
-        y = owner.posY + 1 + 0.5*direction.y;
-        z = owner.posZ + 0.5*direction.z;
+    public void entityShoot(EntityLivingBase owner, net.minecraft.util.math.Vec3d direction, float velocity, float inaccuracy) {
+        double x, y, z;
+        x = owner.posX + 0.5 * direction.x;
+        y = owner.posY + 1 + 0.5 * direction.y;
+        z = owner.posZ + 0.5 * direction.z;
         this.setForward(direction);
-        this.shoot(x,y,z,velocity,inaccuracy);
+        this.shoot(x, y, z, velocity, inaccuracy);
         this.shootingEntity = owner;
     }
 
-    public void entityShoot(EntityLivingBase owner, net.minecraft.util.math.Vec3d direction){
-        double x,y,z;
-        x = owner.posX + 0.5*direction.x;
-        y = owner.posY + 1 + 0.5*direction.y;
-        z = owner.posZ + 0.5*direction.z;
+    public void entityShoot(EntityLivingBase owner, net.minecraft.util.math.Vec3d direction) {
+        double x, y, z;
+        x = owner.posX + 0.5 * direction.x;
+        y = owner.posY + 1 + 0.5 * direction.y;
+        z = owner.posZ + 0.5 * direction.z;
         this.setForward(direction);
-        this.shoot(x,y,z);
+        this.shoot(x, y, z);
         this.shootingEntity = owner;
     }
 
@@ -171,22 +166,22 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         this.speed = compound.getDouble("speed");
         this.dy = compound.getDouble("dy");
         UUID id = compound.getUniqueId("shootingEntity");
-        if(id != null){
+        if (id != null) {
             this.shootingEntity = this.world.getPlayerEntityByUUID(id);
         }
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
-        compound.setInteger("livingMaxAge",this.livingMaxAge);
-        compound.setInteger("livingAge",this.livingAge);
-        compound.setDouble("forward.x",this.forward.x);
-        compound.setDouble("forward.args",this.forward.y);
-        compound.setDouble("forward.z",this.forward.z);
-        compound.setDouble("speed",this.speed);
-        compound.setDouble("dy",this.dy);
-        if(this.shootingEntity!=null){
-            compound.setUniqueId("shootingEntity",this.shootingEntity.getUniqueID());
+        compound.setInteger("livingMaxAge", this.livingMaxAge);
+        compound.setInteger("livingAge", this.livingAge);
+        compound.setDouble("forward.x", this.forward.x);
+        compound.setDouble("forward.args", this.forward.y);
+        compound.setDouble("forward.z", this.forward.z);
+        compound.setDouble("speed", this.speed);
+        compound.setDouble("dy", this.dy);
+        if (this.shootingEntity != null) {
+            compound.setUniqueId("shootingEntity", this.shootingEntity.getUniqueID());
         }
     }
 
@@ -201,7 +196,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         buffer.writeDouble(this.dy);
         boolean hasPlayerShooter = this.shootingEntity instanceof EntityPlayer;
         buffer.writeBoolean(hasPlayerShooter);
-        if(hasPlayerShooter){
+        if (hasPlayerShooter) {
             UUID id = this.shootingEntity.getUniqueID();
             buffer.writeLong(id.getMostSignificantBits());
             buffer.writeLong(id.getLeastSignificantBits());
@@ -220,7 +215,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         this.speed = buffer.readDouble();
         this.dy = buffer.readDouble();
         boolean hasPlayerShooter = buffer.readBoolean();
-        if(hasPlayerShooter){
+        if (hasPlayerShooter) {
             long highBits = buffer.readLong();
             long lowBits = buffer.readLong();
             UUID id = new UUID(highBits, lowBits);
@@ -230,10 +225,10 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
-        if(source.isExplosion()){
-            if(amount>25){
+        if (source.isExplosion()) {
+            if (amount > 25) {
                 this.isDead = true;
-            }else if(this.lastExplosion != null){
+            } else if (this.lastExplosion != null) {
                 Vec3d vec3d = new Vec3d();
                 vec3d.set(this.lastExplosion.getPosition());
                 Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
@@ -246,38 +241,44 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
                 froward.add(thisPos);
                 this.speed = froward.normalizeAndLength();
                 this.forward = froward;
-                this.shouldSync = true;
+                this.shouldSyncSpeed = true;
             }
         }
         return true;
     }
 
-    public void trySyncSpeed(){
-        if(!this.world.isRemote){
-            this.shouldSync = false;
+    public void trySyncSpeed() {
+        if (!this.world.isRemote) {
+            this.shouldSyncSpeed = false;
             EntityDataPacket packet = EntityDataPacket.getPacket(this);
             if (packet == null) {
                 return;
             }
             packet.buffer.writeInt(1);
-            packet.buffer.writeDouble(this.speed);
-            packet.buffer.writeDouble(this.forward.x);
-            packet.buffer.writeDouble(this.forward.y);
-            packet.buffer.writeDouble(this.forward.z);
+            packet.buffer.writeFloat((float) this.speed);
+            packet.buffer.writeFloat((float) this.forward.x);
+            packet.buffer.writeFloat((float) this.forward.y);
+            packet.buffer.writeFloat((float) this.forward.z);
+            packet.buffer.writeFloat((float) this.motionX);
+            packet.buffer.writeFloat((float) this.motionY);
+            packet.buffer.writeFloat((float) this.motionZ);
             Kanake.network.sendToAll(packet);
         }
-   }
+    }
 
     @Override
     public int readData(ByteBuf buf) {
         int type = buf.readInt();
-        if(type == 1){
-            this.speed = buf.readDouble();
+        if (type == 1) {
+            this.speed = buf.readFloat();
             this.forward = new Vec3d(
-                    buf.readDouble(),
-                    buf.readDouble(),
-                    buf.readDouble()
+                    buf.readFloat(),
+                    buf.readFloat(),
+                    buf.readFloat()
             );
+            this.motionX = buf.readFloat();
+            this.motionY = buf.readFloat();
+            this.motionZ = buf.readFloat();
         }
         return type;
     }

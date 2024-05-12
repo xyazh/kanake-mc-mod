@@ -23,14 +23,14 @@ public class TileManaStorageBase extends TileBase implements ITickable, IManaSto
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.manaStored = compound.getDouble("manaStored");
-        this.shouldSync = compound.getBoolean("shouldSync");
+        this.shouldSync = compound.getBoolean("shouldSyncSpeed");
     }
 
     @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
         compound.setDouble("manaStored", this.manaStored);
-        compound.setBoolean("shouldSync", this.shouldSync);
+        compound.setBoolean("shouldSyncSpeed", this.shouldSync);
         return compound;
     }
 
