@@ -96,6 +96,8 @@ public class EntityDestroy extends EntityBall {
         return flag;
     }
 
+
+
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource source, float amount) {
         return true;
@@ -135,5 +137,8 @@ public class EntityDestroy extends EntityBall {
         return false;
     }
 
-
+    @Override
+    public boolean isImmuneToExplosions() {
+        return true;
+    }
 }

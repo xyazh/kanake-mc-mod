@@ -70,14 +70,6 @@ public class WSRailBase extends BlockRail implements IHasModel {
         return super.getItemDropped(state, rand, fortune);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World player, List<String> tooltip, @Nonnull ITooltipFlag advanced){
-        tooltip.add("高速轨道");
-        tooltip.add("不需要红石信号激活");
-        tooltip.add("小心脱轨!");
-        tooltip.add("速度倍率 x"+this.speed);
-    }
-
     @Override
     public int quantityDropped(@Nonnull Random rand) {
         return super.quantityDropped(rand);

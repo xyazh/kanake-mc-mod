@@ -73,6 +73,6 @@ public class ItemStorageBase extends ItemBase implements IItemManaStorage {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(@Nonnull ItemStack stack, World world, List<String> tooltip, @Nonnull ITooltipFlag flag) {
-        tooltip.add(I18n.format("tooltip.mana.storage") + ":" + this.getMana(stack) + " / " + this.getMaxMana(stack));
+        tooltip.add(I18n.format("tooltip.mana.storage",this.getMana(stack) ,this.getMaxMana(stack)));
     }
 }

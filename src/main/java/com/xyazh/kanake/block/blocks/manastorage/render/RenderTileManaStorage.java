@@ -34,7 +34,6 @@ public class RenderTileManaStorage extends TileEntitySpecialRenderer<TileManaSto
         x2 = x + 0.875;
         y1 = y + 0.125;
         y2 = y + 0.125 + (0.4375 - 0.125) * te.getManaStored() / te.getMaxManaStored();
-        ;
         z1 = z + 0.125;
         z2 = z + 0.875;
         double[] vertices1 = {

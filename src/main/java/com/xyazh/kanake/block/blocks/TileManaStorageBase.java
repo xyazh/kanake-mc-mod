@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 public class TileManaStorageBase extends TileBase implements ITickable, IManaStorage {
     protected double maxManaStored;
     protected double manaStored = 0;
-    public boolean shouldSync = false;
+    public boolean shouldSync = true;
 
     public TileManaStorageBase(){
         super();

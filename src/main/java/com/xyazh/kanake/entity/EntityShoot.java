@@ -28,6 +28,8 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     protected Vec3d forward = new Vec3d(0, 1, 0);
     public double speed = 1.0;
     public EntityLivingBase shootingEntity = null;
+    protected UUID shootingEntityUUID = null;
+    protected Vec3d shootingEntityPos = null;
     protected BlockPos blockPos = null;
     protected double dy = 0;
     protected boolean shouldSyncSpeed = false;
@@ -62,6 +64,16 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if(this.shootingEntity == null && this.shootingEntityUUID != null){
+            this.shootingEntity = world.getPlayerEntityByUUID(this.shootingEntityUUID);
+            if (this.shootingEntity == null && this.shootingEntityPos != null) {
+                AxisAlignedBB aabb = new AxisAlignedBB(this.shootingEntityPos.x - 1, this.shootingEntityPos.y - 1, this.shootingEntityPos.z - 1, this.shootingEntityPos.x + 1, this.shootingEntityPos.y + 1, this.shootingEntityPos.z + 1);
+                List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb,entity -> this.shootingEntityUUID.equals(entity.getUniqueID()));
+                if (!list.isEmpty()) {
+                    this.shootingEntity = list.get(0);
+                }
+            }
+        }
         if (this.shouldSyncSpeed) {
             this.trySyncSpeed();
         }
@@ -165,9 +177,13 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         );
         this.speed = compound.getDouble("speed");
         this.dy = compound.getDouble("dy");
-        UUID id = compound.getUniqueId("shootingEntity");
-        if (id != null) {
-            this.shootingEntity = this.world.getPlayerEntityByUUID(id);
+        this.shootingEntityUUID = compound.getUniqueId("shootingEntity");
+        if (compound.hasKey("shootingEntityPos")) {
+            this.shootingEntityPos = new Vec3d(
+                    compound.getDouble("shootingEntityPos.x"),
+                    compound.getDouble("shootingEntityPos.y"),
+                    compound.getDouble("shootingEntityPos.z")
+            );
         }
     }
 
@@ -182,6 +198,17 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         compound.setDouble("dy", this.dy);
         if (this.shootingEntity != null) {
             compound.setUniqueId("shootingEntity", this.shootingEntity.getUniqueID());
+            this.shootingEntityPos = Vec3d.fromEntityPos(this.shootingEntity);
+        }else if (this.shootingEntityUUID != null) {
+            compound.setUniqueId("shootingEntity", this.shootingEntityUUID);
+        }
+        if(this.shootingEntityPos == null){
+            compound.setBoolean("shootingEntityPos", false);
+        }else {
+            compound.setBoolean("shootingEntityPos", true);
+            compound.setDouble("shootingEntityPos.x", this.shootingEntityPos.x);
+            compound.setDouble("shootingEntityPos.y", this.shootingEntityPos.y);
+            compound.setDouble("shootingEntityPos.z", this.shootingEntityPos.z);
         }
     }
 
@@ -194,12 +221,16 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         buffer.writeDouble(this.forward.z);
         buffer.writeDouble(this.speed);
         buffer.writeDouble(this.dy);
-        boolean hasPlayerShooter = this.shootingEntity instanceof EntityPlayer;
-        buffer.writeBoolean(hasPlayerShooter);
-        if (hasPlayerShooter) {
+        boolean hasShooter = this.shootingEntity != null;
+        buffer.writeBoolean(hasShooter);
+        if (hasShooter) {
             UUID id = this.shootingEntity.getUniqueID();
             buffer.writeLong(id.getMostSignificantBits());
             buffer.writeLong(id.getLeastSignificantBits());
+            Vec3d pos = Vec3d.fromEntityPos(this.shootingEntity);
+            buffer.writeDouble(pos.x);
+            buffer.writeDouble(pos.y);
+            buffer.writeDouble(pos.z);
         }
     }
 
@@ -214,12 +245,16 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         );
         this.speed = buffer.readDouble();
         this.dy = buffer.readDouble();
-        boolean hasPlayerShooter = buffer.readBoolean();
-        if (hasPlayerShooter) {
+        boolean hasShooter = buffer.readBoolean();
+        if (hasShooter) {
             long highBits = buffer.readLong();
             long lowBits = buffer.readLong();
-            UUID id = new UUID(highBits, lowBits);
-            this.shootingEntity = this.world.getPlayerEntityByUUID(id);
+            this.shootingEntityUUID = new UUID(highBits, lowBits);
+            this.shootingEntityPos = new Vec3d(
+                    buffer.readDouble(),
+                    buffer.readDouble(),
+                    buffer.readDouble()
+            );
         }
     }
 
@@ -228,13 +263,14 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         if (source.isExplosion()) {
             if (amount > 25) {
                 this.isDead = true;
-            } else if (this.lastExplosion != null) {
+            }
+            else if (this.lastExplosion != null) {
                 Vec3d vec3d = new Vec3d();
                 vec3d.set(this.lastExplosion.getPosition());
                 Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
                 thisPos.sub(vec3d);
                 thisPos.normalize();
-                thisPos.mul(this.speed * amount / 20);
+                thisPos.mul(this.speed * amount / 40);
                 Vec3d froward = new Vec3d();
                 froward.set(this.forward);
                 froward.mul(this.speed);

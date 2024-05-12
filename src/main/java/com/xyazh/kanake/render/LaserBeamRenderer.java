@@ -1,4 +1,4 @@
-package com.xyazh.kanake.libs.weaponlib;
+package com.xyazh.kanake.render;
 
 import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;

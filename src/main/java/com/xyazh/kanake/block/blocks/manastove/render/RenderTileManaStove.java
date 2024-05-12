@@ -33,8 +33,8 @@ public class RenderTileManaStove extends TileEntitySpecialRenderer<TileManaStove
         double x1, x2, y1, y2, z1, z2;
         x1 = x + 0.125;
         x2 = x + 0.875;
-        y1 = y + 0.5625;
-        y2 = y + 0.5625 + (0.875 - 0.5625) * te.getManaStored() / te.getMaxManaStored();
+        y1 = y + 0.125;
+        y2 = y + 0.125 + (0.4375 - 0.125) * te.getManaStored() / te.getMaxManaStored();
         z1 = z + 0.125;
         z2 = z + 0.875;
         double[] vertices1 = {

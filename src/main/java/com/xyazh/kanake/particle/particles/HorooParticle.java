@@ -39,7 +39,7 @@ public class HorooParticle extends BaseParticle {
         this.particleScale *= 0.75F;
         this.particleScale *= scale;
         this.reddustParticleScale = this.particleScale;
-        this.particleMaxAge = (int)(2.0D / (Math.random() * 0.8D + 0.2D));
+        this.particleMaxAge = (int)(2.5D / (Math.random() * 0.8D + 0.2D));
         this.particleMaxAge = (int)((double)this.particleMaxAge * scale);
     }
 

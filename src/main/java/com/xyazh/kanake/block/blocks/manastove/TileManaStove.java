@@ -20,7 +20,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
     public int workingTime = 0;
     protected double maxManaStored;
     protected double manaStored = 0;
-    public boolean shouldSync = false;
+    public boolean shouldSync = true;
 
     public TileManaStove() {
         super();
@@ -29,7 +29,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
 
     @Override
     public double getFEY() {
-        return 0;
+        return 0.6;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class TileManaStove extends TileManaWithForeverEntity implements IManaSto
             if (this.workingTime > 0) {
                 for(int i=0;i<2;i++){
                     this.world.spawnParticle(ModParticles.HONOO_PARTICLES,
-                            pos.getX() + 0.25 + Kanake.rand.nextFloat() / 2, pos.getY() + 0.1875, pos.getZ() + 0.25 + Kanake.rand.nextFloat() / 2,
+                            pos.getX() + 0.25 + Kanake.rand.nextFloat() / 2, pos.getY() + 0.8, pos.getZ() + 0.25 + Kanake.rand.nextFloat() / 2,
                             0, 0, 0);
                 }
             }
