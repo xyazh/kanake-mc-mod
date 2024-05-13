@@ -1,9 +1,6 @@
 #version 120
 
 uniform sampler2D tex0;
-
-varying vec2 texCoord;
-
 uniform vec3 color;
 uniform float brightness;
 

@@ -35,7 +35,7 @@ public class Kanake
 {
     public static final String MODID = "kanake";
     public static final String NAME = "Kannmein na kenndaimahou";
-    public static final String VERSION = "0.1.20.beta";
+    public static final String VERSION = "0.1.52.beta";
 
     public static SimpleNetworkWrapper network;
 

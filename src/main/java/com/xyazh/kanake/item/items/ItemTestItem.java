@@ -42,7 +42,7 @@ public class ItemTestItem extends ItemBase {
         /*int dim = ModWorlds.getDimIdByName(ProviderArea.providerName);
         TpHelper.changeDimension(player,dim);8*/
         //ManaData.add(player,50);
-        if(!world.isRemote){
+        /*if(!world.isRemote){
             for(int i=0;i<100;i++){
                 Vec3d m = Vec3d.fromPitchYaw(
                         (float) (player.rotationPitch + Kanake.rand.nextGaussian()*4),
@@ -51,7 +51,7 @@ public class ItemTestItem extends ItemBase {
                 entity.entityShoot(player,m);
                 world.spawnEntity(entity);
             }
-        }
+        }*/
 
         /*if (!world.isRemote) {
             Vec3d m = Vec3d.fromPitchYaw(
@@ -61,6 +61,11 @@ public class ItemTestItem extends ItemBase {
             entity.entityShoot(player, m);
             world.spawnEntity(entity);
         }*/
+        if (!world.isRemote) {
+            EntityBiimu entity = new EntityBiimu(world);
+            entity.setPosition(player.posX, player.posY, player.posZ);
+            world.spawnEntity(entity);
+        }
         /*if (!world.isRemote){
             player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
         }*/

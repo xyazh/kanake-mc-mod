@@ -38,18 +38,10 @@ public class LaserBeamRenderer implements CustomRenderer {
 
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder bb = tes.getBuffer();
-        bb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+        bb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
 		float yOffset = -1.3f;
 		float xOffset = 0.5f;
 		bb.pos(xOffset, yOffset, -1.5).color(1.0f, 0.0f, 0.0f, 1.0f).endVertex();
-        bb.pos(xOffset, yOffset, -50).color(1.0f, 0.0f, 0.0f, 0.1f).endVertex();
-        tes.draw();
-
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
-        tes = Tessellator.getInstance();
-        bb = tes.getBuffer();
-        bb.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
-        bb.pos(xOffset, yOffset, -1.5).color(1.0f, 0.0f, 0.0f, 1.0f).endVertex();
         bb.pos(xOffset, yOffset, -50).color(1.0f, 0.0f, 0.0f, 0.1f).endVertex();
         tes.draw();
 

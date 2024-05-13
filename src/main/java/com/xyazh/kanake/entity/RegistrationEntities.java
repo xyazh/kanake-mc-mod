@@ -166,5 +166,12 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityBiimu.class)
+                .id(new ResourceLocation(Kanake.MODID, "biimu"), 253)
+                .name("biimu")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }
