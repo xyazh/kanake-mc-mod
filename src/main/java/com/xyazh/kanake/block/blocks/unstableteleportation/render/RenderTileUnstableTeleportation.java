@@ -5,6 +5,7 @@ import com.xyazh.kanake.block.blocks.teleportation.render.RenderTileTeleportatio
 import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,7 +26,6 @@ public class RenderTileUnstableTeleportation extends TileEntitySpecialRenderer<T
 
     public RenderTileUnstableTeleportation() {
         super();
-
     }
 
     public boolean isGlobalRenderer(@Nonnull TileUnstableTeleportation te) {
@@ -33,9 +33,10 @@ public class RenderTileUnstableTeleportation extends TileEntitySpecialRenderer<T
     }
 
     public void renderSquare(TileUnstableTeleportation te, BufferBuilder bufferbuilder, float partialTicks, double x, double y, double z, double size, int color) {
-        x += 0.5;
-        y += 0.1;
-        z += 0.5;
+        Vec3d offset = te.datumOffset(partialTicks);
+        x += 0.5 + offset.x;
+        y += 0.1 + offset.y;
+        z += 0.5 + offset.z;
         double x1 = x - size / 2.0;
         double z1 = z - size / 2.0;
         double x2 = x + size / 2.0;
@@ -113,7 +114,6 @@ public class RenderTileUnstableTeleportation extends TileEntitySpecialRenderer<T
 
     public void render(@Nonnull TileUnstableTeleportation te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         int activeTextureUnit = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
-
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glPushMatrix();

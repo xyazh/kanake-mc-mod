@@ -4,6 +4,7 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
 import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
 import com.xyazh.kanake.util.MathUtils;
+import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -32,9 +33,10 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
     }
 
     public void renderSquare(TileTeleportation te, BufferBuilder bufferbuilder, float partialTicks, double x, double y, double z, double size, int color) {
-        x += 0.5;
-        y += 0.1;
-        z += 0.5;
+        Vec3d offset = te.datumOffset(partialTicks);
+        x += 0.5 + offset.x;
+        y += 0.1 + offset.y;
+        z += 0.5 + offset.z;
         double x1 = x - size / 2.0;
         double z1 = z - size / 2.0;
         double x2 = x + size / 2.0;

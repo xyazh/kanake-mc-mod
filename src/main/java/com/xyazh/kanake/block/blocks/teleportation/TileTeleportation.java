@@ -4,6 +4,8 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.TileBase;
 import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
 import com.xyazh.kanake.util.MathUtils;
+import com.xyazh.kanake.util.Vec3d;
+import com.xyazh.kanake.util.Vec3dFinal;
 import net.minecraft.util.ITickable;
 
 public class TileTeleportation extends TileBase implements ITickable {
@@ -36,23 +38,33 @@ public class TileTeleportation extends TileBase implements ITickable {
         }
     }
 
+    public boolean undulating(){
+        return true;
+    }
+
     @Override
     public void update() {
         if(this.world.isRemote){
-            int pointsCount = this.pointsY.length;
-            for (int i = 0; i < pointsCount; i++) {
-                if(this.schedules[i] >= this.maxSchedules[i]){
-                    this.schedules[i] = 0;
-                    this.keyPoints1[i] = randS();
-                    this.keyPoints2[i] = randM();
-                    this.maxSchedules[i] = (int) (randS() * 200);
+            if(this.undulating()){
+                int pointsCount = this.pointsY.length;
+                for (int i = 0; i < pointsCount; i++) {
+                    if(this.schedules[i] >= this.maxSchedules[i]){
+                        this.schedules[i] = 0;
+                        this.keyPoints1[i] = randS();
+                        this.keyPoints2[i] = randM();
+                        this.maxSchedules[i] = (int) (randS() * 200);
+                    }
+                    double t = (double) this.schedules[i] / (double) this.maxSchedules[i];
+                    this.lastPointY[i] = this.pointsY[i];
+                    this.pointsY[i] = MathUtils.bezier(0,this.keyPoints1[i],this.keyPoints2[i],0,t)/5;
+                    this.schedules[i]++;
                 }
-                double t = (double) this.schedules[i] / (double) this.maxSchedules[i];
-                this.lastPointY[i] = this.pointsY[i];
-                this.pointsY[i] = MathUtils.bezier(0,this.keyPoints1[i],this.keyPoints2[i],0,t)/5;
-                this.schedules[i]++;
             }
             this.age++;
         }
+    }
+
+    public Vec3d datumOffset(float partialTicks){
+        return Vec3dFinal.ZERO;
     }
 }

@@ -183,6 +183,10 @@ public class Vec3d {
         this.mul(scale);
     }
 
+    public Vec3d copy() {
+        return new Vec3d(x,y,z);
+    }
+
     @Override
     public String toString() {
         return "Vec3d(" + x + ", " + y + ", " + z + ")";

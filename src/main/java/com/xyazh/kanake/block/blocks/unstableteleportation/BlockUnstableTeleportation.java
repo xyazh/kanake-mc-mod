@@ -44,10 +44,6 @@ public class BlockUnstableTeleportation extends BlockBase implements ITileEntity
                 new RenderTileUnstableTeleportation());
     }
 
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(@Nonnull IBlockState stateIn, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Random rand) {
-    }
-
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
@@ -64,43 +60,5 @@ public class BlockUnstableTeleportation extends BlockBase implements ITileEntity
     }
 
     public void onEntityWalk(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Entity entityIn) {
-    }
-
-    public void onEntityCollidedWithBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Entity entityIn) {
-    }
-
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-        return NULL_AABB;
-    }
-
-    public boolean isOpaqueCube(@Nonnull IBlockState state) {
-        return false;
-    }
-
-    public boolean isFullCube(@Nonnull IBlockState state) {
-        return false;
-    }
-
-    public int quantityDropped(@Nonnull Random random) {
-        return 0;
-    }
-
-    public int tickRate(@Nonnull World worldIn) {
-        return 30;
-    }
-
-    public boolean requiresUpdates() {
-        return false;
-    }
-
-    public boolean isCollidable() {
-        return false;
-    }
-
-    @Nonnull
-    @Override
-    public EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
     }
 }
