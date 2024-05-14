@@ -1,7 +1,6 @@
 package com.xyazh.kanake.world;
 
 import com.xyazh.kanake.Kanake;
-import com.xyazh.kanake.world.provider.ProviderArea;
 import com.xyazh.kanake.world.provider.ProviderMaze;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -17,7 +16,6 @@ public class ModWorlds {
 
     public static void worlds(){
         register(ProviderMaze.providerName, ProviderMaze.class,true);
-        register(ProviderArea.providerName, ProviderArea.class,true);
     }
 
     public static int getDimIdByName(String name){

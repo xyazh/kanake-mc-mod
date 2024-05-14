@@ -1,29 +1,13 @@
 package com.xyazh.kanake.item.items;
 
 
-import com.xyazh.kanake.Kanake;
-import com.xyazh.kanake.block.blocks.clean.TileClean;
 import com.xyazh.kanake.entity.*;
-import com.xyazh.kanake.gui.test.GuiHandlerTest;
-import com.xyazh.kanake.util.TpHelper;
-import com.xyazh.kanake.world.ModWorlds;
-import com.xyazh.kanake.world.provider.ProviderArea;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.ChunkProviderServer;
-import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nonnull;
 
