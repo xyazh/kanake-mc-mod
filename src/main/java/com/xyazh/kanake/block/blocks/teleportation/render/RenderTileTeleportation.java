@@ -2,15 +2,19 @@ package com.xyazh.kanake.block.blocks.teleportation.render;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
+import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
 import com.xyazh.kanake.util.MathUtils;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import javax.annotation.Nonnull;
 
@@ -35,72 +39,57 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
         double z1 = z - size / 2.0;
         double x2 = x + size / 2.0;
         double z2 = z + size / 2.0;
-        float dt;
-        if (partialTicks > te.lastPT) {
-            dt = partialTicks - te.lastPT;
-        } else {
-            dt = partialTicks;
+        double[] pointsY = {0,0,0,0,0,0,0,0,0};
+        for(int i = 0; i < pointsY.length; i++){
+            pointsY[i] = te.pointsY[i] + (te.lastPointY[i] - te.pointsY[i]) * partialTicks;
         }
-        te.age += dt;
-        for (int i = 0; i < te.y.length; i++) {
-            if(te.t[i] > te.mt[i]){
-                te.t[i] = 0;
-                te.sy[i] = TileTeleportation.randVS();
-                te.my[i] = TileTeleportation.randVM();
-                te.mt[i] = TileTeleportation.randVS() * 200;
-            }
-            double t = te.t[i] / te.mt[i];
-            te.y[i] = MathUtils.bezier(0,te.sy[i],te.my[i],0,t)/5;
-            te.t[i] += dt;
-        }
-        te.lastPT = partialTicks;
         double[] vertices1 = {
-                x1, y + te.y[0], z1,
-                x1, y + te.y[1], z,
-                x, y + te.y[2], z,
-                x, y + te.y[3], z1
+                x1,y+pointsY[0],z2,
+                x,y+pointsY[1],z2,
+                x,y+pointsY[4],z,
+                x1,y+pointsY[3],z
         };
         double[] texCoords1 = {
-                0, 0,
-                0, 0.5,
-                0.5, 0.5,
-                0.5, 0
+                0,0,
+                0.5,0,
+                0.5,0.5,
+                0,0.5
         };
         double[] vertices2 = {
-                x2, y + te.y[4], z1,
-                x2, y + te.y[5], z,
-                x, y + te.y[2], z,
-                x, y + te.y[3], z1
+                x,y+pointsY[1],z2,
+                x2,y+pointsY[2],z2,
+                x2,y+pointsY[5],z,
+                x,y+pointsY[4],z
         };
         double[] texCoords2 = {
-                1, 0,
-                1, 0.5,
-                0.5, 0.5,
-                0.5, 0
+                0.5,0,
+                1,0,
+                1,0.5,
+                0.5,0.5
         };
         double[] vertices3 = {
-                x2, y + te.y[6], z2,
-                x2, y + te.y[5], z,
-                x, y + te.y[2], z,
-                x, y + te.y[7], z2
+                x1,y+pointsY[3],z,
+                x,y+pointsY[4],z,
+                x,y+pointsY[7],z1,
+                x1,y+pointsY[6],z1
         };
         double[] texCoords3 = {
-                1, 1,
-                1, 0.5,
-                0.5, 0.5,
-                0.5, 1
+                0,0.5,
+                0.5,0.5,
+                0.5,1,
+                0,1
         };
         double[] vertices4 = {
-                x1, y + te.y[8], z2,
-                x1, y + te.y[1], z,
-                x, y + te.y[2], z,
-                x, y + te.y[7], z2
+                x,y+pointsY[4],z,
+                x2,y+pointsY[5],z,
+                x2,y+pointsY[8],z1,
+                x,y+pointsY[7],z1
         };
         double[] texCoords4 = {
-                1, 0,
-                1, 0.5,
-                0.5, 0.5,
-                0.5, 0,
+                0.5,0.5,
+                1,0.5,
+                1,1,
+                0.5,1
         };
         this.draw(vertices1, texCoords1, bufferbuilder, color);
         this.draw(vertices2, texCoords2, bufferbuilder, color);
@@ -124,9 +113,10 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
     public void render(@Nonnull TileTeleportation te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x+0.5,y,z+0.5);
-        GlStateManager.rotate((float) (te.age)/40,0,1,0);
+        GlStateManager.rotate((te.age + partialTicks)/40,0,1,0);
         GlStateManager.translate(-(x+0.5),-y,-(z+0.5));
         GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableTexture2D();
         this.bindTexture(TEXTURE_TP);
         GlStateManager.disableFog();
         GlStateManager.glTexParameteri(3553, 10242, 10497);
@@ -136,9 +126,6 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
         GlStateManager.disableBlend();
         GlStateManager.depthMask(true);
         GlStateManager.enableAlpha();
-        int i = 15728880;
-        int j = i % 65536;
-        int k = i / 65536;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);

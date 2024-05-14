@@ -12,15 +12,14 @@ public class Vec3d {
     public double y;
     public double z;
     public static Vec3d random() {
-        Vec3d vec3d = new Vec3d(rand.nextDouble()-0.5,rand.nextDouble()-0.5,rand.nextDouble()-0.5);
-        vec3d.normalize();
+        Vec3d vec3d = new Vec3d();
+        vec3d.rand();
         return vec3d;
     }
 
     public static Vec3d random(double scale) {
-        Vec3d vec3d = new Vec3d(rand.nextDouble()-0.5,rand.nextDouble()-0.5,rand.nextDouble()-0.5);
-        vec3d.normalize();
-        vec3d.mul(scale);
+        Vec3d vec3d = new Vec3d();
+        vec3d.rand(scale);
         return vec3d;
     }
 
@@ -172,6 +171,16 @@ public class Vec3d {
             return (x == v.x) && (y == v.y) && (z == v.z);
         }
         return false;
+    }
+
+    public void rand(){
+        this.set(rand.nextDouble()-0.5,rand.nextDouble()-0.5,rand.nextDouble()-0.5);
+        this.normalize();
+    }
+
+    public void rand(double scale){
+        this.rand();
+        this.mul(scale);
     }
 
     @Override

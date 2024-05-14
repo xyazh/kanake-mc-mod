@@ -2,52 +2,57 @@ package com.xyazh.kanake.block.blocks.teleportation;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.TileBase;
+import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
+import com.xyazh.kanake.util.MathUtils;
+import net.minecraft.util.ITickable;
 
-public class TileTeleportation extends TileBase {
-    public float lastPT = 0;
-    public double[] y = {
-            0,0,0,
-            0,0,0,
-            0,0,0
-    };
-
-    public double[] my = {
-            randVM(),randVM(),randVM(),
-            randVM(),randVM(),randVM(),
-            randVM(),randVM(),randVM()
-    };
-
-    public double[] sy = {
-            randVS(),randVS(),randVS(),
-            randVS(),randVS(),randVS(),
-            randVS(),randVS(),randVS()
-    };
-
-    public double[] t = {
-            TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,
-            TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,
-            TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200
-    };
-
-    public double[] mt = {
-            TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,
-            TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,
-            TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200,TileTeleportation.randVS() * 200
-    };
-
-    public double age = 0;
-
-    public static double randV(){
+public class TileTeleportation extends TileBase implements ITickable {
+    public int age = 0;
+    public double[] pointsY = {0,0,0,0,0,0,0,0,0};
+    public double[] lastPointY = {0,0,0,0,0,0,0,0,0};
+    public double[] keyPoints1 = {0,0,0,0,0,0,0,0,0};
+    public double[] keyPoints2 = {0,0,0,0,0,0,0,0,0};
+    public int[] schedules = {0,0,0,0,0,0,0,0,0};
+    public int[] maxSchedules = {0,0,0,0,0,0,0,0,0};
+    public static double rand(){
         double r = Kanake.rand.nextDouble()/2+0.5;
         r *= Kanake.rand.nextInt(100)%2==0? -1 : 1;
         return r;
     }
-
-    public static double randVS(){
-        return Math.abs(randV());
+    public static double randS(){
+        return Math.abs(rand());
     }
 
-    public static double randVM(){
-        return -randVS();
+    public static double randM(){
+        return -randS();
+    }
+
+    public TileTeleportation() {
+        int pointsCount = this.pointsY.length;
+        for (int i = 0; i < pointsCount; i++) {
+            this.keyPoints1[i] = randS();
+            this.keyPoints2[i] = randM();
+            this.maxSchedules[i] = (int) (randS() * 200);
+        }
+    }
+
+    @Override
+    public void update() {
+        if(this.world.isRemote){
+            int pointsCount = this.pointsY.length;
+            for (int i = 0; i < pointsCount; i++) {
+                if(this.schedules[i] >= this.maxSchedules[i]){
+                    this.schedules[i] = 0;
+                    this.keyPoints1[i] = randS();
+                    this.keyPoints2[i] = randM();
+                    this.maxSchedules[i] = (int) (randS() * 200);
+                }
+                double t = (double) this.schedules[i] / (double) this.maxSchedules[i];
+                this.lastPointY[i] = this.pointsY[i];
+                this.pointsY[i] = MathUtils.bezier(0,this.keyPoints1[i],this.keyPoints2[i],0,t)/5;
+                this.schedules[i]++;
+            }
+            this.age++;
+        }
     }
 }

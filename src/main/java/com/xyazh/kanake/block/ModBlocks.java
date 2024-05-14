@@ -11,6 +11,7 @@ import com.xyazh.kanake.block.blocks.manatable.*;
 import com.xyazh.kanake.block.blocks.rail.WSRailBase;
 import com.xyazh.kanake.block.blocks.rail.WSRailPoweredBase;
 import com.xyazh.kanake.block.blocks.teleportation.BlockTeleportation;
+import com.xyazh.kanake.block.blocks.unstableteleportation.BlockUnstableTeleportation;
 import com.xyazh.kanake.init.ModCreativeTab;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -26,6 +27,8 @@ public class ModBlocks {
 	public static final Block N_FIRE = new BlockNFire("n_fire");
 	public static final Block N_ICE = new BlockNIce("n_ice");
 	public static final Block TP = new BlockTeleportation("tp");
+	public static final Block UN_YP = new BlockUnstableTeleportation("un_yp")
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
 	public static final Block CLEAN = new BlockClean("clean")
 			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);;
