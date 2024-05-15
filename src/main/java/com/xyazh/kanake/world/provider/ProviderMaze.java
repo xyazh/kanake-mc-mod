@@ -68,6 +68,13 @@ public class ProviderMaze extends WorldProvider {
         return false;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getCloudHeight()
+    {
+        return 224;
+    }
+
     @SideOnly(Side.CLIENT)
     public boolean doesXZShowFog(int x, int z)
     {

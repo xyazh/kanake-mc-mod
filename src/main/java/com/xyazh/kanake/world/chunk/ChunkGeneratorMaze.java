@@ -12,38 +12,89 @@ import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
 public class ChunkGeneratorMaze implements IChunkGenerator {
     private final World world;
-    private final Random rand;
-    private final Random posRand = new Random();
+    private final Random posRand1 = new Random();
+    private final Random posRand2 = new Random();
+    private final Random posRand3 = new Random();
+    private final Random posRand4 = new Random();
     private final IBlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
+    private final IBlockState AIR = Blocks.AIR.getDefaultState();
+    private final IBlockState STONE = Blocks.STONE.getDefaultState();
+    private final IBlockState STONE_BRICK_1 = Blocks.STONEBRICK.getDefaultState();
+    private final IBlockState STONE_BRICK_2 = Blocks.STONEBRICK.getStateFromMeta(1);
+    private final IBlockState STONE_BRICK_3 = Blocks.STONEBRICK.getStateFromMeta(2);
+    protected final Random rand;
+    private final HashSet<Integer> p = new HashSet<>();
+    private final Long seed;
 
     public ChunkGeneratorMaze(World worldIn, long seed) {
         this.world = worldIn;
+        this.seed = seed;
         this.rand = new Random(seed);
+        int a = 1024;
+        int i = 11;
+        p.add(2);
+        p.add(3);
+        p.add(5);
+        p.add(7);
+        for (; i <= a; i += 2) {
+            int j = 3;
+            boolean b;
+            for (b = false; j * j <= i; j += 2) {
+                if (i % j == 0) {
+                    b = true;
+                    break;
+                }
+            }
+            if (!b) {
+                p.add(i);
+            }
+        }
+    }
+
+    public void updateRandom1(int x, int y, int z) {
+        this.posRand1.setSeed(this.hashCombine(x, y, z));
+    }
+
+    public void updateRandom2(int x, int y, int z) {
+        this.posRand2.setSeed(this.hashCombine(x, y, z, 111546435L));
+    }
+
+    public void updateRandom3(int x, int y, int z) {
+        this.posRand3.setSeed(this.hashCombine(x, y, z, 3234846615L));
+    }
+
+    public void updateRandom4(int x, int y, int z) {
+        this.posRand4.setSeed(this.hashCombine(x, y, z, 100280245065L));
     }
 
     protected boolean randFuc2IB(int x, int y, int z) {
-        int seed = this.hashCombine(x, y, z);
-        this.posRand.setSeed(seed);
-        int b = this.posRand.nextInt(1000);
+        this.updateRandom1(x, y, z);
+        int b = this.posRand1.nextInt(1000);
         return b % 2 == 0;
     }
 
     private int hashCombine(int x, int y, int z) {
-        return Objects.hash(x, y, z);
+        return Objects.hash(x, y, z, this.seed);
+    }
+
+    private int hashCombine(int x, int y, int z, long offset) {
+        return Objects.hash(x, y, z, offset, this.seed);
     }
 
     protected boolean isKabe(int x, int y, int z) {
         boolean t = true;
+        this.updateRandom2(x, y, z);
         if ((x % 2 == 0) && (z % 2 == 0)) {
             t = false;
         } else if (x % 2 == 0) {
-            if (this.rand.nextDouble() < 0.1) {
+            if (this.posRand2.nextDouble() < 0.1) {
                 t = false;
             } else {
                 int p1, p2;
@@ -52,7 +103,7 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
                 t = this.randFuc2IB(p1, y, p2);
             }
         } else if (z % 2 == 0) {
-            if (this.rand.nextDouble() < 0.1) {
+            if (this.posRand2.nextDouble() < 0.1) {
                 t = false;
             } else {
                 int p1, p2;
@@ -64,34 +115,76 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
         return t;
     }
 
-    public void prepareHeights(int x, int z, ChunkPrimer primer) {
-        int layer = 8;
-        for (int y = 0; y < layer; y++) {
-            if (this.isKabe(x, y, z)) {
-                for (int i = 0; i < 16; i++) {
-                    for (int j = 0; j < 16; j++) {
-                        for (int k = 0; k < 16; k++) {
-                            primer.setBlockState(i, j + (y<<4), k, BEDROCK);
-                        }
-                    }
-                }
-            } else {
-                if((y!=0)&&(this.rand.nextDouble()<0.02)){
-                    continue;
-                }
-                for (int i = 0; i < 16; i++) {
-                    for (int k = 0; k < 16; k++) {
-                        primer.setBlockState(i, y<<4, k, BEDROCK);
-                    }
-                }
-            }
-        }
-
+    private void buildBase(int x, int z, ChunkPrimer primer) {
         for (int i = 0; i < 16; i++) {
             for (int k = 0; k < 16; k++) {
-                primer.setBlockState(i, layer<<4, k, BEDROCK);
+                primer.setBlockState(i, 0, k, BEDROCK);
             }
         }
+    }
+
+    private void buildLayerBase(int x, int y, int z, ChunkPrimer primer) {
+        for (int i = 0; i < 16; i++) {
+            for (int k = 0; k < 16; k++) {
+                IBlockState state = STONE_BRICK_1;
+                this.updateRandom4(x, y, z);
+                if (this.posRand4.nextDouble() >= 0.01) {
+                    this.updateRandom3(x + i, y, z + k);
+                    if (this.posRand3.nextDouble() < 0.05) {
+                        state = STONE_BRICK_2;
+                    } else if (this.posRand3.nextDouble() < 0.1) {
+                        state = STONE_BRICK_3;
+                    }
+                    primer.setBlockState(i, y, k, state);
+                }
+                this.updateRandom4(x, y + 15, z);
+                if (this.posRand4.nextDouble() >= 0.01) {
+                    this.updateRandom3(x + i, y + 15, z + k);
+                    if (this.posRand3.nextDouble() < 0.05) {
+                        state = STONE_BRICK_2;
+                    } else if (this.posRand3.nextDouble() < 0.1) {
+                        state = STONE_BRICK_3;
+                    }
+                    primer.setBlockState(i, y + 15, k, state);
+                }
+            }
+        }
+    }
+
+    private void buildLayer(int x, int l, int z, ChunkPrimer primer) {
+        int y = (l << 4) + 1;
+        int posX = x << 4;
+        int posZ = z << 4;
+        if (this.isKabe(x, l, z)) {
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 16; j++) {
+                    for (int k = 0; k < 16; k++) {
+                        IBlockState state = STONE_BRICK_1;
+                        this.updateRandom3(posX + i, y + j, posZ + k);
+                        if (this.posRand3.nextDouble() < 0.05) {
+                            state = STONE_BRICK_2;
+                        } else if (this.posRand3.nextDouble() < 0.05) {
+                            state = STONE_BRICK_3;
+                        }
+                        primer.setBlockState(i, y + j, k, state);
+                    }
+                }
+            }
+        } else {
+            this.buildLayerBase(posX, y, posZ, primer);
+        }
+    }
+
+    private void buildMaze(int x, int z, int layer, ChunkPrimer primer) {
+        for (int l = 0; l < layer; l++) {
+            this.buildLayer(x, l, z, primer);
+        }
+    }
+
+    public void prepareHeights(int x, int z, ChunkPrimer primer) {
+        int layer = 4;
+        this.buildBase(x, z, primer);
+        this.buildMaze(x, z, layer, primer);
     }
 
     public void buildSurfaces(int x, int z, ChunkPrimer primer) {
@@ -100,7 +193,6 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
 
     @Nonnull
     public Chunk generateChunk(int x, int z) {
-        this.rand.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.prepareHeights(x, z, chunkprimer);
         this.buildSurfaces(x, z, chunkprimer);
