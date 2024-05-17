@@ -1,6 +1,7 @@
 package com.xyazh.kanake.world.chunk;
 
 import com.xyazh.kanake.util.Vec3d;
+import com.xyazh.kanake.world.tree.BigTreeGenerateManager;
 import com.xyazh.kanake.world.tree.BigTreeGenerateTemplate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -30,32 +31,14 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
     private final IBlockState STONE_BRICK_2 = Blocks.STONEBRICK.getStateFromMeta(1);
     private final IBlockState STONE_BRICK_3 = Blocks.STONEBRICK.getStateFromMeta(2);
     protected final Random rand;
-    private final HashSet<Integer> p = new HashSet<>();
     private final Long seed;
+    protected BigTreeGenerateManager bigTreeGenerateManager;
 
     public ChunkGeneratorMaze(World worldIn, long seed) {
         this.world = worldIn;
         this.seed = seed;
         this.rand = new Random(seed);
-        int a = 1024;
-        int i = 11;
-        p.add(2);
-        p.add(3);
-        p.add(5);
-        p.add(7);
-        for (; i <= a; i += 2) {
-            int j = 3;
-            boolean b;
-            for (b = false; j * j <= i; j += 2) {
-                if (i % j == 0) {
-                    b = true;
-                    break;
-                }
-            }
-            if (!b) {
-                p.add(i);
-            }
-        }
+        this.bigTreeGenerateManager = new BigTreeGenerateManager(seed);
     }
 
     public void updateRandom1(int x, int y, int z) {
@@ -185,25 +168,25 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
         }
     }
 
-    private void buildTreeCenter(int x, int y, int z, ChunkPrimer primer, int m, int n,Collection<BigTreeGenerateTemplate> trees) {
+    private void buildTreeCell(int x, int y, int z, ChunkPrimer primer, int m, int n, Collection<BigTreeGenerateTemplate> trees) {
         for (BigTreeGenerateTemplate tree:trees){
             if(tree.contain(new Vec3d(x + 0.5, y + 0.5, z + 0.5))){
-                primer.setBlockState(m, y, n, STONE);
+                primer.setBlockState(m, y+1, n, STONE);
             }
         }
     }
 
     private void buildTree(int x, int z, ChunkPrimer primer) {
-        int posX = x << 4;
-        int posZ = z << 4;
-        Vec3d l = new Vec3d(posX, 0, posZ);
-        if(l.length() > 100){
+        Collection<BigTreeGenerateTemplate> trees = this.bigTreeGenerateManager.getTrees(x, z,0);
+        if(trees.size()<=0){
             return;
         }
+        int posX = x << 4;
+        int posZ = z << 4;
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 256; j++) {
                 for (int k = 0; k < 16; k++) {
-                    //this.buildTreeCenter(posX + i, j, posZ + k, primer, i, k);
+                    this.buildTreeCell(posX + i, j, posZ + k, primer, i, k,trees);
                 }
             }
         }
@@ -211,8 +194,8 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
 
     public void prepareHeights(int x, int z, ChunkPrimer primer) {
         int layer = 4;
-        //this.buildBase(x, z, primer);
-        //this.buildMaze(x, z, layer, primer);
+        this.buildBase(x, z, primer);
+        this.buildMaze(x, z, layer, primer);
         this.buildTree(x, z, primer);
     }
 

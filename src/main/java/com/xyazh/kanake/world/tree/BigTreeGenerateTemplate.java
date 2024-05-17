@@ -13,26 +13,19 @@ public class BigTreeGenerateTemplate {
     protected static final LinkedHashMap<Long, BigTreeGenerateTemplate> TEMPLATES = new LinkedHashMap<Long, BigTreeGenerateTemplate>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Long, BigTreeGenerateTemplate> eldest) {
-            return size() > 20;
+            return size() > 10;
         }
     };
 
-    public static BigTreeGenerateTemplate getTemplate(long seed) {
-        return TEMPLATES.computeIfAbsent(seed, BigTreeGenerateTemplate::new);
-    }
-
-    public BigTreeGenerateTemplate(long seed) {
-        this.seed = seed;
-        this.rand = new Random(seed);
-        this.rootPos = Vec3d.ZERO.copy();
-        this.drawBranch(rootPos, 4, 40, -90, 0, 6);
+    public static BigTreeGenerateTemplate getTemplate(long seed, Vec3d rootPos) {
+        return TEMPLATES.computeIfAbsent(seed, k -> new BigTreeGenerateTemplate(seed, rootPos));
     }
 
     public BigTreeGenerateTemplate(long seed, Vec3d rootPos) {
         this.seed = seed;
         this.rand = new Random(seed);
         this.rootPos = rootPos;
-        this.drawBranch(rootPos, 4, 40, -90, 0, 6);
+        this.drawBranch(rootPos, 4, 96, -90, 0, 6);
     }
 
     @Override
@@ -65,8 +58,10 @@ public class BigTreeGenerateTemplate {
         v1.mul(length);
         v1.add(v0);
         this.branches.add(new Branches(v0, v1, radius));
-        this.drawBranch(v1, radius * 0.8f, length * 0.8f, pitch + this.rand.nextFloat() * 45, this.rand.nextFloat() * 180, maxDepth - 1);
-        this.drawBranch(v1, radius * 0.8f, length * 0.8f, pitch - this.rand.nextFloat() * 45, -this.rand.nextFloat() * 180, maxDepth - 1);
+        int count = this.rand.nextInt(2) + 2;
+        for (int i = 0; i < count; i++) {
+            this.drawBranch(v1, radius * (0.7f + this.rand.nextFloat() / 10), length * (0.4f + this.rand.nextFloat() / 2), pitch - this.rand.nextFloat() * 45, this.rand.nextFloat() * 360, maxDepth - 1);
+        }
     }
 
     public boolean contain(Vec3d v) {
