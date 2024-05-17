@@ -13,7 +13,7 @@ public class BigTreeGenerateTemplate {
     protected static final LinkedHashMap<Long, BigTreeGenerateTemplate> TEMPLATES = new LinkedHashMap<Long, BigTreeGenerateTemplate>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Long, BigTreeGenerateTemplate> eldest) {
-            return size() > 10;
+            return size() > 5;
         }
     };
 
@@ -25,7 +25,7 @@ public class BigTreeGenerateTemplate {
         this.seed = seed;
         this.rand = new Random(seed);
         this.rootPos = rootPos;
-        this.drawBranch(rootPos, 4, 96, -90, 0, 6);
+        this.drawBranch(rootPos, 4, 96, -90, 0, 5);
     }
 
     @Override

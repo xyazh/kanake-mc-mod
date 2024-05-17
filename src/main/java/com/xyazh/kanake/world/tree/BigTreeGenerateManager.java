@@ -20,7 +20,7 @@ public class BigTreeGenerateManager {
     }
 
     public BigTreeGenerateManager(long seed){
-        this(seed, 4, 5000, 255, 0);
+        this(seed, 4, 500, 255, 0);
     }
 
     public void updateRandom(int x, int z) {
