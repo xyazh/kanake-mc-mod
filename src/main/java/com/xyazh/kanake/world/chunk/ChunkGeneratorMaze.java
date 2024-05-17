@@ -1,5 +1,7 @@
 package com.xyazh.kanake.world.chunk;
 
+import com.xyazh.kanake.util.Vec3d;
+import com.xyazh.kanake.world.tree.BigTreeGenerateTemplate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
@@ -12,10 +14,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class ChunkGeneratorMaze implements IChunkGenerator {
     private final World world;
@@ -23,6 +22,7 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
     private final Random posRand2 = new Random();
     private final Random posRand3 = new Random();
     private final Random posRand4 = new Random();
+    private final Random posRand5 = new Random();
     private final IBlockState BEDROCK = Blocks.BEDROCK.getDefaultState();
     private final IBlockState AIR = Blocks.AIR.getDefaultState();
     private final IBlockState STONE = Blocks.STONE.getDefaultState();
@@ -72,6 +72,10 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
 
     public void updateRandom4(int x, int y, int z) {
         this.posRand4.setSeed(this.hashCombine(x, y, z, 100280245065L));
+    }
+
+    public void updateRandom5(int x, int y, int z) {
+        this.posRand5.setSeed(this.hashCombine(x, y, z, 4849845L));
     }
 
     protected boolean randFuc2IB(int x, int y, int z) {
@@ -181,10 +185,35 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
         }
     }
 
+    private void buildTreeCenter(int x, int y, int z, ChunkPrimer primer, int m, int n,Collection<BigTreeGenerateTemplate> trees) {
+        for (BigTreeGenerateTemplate tree:trees){
+            if(tree.contain(new Vec3d(x + 0.5, y + 0.5, z + 0.5))){
+                primer.setBlockState(m, y, n, STONE);
+            }
+        }
+    }
+
+    private void buildTree(int x, int z, ChunkPrimer primer) {
+        int posX = x << 4;
+        int posZ = z << 4;
+        Vec3d l = new Vec3d(posX, 0, posZ);
+        if(l.length() > 100){
+            return;
+        }
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 256; j++) {
+                for (int k = 0; k < 16; k++) {
+                    //this.buildTreeCenter(posX + i, j, posZ + k, primer, i, k);
+                }
+            }
+        }
+    }
+
     public void prepareHeights(int x, int z, ChunkPrimer primer) {
         int layer = 4;
-        this.buildBase(x, z, primer);
-        this.buildMaze(x, z, layer, primer);
+        //this.buildBase(x, z, primer);
+        //this.buildMaze(x, z, layer, primer);
+        this.buildTree(x, z, primer);
     }
 
     public void buildSurfaces(int x, int z, ChunkPrimer primer) {

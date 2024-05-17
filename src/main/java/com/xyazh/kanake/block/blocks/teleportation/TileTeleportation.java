@@ -2,10 +2,8 @@ package com.xyazh.kanake.block.blocks.teleportation;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.TileBase;
-import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
 import com.xyazh.kanake.util.MathUtils;
 import com.xyazh.kanake.util.Vec3d;
-import com.xyazh.kanake.util.Vec3dFinal;
 import net.minecraft.util.ITickable;
 
 public class TileTeleportation extends TileBase implements ITickable {
@@ -65,6 +63,6 @@ public class TileTeleportation extends TileBase implements ITickable {
     }
 
     public Vec3d datumOffset(float partialTicks){
-        return Vec3dFinal.ZERO;
+        return Vec3d.ZERO;
     }
 }

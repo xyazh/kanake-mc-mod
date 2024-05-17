@@ -2,13 +2,11 @@ package com.xyazh.kanake.block.blocks.unstableteleportation;
 
 import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
 import com.xyazh.kanake.util.Vec3d;
-import com.xyazh.kanake.util.Vec3dFinal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class TileUnstableTeleportation extends TileTeleportation {
     public Vec3d randVec3 = Vec3d.random(0.1);
@@ -45,6 +43,6 @@ public class TileUnstableTeleportation extends TileTeleportation {
 
     @Override
     public Vec3d datumOffset(float partialTicks) {
-        return Vec3dFinal.UP;
+        return Vec3d.UP;
     }
 }

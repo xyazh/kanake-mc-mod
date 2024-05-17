@@ -2,6 +2,7 @@ package com.xyazh.kanake.world.provider;
 
 import com.xyazh.kanake.world.ModWorlds;
 import com.xyazh.kanake.world.chunk.ChunkGeneratorMaze;
+import com.xyazh.kanake.world.tree.BigTreeGenerateTemplate;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
