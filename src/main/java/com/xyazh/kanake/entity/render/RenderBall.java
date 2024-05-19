@@ -1,7 +1,6 @@
 package com.xyazh.kanake.entity.render;
 
 import com.xyazh.kanake.entity.EntityBall;
-import com.xyazh.kanake.render.LaserBeamRenderer;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
@@ -15,7 +14,6 @@ import javax.annotation.Nullable;
 
 public class RenderBall extends Render<EntityBall> {
     static final Vec3d VEC3D = new Vec3d(0, 0, 0);
-    static final LaserBeamRenderer RENDER = new LaserBeamRenderer();
 
     public RenderBall(RenderManager renderManager) {
         super(renderManager);
