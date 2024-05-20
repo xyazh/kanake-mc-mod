@@ -32,6 +32,9 @@ public class RenderBall extends Render<EntityBall> {
         GlStateManager.disableFog();
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
+
+
+
         GlStateManager.depthMask(true);
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();

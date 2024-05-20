@@ -1,85 +1,142 @@
 package com.xyazh.kanake.render;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
 
 public class FramebufferExample {
     public static final Minecraft MC = Minecraft.getMinecraft();
-    private final int width;
-    private final int height;
+    public int width;
+    public int height;
+    private final boolean useDepth;
+    private Framebuffer framebuffer;
 
-    private final int framebuffer;
-    private final int textureColorBuffer;
-    private final int renderBuffer;
-
-    public boolean shouldRecreateFBOs() {
-        return MC.displayWidth != this.width || MC.displayHeight != this.height;
-    }
-
-    public static FramebufferExample recreateFramebuffer() {
-        return new FramebufferExample();
-    }
-
-    public FramebufferExample() {
+    public FramebufferExample(boolean useDepthIn) {
         width = MC.displayWidth;
         height = MC.displayHeight;
+        useDepth = useDepthIn;
+        framebuffer = new Framebuffer(width, height, useDepthIn);
+    }
 
-        // 创建帧缓冲区对象
-        framebuffer = GL30.glGenFramebuffers();
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer);
-        // 创建纹理对象作为颜色附件
-        textureColorBuffer = GL11.glGenTextures();
-        GlStateManager.bindTexture(textureColorBuffer);
-        //GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureColorBuffer);
-        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height, 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (java.nio.ByteBuffer) null);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL30.glFramebufferTexture2D(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, GL11.GL_TEXTURE_2D, textureColorBuffer, 0);
-        //GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, textureColorBuffer, 0);
-
-        // 创建渲染缓冲区对象作为深度和模板附件
-        renderBuffer = GL30.glGenRenderbuffers();
-        GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, renderBuffer);
-        GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL30.GL_DEPTH24_STENCIL8, width, height);
-        GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_STENCIL_ATTACHMENT, GL30.GL_RENDERBUFFER, renderBuffer);
-        // 检查帧缓冲区的完整性
-        if (GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER) != GL30.GL_FRAMEBUFFER_COMPLETE) {
-            throw new RuntimeException("Framebuffer is not complete!");
-        }
-        // 解绑帧缓冲区
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+    public boolean shouldRecreate() {
+        return MC.displayWidth != this.width || MC.displayHeight != this.height;
     }
 
     @Override
     protected void finalize() throws Throwable {
         try {
-            GL30.glDeleteFramebuffers(framebuffer);
-            GL11.glDeleteTextures(textureColorBuffer);
-            GL30.glDeleteRenderbuffers(renderBuffer);
+            framebuffer.deleteFramebuffer();
         } finally {
             super.finalize();
         }
     }
 
-    public void renderToFramebufferStart() {
-        // 绑定帧缓冲区作为当前渲染目标
+    public void tryReCreate(){
+        if (shouldRecreate()) {
+            width = MC.displayWidth;
+            height = MC.displayHeight;
+            framebuffer.deleteFramebuffer();
+            framebuffer = new Framebuffer(width, height, useDepth);
+        }
+    }
+
+
+    public void bindFramebufferTexture()
+    {
+        //tryReCreate();
+        framebuffer.bindFramebufferTexture();
+    }
+
+    public void unbindFramebufferTexture()
+    {
+        framebuffer.unbindFramebufferTexture();
+    }
+
+    public void bindFramebuffer(boolean resetViewport)
+    {
+        tryReCreate();
+        framebuffer.bindFramebuffer(resetViewport);
+    }
+
+    public void unbindFramebuffer()
+    {
+        framebuffer.unbindFramebuffer();
+    }
+
+    public void renderToFramebufferStart(boolean resetViewport) {
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, framebuffer);
-        GlStateManager.clearColor(0.f,0.f,0.f, 1.0f);
-        GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glViewport(0, 0, width, height);
+        bindFramebuffer(resetViewport);
+        setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
+        framebufferClear();
+        if(useDepth){
+            GlStateManager.enableDepth();
+        }
     }
 
     public void renderToFramebufferEnd() {
-        GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
+        unbindFramebuffer();
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
     }
 
-    public int getFramebufferTexture() {
-        return textureColorBuffer;
+    public void setFramebufferColor(float red, float green, float blue, float alpha)
+    {
+        framebuffer.setFramebufferColor(red, green, blue, alpha);
+    }
+
+    public void framebufferClear()
+    {
+        GlStateManager.clearColor(framebuffer.framebufferColor[0], framebuffer.framebufferColor[1], framebuffer.framebufferColor[2], framebuffer.framebufferColor[3]);
+        if (useDepth)
+        {
+            GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+        }else {
+            GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+        }
+    }
+
+    public void renderFboQuad() {
+        GL11.glViewport(0, 0, width, height);
+        // 保存当前投影矩阵
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, width, -height, 0, -1, 1);
+
+        // 设置模型视图矩阵
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+
+        GlStateManager.enableTexture2D();
+        framebuffer.bindFramebufferTexture();
+        GlStateManager.disableLighting();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GlStateManager.disableCull();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableBlend();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferbuilder.pos(0, 0,0).tex(0, 1).color(255,255,255,255).endVertex();
+        bufferbuilder.pos(width, 0,0).tex(1, 1).color(255,255,255,255).endVertex();
+        bufferbuilder.pos(width, -height,0).tex(1, 0).color(255,255,255,255).endVertex();
+        bufferbuilder.pos(0, -height,0).tex(0,0).color(255,255,255,255).endVertex();
+        tessellator.draw();
+
+        GlStateManager.enableLighting();
+        GlStateManager.enableCull();
+
+        // 恢复之前的投影矩阵
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glPopMatrix();
+        // 恢复之前的模型视图矩阵
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glPopMatrix();
     }
 }
