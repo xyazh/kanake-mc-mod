@@ -42,8 +42,8 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
         this.seed = seed;
         this.rand = new Random(seed);
         this.bigTreeGenerateManager = new BigTreeGenerateManager(seed);
-        this.perlinNoise2d1 = new PerlinNoise2d(Objects.hash(seed, 11L), 0.25, 8);
-        this.perlinNoise2d2 = new PerlinNoise2d(Objects.hash(seed, 13L), 0.125, 16);
+        this.perlinNoise2d1 = new PerlinNoise2d(Objects.hash(seed, 11L), 0.5, 8);
+        this.perlinNoise2d2 = new PerlinNoise2d(Objects.hash(seed, 13L), 0.25, 16);
     }
 
     public void updateRandom1(int x, int y, int z) {
@@ -130,7 +130,7 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
                     }
                     primer.setBlockState(i, y, k, state);
                 }
-                this.updateRandom4(x, y + 15, z);
+                this.updateRandom4(x, y + 16, z);
                 if (this.posRand4.nextDouble() >= 0.01) {
                     this.updateRandom3(x + i, y + 15, z + k);
                     if (this.posRand3.nextDouble() < 0.05) {
@@ -200,7 +200,7 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
 
     private void buildTreeCell(int x, int y, int z, ChunkPrimer primer, int m, int n, Collection<BigTreeGenerateTemplate> trees) {
         for (BigTreeGenerateTemplate tree : trees) {
-            if (tree.contain(new Vec3d(x + 0.5, y + 0.5, z + 0.5))) {
+            if (tree.contain(x,y,z)) {
                 primer.setBlockState(m, y + 1, n, STONE);
             }
         }

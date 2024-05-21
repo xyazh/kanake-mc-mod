@@ -167,7 +167,7 @@ public class ModItems {
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_STOP = new ItemEmblem(Magic.STOP.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_NO_GRAVITY = new ItemEmblem(Magic.NO_GRAVITY.order)
+    public static final ItemEmblem EMBLEM_NO_GRAVITY = new ItemEmblem(Magic.GRAVITY.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_SET_SUB = new ItemEmblem(Magic.SET_SUB.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
@@ -186,5 +186,21 @@ public class ModItems {
     public static final ItemEmblem EMBLEM_NOT_STOP = new ItemEmblem(Magic.NOT_STOP.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_CLEAR = new ItemEmblem(Magic.CLEAR.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_OPPOSITE_VELOCITY = new ItemEmblem(Magic.OPPOSITE_VELOCITY.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_SERIES_2 = new ItemEmblem(Magic.SERIES_2.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_SERIES_3 = new ItemEmblem(Magic.SERIES_3.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_SERIES_5 = new ItemEmblem(Magic.SERIES_5.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_RIDE = new ItemEmblem(Magic.RIDE.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_ADD_GRAVITY = new ItemEmblem(Magic.ADD_GRAVITY.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_SUB_GRAVITY = new ItemEmblem(Magic.SUB_GRAVITY.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_KEEP_EXPLODE = new ItemEmblem(Magic.KEEP_EXPLODE.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
 }

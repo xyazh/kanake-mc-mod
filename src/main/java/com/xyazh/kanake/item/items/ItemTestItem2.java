@@ -26,7 +26,7 @@ public class ItemTestItem2 extends ItemBase {
 
     public LinkedList<Integer> getOrder(){
         LinkedList<Integer> list = new LinkedList<>();
-        list.add(Magic.NO_GRAVITY.order);
+        list.add(Magic.GRAVITY.order);
         list.add(Magic.SPEED_LOW.order);
         list.add(Magic.CALLBACK.order);
         list.add(Magic.EXPLODE_BIG.order);

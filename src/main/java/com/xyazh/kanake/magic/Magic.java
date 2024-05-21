@@ -16,11 +16,11 @@ public class Magic {
     //增加一个方向为发射者朝向的大速度
     public static final Command SPEED_HIGH = new CommandSpeed(3,true,1.5);
     //增加一个方向随机的小速度
-    public static final Command RANDOM_SPEED_LOW = new CommandRandomSpeed(4,true,0.5);
+    public static final Command RANDOM_SPEED_LOW = new CommandRandomSpeed(4,false,0.5);
     //增加一个方向随机的中速度
-    public static final Command RANDOM_SPEED_MEDIUM = new CommandRandomSpeed(5,true,1.0);
+    public static final Command RANDOM_SPEED_MEDIUM = new CommandRandomSpeed(5,false,1.0);
     //增加一个方向随机的大速度
-    public static final Command RANDOM_SPEED_HIGH = new CommandRandomSpeed(6,true,1.5);
+    public static final Command RANDOM_SPEED_HIGH = new CommandRandomSpeed(6,false,1.5);
     //停止执行指令20tick，1秒
     public static final Command NOP_LOW = new CommandNop(7,false,20);
     //停止执行指令80tick，4秒
@@ -51,8 +51,8 @@ public class Magic {
     public static final Command CALLBACK = new OrderCommand(20,false);
     //使魔法停止
     public static final Command STOP = new CommandStop(21,true,true);
-    //使魔法不受重力
-    public static final Command NO_GRAVITY = new CommandNoGravity(22,true);
+    //切换魔法重力状态
+    public static final Command GRAVITY = new CommandGravity(22,true);
     //设置魔法为子魔法
     public static final Command SET_SUB = new CommandSetSub(23,true,true);
     //设置魔法不为子魔法
@@ -71,4 +71,20 @@ public class Magic {
     public static final Command NOT_STOP = new CommandStop(30,true,false);
     //清除后续指令
     public static final Command CLEAR = new OrderCommand(31,true);
+    //使魔法反向速度
+    public static final Command OPPOSITE_VELOCITY = new CommandOppositeVelocity(32,false);
+    //二连发
+    public static final Command SERIES_2 = new CommandSeries(33,false,1,true);
+    //三连发
+    public static final Command SERIES_3 = new CommandSeries(34,false,2,true);
+    //五连发
+    public static final Command SERIES_5 = new CommandSeries(35,false,4,true);
+    //骑乘
+    public static final Command RIDE = new CommandRide(36,false);
+    //增加重力
+    public static final Command ADD_GRAVITY = new CommandSetGravity(37,true,-0.0048f);
+    //减少重力
+    public static final Command SUB_GRAVITY = new CommandSetGravity(38,true,0.0048f);
+    //不受爆炸影响
+    public static final Command KEEP_EXPLODE = new CommandKeepExplode(39,false);
 }

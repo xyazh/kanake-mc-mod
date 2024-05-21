@@ -3,6 +3,7 @@ package com.xyazh.kanake.world.tree;
 import com.xyazh.kanake.util.Vec3d;
 
 public class Branches {
+    private final Vec3d tempVec = new Vec3d();
     public final Vec3d startPos;
     public final float radius;
     public final Vec3d endPos;
@@ -13,9 +14,10 @@ public class Branches {
         this.endPos = endPos;
     }
 
-    public boolean contain(Vec3d v) {
-        if (v.isBetween(startPos, endPos)) {
-            double distance = v.distanceToLine(startPos, endPos);
+    public boolean contain(double x, double y, double z) {
+        tempVec.set(x, y, z);
+        if (tempVec.isBetween(startPos, endPos)) {
+            double distance = tempVec.distanceToLine(startPos, endPos);
             return distance <= radius;
         }
         return false;

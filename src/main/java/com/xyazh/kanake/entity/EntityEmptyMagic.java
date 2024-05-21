@@ -3,9 +3,7 @@ package com.xyazh.kanake.entity;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.damage.MagicDamage;
 import com.xyazh.kanake.magic.Magic;
-import com.xyazh.kanake.magic.command.Command;
-import com.xyazh.kanake.magic.command.CommandJmp;
-import com.xyazh.kanake.magic.command.CommandNop;
+import com.xyazh.kanake.magic.command.*;
 import com.xyazh.kanake.network.EntityDataPacket;
 import com.xyazh.kanake.network.IEntityDataParameter;
 import com.xyazh.kanake.particle.ModParticles;
@@ -36,6 +34,7 @@ public class EntityEmptyMagic extends EntityShoot{
     public boolean isSubMagic = false;
     public boolean settingDead = false;
     public boolean isStop = false;
+    public boolean keepExplode = false;
 
 
     public EntityEmptyMagic(World worldIn) {
@@ -53,8 +52,16 @@ public class EntityEmptyMagic extends EntityShoot{
         return true;
     }
 
-    public void setOrder(LinkedList<Integer> order) {
-        this.order = new LinkedList<>(order);
+    public void setOrder(LinkedList<Integer> orders) {
+        this.order = new LinkedList<>();
+        for(int order : orders){
+            Command command = Magic.ORDER_MAP.get(order);
+            if(command instanceof OrderCommand){
+                this.order.add(order);
+            }else if(command instanceof StaticCommand){
+                command.execute(this);
+            }
+        }
     }
 
     @Override
@@ -114,7 +121,7 @@ public class EntityEmptyMagic extends EntityShoot{
         if (this.lastOrderAge-- > 0) {
             return;
         }
-        this.lastOrderAge = 10;
+        this.lastOrderAge = 5;
         if (this.order.size() <= 0) {
             return;
         }
@@ -188,6 +195,7 @@ public class EntityEmptyMagic extends EntityShoot{
         entity.temperature = this.temperature;
         entity.lastOrderAge = this.lastOrderAge;
         entity.shootingEntity = this.shootingEntity;
+        entity.keepExplode = this.keepExplode;
         entity.setForward(this.forward);
         entity.setPosition(this.posX, this.posY, this.posZ);
         return entity;
@@ -272,6 +280,7 @@ public class EntityEmptyMagic extends EntityShoot{
         this.g = compound.getFloat("g");
         this.settingDead = compound.getBoolean("settingDead");
         this.isStop = compound.getBoolean("isStop");
+        this.keepExplode = compound.getBoolean("keepExplode");
     }
 
     @Override
@@ -287,6 +296,7 @@ public class EntityEmptyMagic extends EntityShoot{
         compound.setFloat("g", this.g);
         compound.setBoolean("settingDead", this.settingDead);
         compound.setBoolean("isStop", this.isStop);
+        compound.setBoolean("keepExplode", this.keepExplode);
     }
 
 
@@ -306,6 +316,7 @@ public class EntityEmptyMagic extends EntityShoot{
         buffer.writeInt(this.temperature);
         buffer.writeInt(this.lastOrderAge);
         buffer.writeBoolean(this.isSubMagic);
+        buffer.writeBoolean(this.keepExplode);
     }
 
     @Override
@@ -316,5 +327,11 @@ public class EntityEmptyMagic extends EntityShoot{
         this.temperature = buffer.readInt();
         this.lastOrderAge = buffer.readInt();
         this.isSubMagic = buffer.readBoolean();
+        this.keepExplode = buffer.readBoolean();
+    }
+
+    @Override
+    public boolean isImmuneToExplosions() {
+        return this.keepExplode;
     }
 }

@@ -32,7 +32,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     protected Vec3d shootingEntityPos = null;
     protected BlockPos blockPos = null;
     protected double dy = 0;
-    protected boolean shouldSyncSpeed = false;
+    public boolean shouldSyncSpeed = false;
     public Explosion lastExplosion = null;
 
     public EntityShoot(World worldIn) {
@@ -110,6 +110,22 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     public void setForward(net.minecraft.util.math.Vec3d forward) {
         this.forward.set(forward);
         this.forward.normalize();
+    }
+
+    public Vec3d getSpeed() {
+        Vec3d forward = this.forward.copy();
+        forward.mul(this.speed);
+        return forward;
+    }
+
+    public void setSpeed(Vec3d vec3d){
+        this.speed = vec3d.normalizeAndLength();
+        this.forward.set(vec3d);
+    }
+
+    public void addSpeed(Vec3d vec3d){
+        vec3d.add(this.getSpeed());
+        this.setSpeed(vec3d);
     }
 
     public void setLivingMaxAge(int livingMaxAge) {

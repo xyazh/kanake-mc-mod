@@ -21,7 +21,7 @@ public class BigTreeGenerateManager {
     }
 
     public BigTreeGenerateManager(long seed){
-        this(seed, 5, 600, 255, 0);
+        this(seed, 16, 600, 255, 0);
     }
 
     public void updateRandom(int x, int z) {
@@ -49,7 +49,10 @@ public class BigTreeGenerateManager {
                 }
                 float yaw = 0 + this.rand2.nextFloat() * 360;
                 Vec3d rootPos = new Vec3d(x, y, z);
-                trees.add(BigTreeGenerateTemplate.getTemplate(Objects.hash(rootPos, this.seed), rootPos,pitch, yaw));
+                BigTreeGenerateTemplate tree = BigTreeGenerateTemplate.getTemplate(Objects.hash(rootPos, this.seed), rootPos,pitch, yaw);
+                if(tree.containChunk(inChunkX, inChunkZ)){
+                    trees.add(tree);
+                }
             }
         }
         return trees;
