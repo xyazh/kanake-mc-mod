@@ -5,7 +5,6 @@ import com.xyazh.kanake.damage.MagicDamage;
 import com.xyazh.kanake.magic.Magic;
 import com.xyazh.kanake.magic.command.*;
 import com.xyazh.kanake.network.EntityDataPacket;
-import com.xyazh.kanake.network.IEntityDataParameter;
 import com.xyazh.kanake.particle.ModParticles;
 import com.xyazh.kanake.potion.buff.PotionKoori;
 import com.xyazh.kanake.util.TagUtil;
@@ -23,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.LinkedList;
 import java.util.List;
 
-public class EntityEmptyMagic extends EntityShoot{
+public class EntityEmptyMagic extends EntityShoot {
     protected final LinkedList<Integer> ORDER_QUEUE = new LinkedList<>();
     public LinkedList<Integer> order = new LinkedList<>();
     public LinkedList<Integer> callback = new LinkedList<>();
@@ -35,11 +34,32 @@ public class EntityEmptyMagic extends EntityShoot{
     public boolean settingDead = false;
     public boolean isStop = false;
     public boolean keepExplode = false;
-
+    public int lookAtType = 0;
+    protected EntityLivingBase target = null;
 
     public EntityEmptyMagic(World worldIn) {
         super(worldIn);
         this.speed = 0.0;
+    }
+
+    public void findTarget() {
+        AxisAlignedBB aabb = new AxisAlignedBB(
+                this.posX + 8, this.posY + 8, this.posZ + 8,
+                this.posX - 8, this.posY - 8, this.posZ - 8);
+        EntityLivingBase target = null;
+        for (EntityLivingBase entity :
+                this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, (e) -> !e.equals(this.shootingEntity))) {
+            if (target == null) {
+                target = entity;
+                continue;
+            }
+            double distance1 = this.getDistance(entity);
+            double distance2 = this.getDistance(target);
+            if (distance1 < distance2) {
+                target = entity;
+            }
+        }
+        this.target = target;
     }
 
     @Override
@@ -54,11 +74,11 @@ public class EntityEmptyMagic extends EntityShoot{
 
     public void setOrder(LinkedList<Integer> orders) {
         this.order = new LinkedList<>();
-        for(int order : orders){
+        for (int order : orders) {
             Command command = Magic.ORDER_MAP.get(order);
-            if(command instanceof OrderCommand){
+            if (command instanceof OrderCommand) {
                 this.order.add(order);
-            }else if(command instanceof StaticCommand){
+            } else if (command instanceof StaticCommand) {
                 command.execute(this);
             }
         }
@@ -83,7 +103,7 @@ public class EntityEmptyMagic extends EntityShoot{
 
     @Override
     public void setDead() {
-        if(this.settingDead){
+        if (this.settingDead) {
             return;
         }
         this.settingDead = true;
@@ -102,6 +122,33 @@ public class EntityEmptyMagic extends EntityShoot{
         double speed = this.speed;
         if (this.isStop) {
             speed = 0.0;
+        }
+        if (this.lookAtType != 0) {
+            if (this.target == null) {
+                this.findTarget();
+            } else {
+                Vec3d vec3d = Vec3d.fromEntityPos(this.target);
+                vec3d.sub(this.posX, this.posY, this.posZ);
+                switch (this.lookAtType) {
+                    case 1:
+                        vec3d.normalize();
+                        vec3d.mul(0.1);
+                        this.addSpeed(vec3d);
+                        break;
+                    case 2:
+                        vec3d.normalize();
+                        this.setForward(vec3d);
+                        break;
+                }
+                this.motionX = this.forward.x * speed;
+                this.motionY = this.forward.y * speed;
+                this.motionZ = this.forward.z * speed;
+                if (!this.target.isEntityAlive()) {
+                    this.target = null;
+                }
+                this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+                return;
+            }
         }
         this.gdy += this.g;
         this.motionX = this.forward.x * speed;
@@ -146,19 +193,19 @@ public class EntityEmptyMagic extends EntityShoot{
                 this.callback.add(this.order.poll());
             }
             return;
-        }else if (command instanceof CommandJmp) {
+        } else if (command instanceof CommandJmp) {
             CommandJmp jmp = (CommandJmp) command;
-            if(this.isSubMagic!=jmp.isSubMagic){
+            if (this.isSubMagic != jmp.isSubMagic) {
                 return;
             }
-            for(int i = 0; i < jmp.jmp; i++){
+            for (int i = 0; i < jmp.jmp; i++) {
                 if (this.order.size() <= 0) {
                     return;
                 }
                 this.order.poll();
             }
             return;
-        }else if(command == Magic.CLEAR){
+        } else if (command == Magic.CLEAR) {
             this.order.clear();
             return;
         }
@@ -196,6 +243,8 @@ public class EntityEmptyMagic extends EntityShoot{
         entity.lastOrderAge = this.lastOrderAge;
         entity.shootingEntity = this.shootingEntity;
         entity.keepExplode = this.keepExplode;
+        entity.lookAtType = this.lookAtType;
+        entity.setLivingMaxAge(this.livingMaxAge);
         entity.setForward(this.forward);
         entity.setPosition(this.posX, this.posY, this.posZ);
         return entity;
@@ -281,6 +330,7 @@ public class EntityEmptyMagic extends EntityShoot{
         this.settingDead = compound.getBoolean("settingDead");
         this.isStop = compound.getBoolean("isStop");
         this.keepExplode = compound.getBoolean("keepExplode");
+        this.lookAtType = compound.getInteger("lookAtType");
     }
 
     @Override
@@ -297,13 +347,14 @@ public class EntityEmptyMagic extends EntityShoot{
         compound.setBoolean("settingDead", this.settingDead);
         compound.setBoolean("isStop", this.isStop);
         compound.setBoolean("keepExplode", this.keepExplode);
+        compound.setInteger("lookAtType", this.lookAtType);
     }
 
 
     @Override
     public int readData(ByteBuf buf) {
         int type = super.readData(buf);
-        if(type == 0){
+        if (type == 0) {
             this.ORDER_QUEUE.add(buf.readInt());
         }
         return type;
@@ -317,6 +368,8 @@ public class EntityEmptyMagic extends EntityShoot{
         buffer.writeInt(this.lastOrderAge);
         buffer.writeBoolean(this.isSubMagic);
         buffer.writeBoolean(this.keepExplode);
+        buffer.writeBoolean(this.isStop);
+        buffer.writeInt(this.lookAtType);
     }
 
     @Override
@@ -328,6 +381,8 @@ public class EntityEmptyMagic extends EntityShoot{
         this.lastOrderAge = buffer.readInt();
         this.isSubMagic = buffer.readBoolean();
         this.keepExplode = buffer.readBoolean();
+        this.isStop = buffer.readBoolean();
+        this.lookAtType = buffer.readInt();
     }
 
     @Override

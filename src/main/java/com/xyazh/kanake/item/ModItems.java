@@ -15,6 +15,9 @@ import com.xyazh.kanake.item.swords.ItemHarmoniumCrystalSword;
 import com.xyazh.kanake.item.wsitem.ItemWSMagicSword;
 import com.xyazh.kanake.item.wsitem.ItemWSSword;
 import com.xyazh.kanake.magic.Magic;
+import com.xyazh.kanake.magic.command.Command;
+import com.xyazh.kanake.magic.command.CommandAddLife;
+import com.xyazh.kanake.magic.command.CommandLookAt;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;
@@ -202,5 +205,15 @@ public class ModItems {
     public static final ItemEmblem EMBLEM_SUB_GRAVITY = new ItemEmblem(Magic.SUB_GRAVITY.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_KEEP_EXPLODE = new ItemEmblem(Magic.KEEP_EXPLODE.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_ADD_LIFE_LOW = new ItemEmblem(Magic.ADD_LIFE_LOW.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_ADD_LIFE_MEDIUM = new ItemEmblem(Magic.ADD_LIFE_MEDIUM.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_ADD_LIFE_HIGH = new ItemEmblem(Magic.ADD_LIFE_HIGH.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_LOOK_AT_1 = new ItemEmblem(Magic.LOOK_AT_1.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_LOOK_AT_2 = new ItemEmblem(Magic.LOOK_AT_2.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
 }

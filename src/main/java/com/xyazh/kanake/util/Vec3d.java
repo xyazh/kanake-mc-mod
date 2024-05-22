@@ -117,6 +117,12 @@ public class Vec3d {
         this.z -= t1.z;
     }
 
+    public void sub(double x, double y, double z){
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
+    }
+
     public void add(Vec3d t1, Vec3d t2) {
         this.x = t1.x + t2.x;
         this.y = t1.y + t2.y;
@@ -127,6 +133,12 @@ public class Vec3d {
         this.x += t1.x;
         this.y += t1.y;
         this.z += t1.z;
+    }
+
+    public void add(double x, double y, double z){
+        this.x += x;
+        this.y += y;
+        this.z += z;
     }
 
     public double length() {
@@ -201,7 +213,6 @@ public class Vec3d {
     public double distance(Vec3d v) {
         return Math.sqrt((v.x - this.x) * (v.x - this.x) + (v.y - this.y) * (v.y - this.y) + (v.z - this.z) * (v.z - this.z));
     }
-
 
     @Override
     public int hashCode() {

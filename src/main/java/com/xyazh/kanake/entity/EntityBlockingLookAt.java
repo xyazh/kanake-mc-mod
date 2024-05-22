@@ -30,8 +30,8 @@ public class EntityBlockingLookAt extends EntityShoot {
 
     public void findTarget() {
         AxisAlignedBB aabb = new AxisAlignedBB(
-                this.posX + 16, this.posY + 16, this.posZ + 16,
-                this.posX - 16, this.posY - 16, this.posZ - 16);
+                this.posX + 8, this.posY + 8, this.posZ + 8,
+                this.posX - 8, this.posY - 8, this.posZ - 8);
         Entity target = null;
         for (Entity entity :
                 this.world.getEntitiesWithinAABB(Entity.class, aabb, (e) -> e instanceof IProjectile || e instanceof EntityFireball || e instanceof EntityShulkerBullet)) {
@@ -44,12 +44,9 @@ public class EntityBlockingLookAt extends EntityShoot {
                 target = entity;
                 continue;
             }
-            Vec3d target1Pos = new Vec3d(entity.posX, entity.posY, entity.posZ);
-            Vec3d target2Pos = new Vec3d(target.posX, target.posY, target.posZ);
-            Vec3d thisPos = new Vec3d(this.posX, this.posY, this.posZ);
-            target1Pos.sub(thisPos);
-            target2Pos.sub(thisPos);
-            if(target1Pos.length() < target2Pos.length()){
+            double distance1 = this.getDistance(entity);
+            double distance2 = this.getDistance(target);
+            if(distance1 < distance2){
                 target = entity;
             }
         }
@@ -88,7 +85,7 @@ public class EntityBlockingLookAt extends EntityShoot {
             this.motionY = motion.y;
             this.motionZ = motion.z;
             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-            if (this.target.isDead) {
+            if (!this.target.isEntityAlive()) {
                 this.target = null;
             }
         } else {

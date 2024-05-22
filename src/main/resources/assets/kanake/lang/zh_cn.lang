@@ -199,4 +199,14 @@ item.emblem_38.name=减重纹章
 item.emblem_38.desc=减少魔法重力
 item.emblem_39.name=防爆纹章
 item.emblem_39.desc=使魔法不受爆炸影响
+item.emblem_40.name=小持久纹章
+item.emblem_40.desc=增加魔弹小寿命
+item.emblem_41.name=中持久纹章
+item.emblem_41.desc=增加魔弹中寿命
+item.emblem_42.name=大持久纹章
+item.emblem_42.desc=增加魔弹大寿命
+item.emblem_43.name=觅踪趋向纹章
+item.emblem_43.desc=趋向目标运动
+item.emblem_44.name=觅踪锁定纹章
+item.emblem_44.desc=锁定目标运动
 

@@ -132,6 +132,9 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         this.livingMaxAge = livingMaxAge;
     }
 
+    public void addLivingMaxAge(int livingMaxAge) {
+        this.livingMaxAge += livingMaxAge;
+    }
     @Override
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         this.setPosition(x, y, z);

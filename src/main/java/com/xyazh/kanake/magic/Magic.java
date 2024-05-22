@@ -87,4 +87,14 @@ public class Magic {
     public static final Command SUB_GRAVITY = new CommandSetGravity(38,true,0.0048f);
     //不受爆炸影响
     public static final Command KEEP_EXPLODE = new CommandKeepExplode(39,false);
+    //增加寿命小
+    public static final Command ADD_LIFE_LOW = new CommandAddLife(40,false,200);
+    //增加寿命中
+    public static final Command ADD_LIFE_MEDIUM = new CommandAddLife(41,false,400);
+    //增加寿命大
+    public static final Command ADD_LIFE_HIGH = new CommandAddLife(42,false,800);
+    //觅踪趋向
+    public static final Command LOOK_AT_1 = new CommandLookAt(43, true,1);
+    //觅踪锁定
+    public static final Command LOOK_AT_2 = new CommandLookAt(44, true,2);
 }

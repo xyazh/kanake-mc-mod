@@ -23,8 +23,8 @@ public class EntityFireBallLookAt extends EntityFireBall{
 
     public void findTarget() {
         AxisAlignedBB aabb = new AxisAlignedBB(
-                this.posX + 16, this.posY + 16, this.posZ + 16,
-                this.posX - 16, this.posY - 16, this.posZ - 16);
+                this.posX + 8, this.posY + 8, this.posZ + 8,
+                this.posX - 8, this.posY - 8, this.posZ - 8);
         EntityLivingBase target = null;
         for (EntityLivingBase entity:
                 this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, (e) -> !e.equals(this.shootingEntity))) {
@@ -32,12 +32,9 @@ public class EntityFireBallLookAt extends EntityFireBall{
                 target = entity;
                 continue;
             }
-            com.xyazh.kanake.util.Vec3d target1Pos = new com.xyazh.kanake.util.Vec3d(entity.posX, entity.posY, entity.posZ);
-            com.xyazh.kanake.util.Vec3d target2Pos = new com.xyazh.kanake.util.Vec3d(target.posX, target.posY, target.posZ);
-            com.xyazh.kanake.util.Vec3d thisPos = new com.xyazh.kanake.util.Vec3d(this.posX, this.posY, this.posZ);
-            target1Pos.sub(thisPos);
-            target2Pos.sub(thisPos);
-            if(target1Pos.length() < target2Pos.length()){
+            double distance1 = this.getDistance(entity);
+            double distance2 = this.getDistance(target);
+            if(distance1 < distance2){
                 target = entity;
             }
         }
@@ -66,7 +63,7 @@ public class EntityFireBallLookAt extends EntityFireBall{
             this.motionY = motion.y;
             this.motionZ = motion.z;
             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-            if (this.target.isDead) {
+            if (!this.target.isEntityAlive()) {
                 this.target = null;
             }
         } else {
