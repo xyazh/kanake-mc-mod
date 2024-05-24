@@ -14,13 +14,13 @@ public class Magic {
     //增加一个方向为发射者朝向的中速度
     public static final Command SPEED_MEDIUM = new CommandSpeed(2,true,1.0);
     //增加一个方向为发射者朝向的大速度
-    public static final Command SPEED_HIGH = new CommandSpeed(3,true,1.5);
+    public static final Command SPEED_HIGH = new CommandSpeed(3,true,2.0);
     //增加一个方向随机的小速度
     public static final Command RANDOM_SPEED_LOW = new CommandRandomSpeed(4,false,0.5);
     //增加一个方向随机的中速度
     public static final Command RANDOM_SPEED_MEDIUM = new CommandRandomSpeed(5,false,1.0);
     //增加一个方向随机的大速度
-    public static final Command RANDOM_SPEED_HIGH = new CommandRandomSpeed(6,false,1.5);
+    public static final Command RANDOM_SPEED_HIGH = new CommandRandomSpeed(6,false,2.0);
     //停止执行指令20tick，1秒
     public static final Command NOP_LOW = new CommandNop(7,false,20);
     //停止执行指令80tick，4秒
@@ -97,4 +97,6 @@ public class Magic {
     public static final Command LOOK_AT_1 = new CommandLookAt(43, true,1);
     //觅踪锁定
     public static final Command LOOK_AT_2 = new CommandLookAt(44, true,2);
+    //魔法隐形
+    public static final Command HIDDEN = new CommandHidden(45,true);
 }

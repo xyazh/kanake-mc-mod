@@ -35,6 +35,7 @@ public class EntityEmptyMagic extends EntityShoot {
     public boolean isStop = false;
     public boolean keepExplode = false;
     public int lookAtType = 0;
+    public boolean hidden = false;
     protected EntityLivingBase target = null;
 
     public EntityEmptyMagic(World worldIn) {
@@ -168,7 +169,7 @@ public class EntityEmptyMagic extends EntityShoot {
         if (this.lastOrderAge-- > 0) {
             return;
         }
-        this.lastOrderAge = 5;
+        this.lastOrderAge = 4;
         if (this.order.size() <= 0) {
             return;
         }
@@ -280,6 +281,9 @@ public class EntityEmptyMagic extends EntityShoot {
     }
 
     public void spawnParticle() {
+        if(this.hidden){
+            return;
+        }
         if (this.world.isRemote) {
             EnumParticleTypes particle1, particle2;
             if (this.temperature <= -50) {
@@ -300,6 +304,9 @@ public class EntityEmptyMagic extends EntityShoot {
     }
 
     protected void setDeadParticle() {
+        if(this.hidden){
+            return;
+        }
         if (this.world.isRemote) {
             EnumParticleTypes particle;
             if (this.temperature <= -50) {
@@ -331,6 +338,7 @@ public class EntityEmptyMagic extends EntityShoot {
         this.isStop = compound.getBoolean("isStop");
         this.keepExplode = compound.getBoolean("keepExplode");
         this.lookAtType = compound.getInteger("lookAtType");
+        this.hidden = compound.getBoolean("hidden");
     }
 
     @Override
@@ -348,6 +356,7 @@ public class EntityEmptyMagic extends EntityShoot {
         compound.setBoolean("isStop", this.isStop);
         compound.setBoolean("keepExplode", this.keepExplode);
         compound.setInteger("lookAtType", this.lookAtType);
+        compound.setBoolean("hidden", this.hidden);
     }
 
 

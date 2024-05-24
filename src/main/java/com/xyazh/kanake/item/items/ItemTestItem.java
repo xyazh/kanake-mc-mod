@@ -2,6 +2,7 @@ package com.xyazh.kanake.item.items;
 
 
 import com.xyazh.kanake.entity.*;
+import com.xyazh.kanake.particle.ModParticles;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,14 +46,19 @@ public class ItemTestItem extends ItemBase {
             entity.entityShoot(player, m);
             world.spawnEntity(entity);
         }*/
-        if (!world.isRemote) {
+        /*if (!world.isRemote) {
             EntityBiimu entity = new EntityBiimu(world);
             entity.setPosition(player.posX, player.posY, player.posZ);
             world.spawnEntity(entity);
-        }
+        }*/
         /*if (!world.isRemote){
             player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
         }*/
+        if(world.isRemote){
+            for (int i = 0; i < 10; i++){
+                world.spawnParticle(ModParticles.HEAL_BALL_PARTICLES, player.posX, player.posY + 1, player.posZ, 0.5, 0.01, 0);
+            }
+        }
         return super.onItemRightClick(world, player, hand);
     }
 
