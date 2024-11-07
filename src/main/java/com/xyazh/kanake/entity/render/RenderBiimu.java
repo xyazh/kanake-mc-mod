@@ -1,16 +1,11 @@
 package com.xyazh.kanake.entity.render;
 
 import com.xyazh.kanake.entity.EntityBiimu;
-import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
-import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
+import com.xyazh.kanake.events.Event;
 import com.xyazh.kanake.render.FramebufferExample;
-import com.xyazh.kanake.render.FramebufferTest;
-import com.xyazh.kanake.render.RenderHelper;
 import com.xyazh.kanake.util.Vec3d;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -23,6 +18,8 @@ import javax.annotation.Nullable;
 
 public class RenderBiimu extends Render<EntityBiimu> {
     private static final Vec3d VEC3D = Vec3d.ZERO.copy();
+    private static final FramebufferExample FBO = new FramebufferExample(false);
+
     public RenderBiimu(RenderManager renderManager) {
         super(renderManager);
     }
@@ -44,7 +41,48 @@ public class RenderBiimu extends Render<EntityBiimu> {
 
     @Override
     public void doRender(@Nonnull EntityBiimu entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        this.render(x, y, z, partialTicks);
+        //this.render(x, y, z, partialTicks);
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableFog();
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableAlpha();
+
+        /*FBO.renderToFramebufferStart();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferbuilder.pos(x+0.5, y, z+0.5).tex(0, 0).color(255, 255, 255, 255).endVertex();
+        bufferbuilder.pos(x+0.5, y, z-0.5).tex(1, 0).color(255, 255, 255, 255).endVertex();
+        bufferbuilder.pos(x-0.5, y, z-0.5).tex(1, 1).color(255, 255, 255, 255).endVertex();
+        bufferbuilder.pos(x-0.5, y, z+0.5).tex(0, 1).color(255, 255, 255, 255).endVertex();
+        tessellator.draw();
+        FBO.renderToFramebufferEnd();*/
+
+        FBO.copyDisFramebuffer();
+
+
+        /*GlStateManager.enableTexture2D();
+        FBO.bindFramebufferTexture();
+        Tessellator tessellator1 = Tessellator.getInstance();
+        BufferBuilder bufferbuilder1 = tessellator1.getBuffer();
+        bufferbuilder1.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferbuilder1.pos(x+0.5, y, z+0.5).tex(0, 0).color(255, 255, 255, 255).endVertex();
+        bufferbuilder1.pos(x+0.5, y, z-0.5).tex(1, 0).color(255, 255, 255, 255).endVertex();
+        bufferbuilder1.pos(x-0.5, y, z-0.5).tex(1, 1).color(255, 255, 255, 255).endVertex();
+        bufferbuilder1.pos(x-0.5, y, z+0.5).tex(0, 1).color(255, 255, 255, 255).endVertex();
+        tessellator1.draw();
+        FBO.unbindFramebufferTexture();*/
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableFog();
+        GlStateManager.enableLighting();
+        GlStateManager.enableCull();
+
+        Event.FBO.renderFboQuad();
     }
 
     protected void render(double x, double y, double z, float partialTicks){

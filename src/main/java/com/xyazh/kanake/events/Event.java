@@ -8,7 +8,10 @@ import com.xyazh.kanake.damage.KillSlimeDamage;
 import com.xyazh.kanake.entity.EntityShoot;
 import com.xyazh.kanake.entity.EntityWSKnight;
 import com.xyazh.kanake.item.ModItems;
+import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
+import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.render.FramebufferExample;
 import com.xyazh.kanake.util.ParticleUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -31,10 +35,31 @@ import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.*;
 
 
 @Mod.EventBusSubscriber(modid = Kanake.MODID)
 public class Event {
+    public static FramebufferExample FBO = null;
+    public static Shader TEST_SHADER = null;
+
+    @SubscribeEvent
+    public static void onWorldRendered(RenderWorldLastEvent event) {
+        if(FBO==null){
+            FBO = new FramebufferExample(true);
+        }
+        if(TEST_SHADER == null){
+            TEST_SHADER = ShaderManager.loadVMWShader("test");
+        }
+        int bindFBO = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
+        FBO.copyFramebuffer(bindFBO);
+        TEST_SHADER.use();
+        TEST_SHADER.uniform2f("wh",FBO.width,FBO.height);
+        FBO.renderFboQuad();
+        TEST_SHADER.release();
+    }
+
 
     @SubscribeEvent
     public static void drop(LivingDropsEvent event) {

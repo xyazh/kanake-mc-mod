@@ -50,7 +50,10 @@ public class TileClean extends TileEntity implements ITickable {
 
     @Nonnull
     public AxisAlignedBB getRenderBoundingBox() {
-        return new AxisAlignedBB(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        return new AxisAlignedBB(
+                Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
+                Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY
+        );
     }
 
     public boolean shouldRenderCircle() {
@@ -179,7 +182,7 @@ public class TileClean extends TileEntity implements ITickable {
                     double theta = 2 * Math.PI * Kanake.rand.nextDouble();
                     double rx = radius * Math.cos(theta);
                     double rz = radius * Math.sin(theta);
-                    this.world.spawnParticle(ModParticles.BIIMU_PARTICLES, this.pos.getX() + rx, circleHeight, this.pos.getZ() + rz, 0, -4, 0);
+                    this.world.spawnParticle(ModParticles.BIIMU_PARTICLES, this.pos.getX() + rx, circleHeight, this.pos.getZ() + rz, 0, -4 + Kanake.rand.nextDouble() * 2, 0);
                 }
             }
         } else {

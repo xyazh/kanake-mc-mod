@@ -50,6 +50,7 @@ public class Kanake
     public static ProxyBase proxy;
 
     public static boolean HAS_BAUBLES = false;
+    public static boolean HAS_OPT = false;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -57,6 +58,7 @@ public class Kanake
         logger = event.getModLog();
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
         HAS_BAUBLES = Loader.isModLoaded("baubles");
+        HAS_OPT = Loader.isModLoaded("optifine");
         ConfigLoader.init(event);
         LoopThread.creatThread();
         RegistryHandler.preInitRegistries(event);
