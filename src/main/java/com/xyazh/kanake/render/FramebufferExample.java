@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.GL11;
@@ -16,6 +17,7 @@ public class FramebufferExample {
     public int width;
     public int height;
     private Framebuffer framebuffer;
+    protected int lastBindFBO = 0;
 
     public FramebufferExample(boolean useDepthIn) {
         width = MC.displayWidth;
@@ -38,14 +40,14 @@ public class FramebufferExample {
     }
 
     public boolean tryReCreate() {
-        if (shouldRecreate()) {
-            width = MC.displayWidth;
-            height = MC.displayHeight;
-            framebuffer.deleteFramebuffer();
-            framebuffer = new Framebuffer(width, height, useDepth);
-            return true;
+        if (!shouldRecreate()) {
+            return false;
         }
-        return false;
+        width = MC.displayWidth;
+        height = MC.displayHeight;
+        framebuffer.deleteFramebuffer();
+        framebuffer = new Framebuffer(width, height, useDepth);
+        return true;
     }
 
     public void bindFramebufferTexture() {
@@ -58,6 +60,7 @@ public class FramebufferExample {
     }
 
     public void bindFramebuffer(boolean resetViewport) {
+        this.lastBindFBO = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
         framebuffer.bindFramebuffer(resetViewport || tryReCreate());
     }
 
@@ -67,15 +70,15 @@ public class FramebufferExample {
 
 
     public void unbindFramebuffer() {
-        framebuffer.unbindFramebuffer();
+        this.framebuffer.unbindFramebuffer();
+        OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, this.lastBindFBO);
     }
 
     public void renderToFramebufferStart(boolean resetViewport) {
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
-        bindFramebuffer(resetViewport || tryReCreate());
-        setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
-        framebufferClear();
-        if (useDepth) {
+        this.bindFramebuffer(resetViewport || tryReCreate());
+        this.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
+        this.framebufferClear();
+        if (this.useDepth) {
             GlStateManager.enableDepth();
         }
     }
@@ -85,8 +88,7 @@ public class FramebufferExample {
     }
 
     public void renderToFramebufferEnd() {
-        unbindFramebuffer();
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+        this.unbindFramebuffer();
     }
 
     public void setFramebufferColor(float red, float green, float blue, float alpha) {
@@ -94,27 +96,31 @@ public class FramebufferExample {
     }
 
     public void framebufferClear() {
-        this.framebuffer.framebufferClear();
+        float[] this$frame = this.framebuffer.framebufferColor;
+        GlStateManager.clearColor(this$frame[0], this$frame[1], this$frame[2], this$frame[3]);
+        int i = 16384;
+        if (this.useDepth)
+        {
+            GlStateManager.clearDepth(1.0D);
+            i |= 256;
+        }
+        GlStateManager.clear(i);
     }
 
     public void pushMatrix() {
         GL11.glViewport(0, 0, width, height);
-        // 保存当前投影矩阵
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
         GL11.glOrtho(0, width, -height, 0, -1, 1);
-        // 设置模型视图矩阵
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
     }
 
     public void popMatrix() {
-        // 恢复之前的投影矩阵
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPopMatrix();
-        // 恢复之前的模型视图矩阵
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glPopMatrix();
     }
@@ -148,24 +154,38 @@ public class FramebufferExample {
     }
 
 
-    public void copyFramebuffer(int frameBuffer) {
+    public void copyFrameBuffer(int frameBuffer) {
+        this.lastBindFBO = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
         tryReCreate();
-        OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, frameBuffer); // 默认FBO（屏幕缓冲区）
-        OpenGlHelper.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, this.framebuffer.framebufferObject); // 我们的目标FBO
+        OpenGlHelper.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, frameBuffer);
+        OpenGlHelper.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, this.framebuffer.framebufferObject);
         GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
                 GL11.GL_COLOR_BUFFER_BIT, GL11.GL_NEAREST);
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+        this.unbindFramebuffer();
     }
 
-    public void copyFramebuffer(Framebuffer frameBuffer) {
-        this.copyFramebuffer(frameBuffer.framebufferObject);
+    public void copyFrameBuffer(Framebuffer frameBuffer) {
+        this.copyFrameBuffer(frameBuffer.framebufferObject);
     }
 
-    public void copyDisFramebuffer() {
-        this.copyFramebuffer(Minecraft.getMinecraft().getFramebuffer());
+    public void copyDisFrameBuffer() {
+        this.copyFrameBuffer(Minecraft.getMinecraft().getFramebuffer());
     }
 
     public void copyWindowBuffer() {
-        this.copyFramebuffer(0);
+        this.copyFrameBuffer(0);
+    }
+
+    public void copyBindBuffer() {
+        int bindFBO = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
+        this.copyFrameBuffer(bindFBO);
+    }
+
+    protected void delTexture() {
+        if (this.framebuffer.framebufferTexture > -1)
+        {
+            TextureUtil.deleteTexture(this.framebuffer.framebufferTexture);
+            this.framebuffer.framebufferTexture = -1;
+        }
     }
 }

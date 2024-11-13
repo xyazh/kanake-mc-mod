@@ -44,7 +44,7 @@ dependencies {
     compileOnly(files("./libs/Baubles-1.12-1.5.2-deobf.jar"))
     // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_1.12.2-4.13.1.220"
-    //runtime "baubles:Baubles-1.12-1.5.2-deobf"
+    runtime "baubles:Baubles-1.12-1.5.2-deobf"
 }
 
 

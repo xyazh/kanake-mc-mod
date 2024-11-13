@@ -6,28 +6,41 @@ varying vec2 TexCoords;
 uniform sampler2D screenTexture;
 uniform vec2 wh;
 
-void main()
-{
-    vec2 lensCenter = vec2(0.5, 0.5);
-    float range = 0.2;
+vec2 posToPix(vec2 pos){
+    return pos * wh;
+}
 
-    // 计算当前像素到凹透镜中心的方向和距离
-    vec2 direction = TexCoords - lensCenter;
-    direction = vec2(direction.x / wh.y * wh.x,direction.y);
+vec2 pixToPos(vec2 pixPos){
+    return pixPos / wh;
+}
+
+void main(){
+    vec2 centerPixPos = posToPix(vec2(0.5, 0.5));
+    vec2 texPixCoord = posToPix(TexCoords);
+    //当前像素到中心点向量，方向，距离
+    vec2 direction = texPixCoord- centerPixPos;
     vec2 forth = normalize(direction);
     float distance = length(direction);
-    vec2 lensEffect = vec2(0.0, 0.0);
-    if (distance < 0.7){
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-    }else if (distance < 0.13333333){
-        //简单的用cos模拟光线扭曲，更真实的TODO
-        lensEffect = direction - forth * cos(3 / 2 * 3.1415926535 * distance / range) / 5;
-        vec2 distortedCoords = TexCoords + lensEffect;
-        // 从纹理中采样颜色
-        vec4 color = texture2D(screenTexture, distortedCoords);
-        // 将采样得到的颜色赋值给 gl_FragColor
-        gl_FragColor = color;
-    }else{
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    float radius = 0.2 * wh.x;
+    float radius2 = 0.06 * wh.x;
+    vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+    if (distance < radius2){
+        color = vec4(0.0, 0.0, 0.0, 1.0);
+    }else if (distance < radius){
+        //假设中心在原点，光线被偏转力度向量
+        float x = distance / radius;
+        vec2 changeForth = normalize(vec2(acos(x), asin(x)));
+        //假设光线为平行光
+        vec2 lightForth = vec2(0.0, 1.0);
+        //使光线偏折
+        vec2 lightForth2 = normalize(lightForth + changeForth);
+        //假设光线被偏折射后距离背景100px
+        float l = 200.0;
+        //最后投射的像素的改变量
+        float dx = l / lightForth2.y * lightForth2.x;
+        texPixCoord = texPixCoord - forth * dx;
+        vec2 distortedCoords = pixToPos(texPixCoord);
+        color = texture2D(screenTexture, distortedCoords);
     }
+    gl_FragColor = color;
 }

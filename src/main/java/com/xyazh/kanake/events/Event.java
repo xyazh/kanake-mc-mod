@@ -35,31 +35,11 @@ import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.*;
 
 
 @Mod.EventBusSubscriber(modid = Kanake.MODID)
 public class Event {
-    public static FramebufferExample FBO = null;
-    public static Shader TEST_SHADER = null;
-
-    @SubscribeEvent
-    public static void onWorldRendered(RenderWorldLastEvent event) {
-        if(FBO==null){
-            FBO = new FramebufferExample(true);
-        }
-        if(TEST_SHADER == null){
-            TEST_SHADER = ShaderManager.loadVMWShader("test");
-        }
-        int bindFBO = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
-        FBO.copyFramebuffer(bindFBO);
-        TEST_SHADER.use();
-        TEST_SHADER.uniform2f("wh",FBO.width,FBO.height);
-        FBO.renderFboQuad();
-        TEST_SHADER.release();
-    }
-
 
     @SubscribeEvent
     public static void drop(LivingDropsEvent event) {
