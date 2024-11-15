@@ -40,10 +40,10 @@ dependencies {
     //compileOnly(files("./libs/GalacticraftCore-Dev-1.12.2-4.0.2.261.jar"))
     //compileOnly(files("./libs/Galacticraft-Planets-Dev-1.12.2-4.0.2.261.jar"))
     //compileOnly(files("./libs/industrialcraft-2-2.8.100-ex112-dev.jar"))
-    compileOnly(files("./libs/jei_1.12.2-4.13.1.220.jar"))
+    //compileOnly(files("./libs/jei_1.12.2-4.13.1.220.jar"))
     compileOnly(files("./libs/Baubles-1.12-1.5.2-deobf.jar"))
     // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_1.12.2-4.13.1.220"
+    //runtime "mezz.jei:jei_1.12.2-4.13.1.220"
     runtime "baubles:Baubles-1.12-1.5.2-deobf"
 }
 

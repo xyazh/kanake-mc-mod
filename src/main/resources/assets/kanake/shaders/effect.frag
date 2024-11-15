@@ -25,5 +25,5 @@ vec4 getColor(vec2 tc) {
 
 
 void main() {
-    gl_FragColor = getColor(texCoords / 0.5);
+    gl_FragColor = getColor(texCoords);
 }

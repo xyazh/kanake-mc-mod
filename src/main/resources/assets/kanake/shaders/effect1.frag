@@ -1,27 +1,10 @@
-#version 120
-
 uniform sampler2D tex0;
-uniform float time;
-
+uniform int horizontal;
+uniform vec2 wh;
+uniform int count;
 varying vec2 texCoords;
-
-float max(float f1, float f2){
-    return f1 > f2 ? f1 : f2;
-}
-
-
-float _randNorm(float seed) {
-    // 将种子应用到随机数生成函数中，影响随机数序列
-    float u1 = fract(sin(seed + gl_FragCoord.x * 12.9898 + gl_FragCoord.y * 78.233) * 43758.5453);
-    float u2 = fract(sin(seed + gl_FragCoord.y * 12.9898 + gl_FragCoord.x * 78.233) * 43758.5453);
-    // 使用 Box-Muller 转换
-    float z0 = sqrt(-2.0 * log(u1)) * cos(2.0 * 3.14159265358979323846 * u2);
-    return z0;
-}
-
-float randNorm(float mean, float stddev, float seed) {
-    return mean + stddev * _randNorm(seed);
-}
+const float sigma = 6;
+const float weights[5] = float[] (0.227, 0.194, 0.121, 0.054, 0.016);
 
 vec4 blend(vec4 c1, vec4 c2){
     if(c1.w == 0.0 && c2.w == 0.0){
@@ -29,22 +12,50 @@ vec4 blend(vec4 c1, vec4 c2){
     }
     vec2 vAlpha = normalize(vec2(c1.w, c2.w));
     vec3 color = c1.xyz * vAlpha.x + c2.xyz * vAlpha.y;
-    //vec3 color = c1.xyz * c1.w + c2.xyz * c2.w;
     return vec4(color, max(c1.w, c2.w));
+
+    //return vec4(c1.xyz,max(c1.w, c2.w));
 }
 
-void main() {
-    vec4 color = vec4(0.0);
-    float step = 0.005;
-    float thisPox = 0.0;
-    float sigma = 0.05;
-    for(int i = 0; i < 20; i++){
-        float r = randNorm(0.0, 0.05, float(i) + time);
-        vec4 color1 = texture2D(tex0, texCoords + vec2(r, 0.0));
-        float a1 = exp(-r * r / (2.0 * sigma * sigma)) * color1.w;
-        color1 = vec4(color1.xyz, a1);
-        color = blend(color, color1);
+
+void main()
+{
+    vec2 offset = 1.0 / wh;
+    vec4 color = texture2D(tex0, texCoords);
+    if(horizontal == 1)
+    {
+        for(int i = 1; i < 5; i++){
+            float r = offset.x * i;
+            vec4 color1 = texture2D(tex0, texCoords + vec2(r, 0.0));
+            vec4 color2 = texture2D(tex0, texCoords - vec2(r, 0.0));
+            //float s = offset.x * sigma;
+            //float weight = exp(-r * r / (2.0 * s * s));
+            float weight = weights[i];
+            float a1 = color1.w * weight;
+            float a2 = color2.w * weight;
+            color1 = vec4(color1.xyz, a1);
+            color2 = vec4(color2.xyz, a2);
+            color = blend(color, blend(color1, color2));
+        }
     }
-    color = blend(color, texture2D(tex0, texCoords));
+    else
+    {
+        for(int i = 1; i < 5; i++){
+            float r = offset.y * i;
+            vec4 color1 = texture2D(tex0, texCoords + vec2(0.0, r));
+            vec4 color2 = texture2D(tex0, texCoords - vec2(0.0, r));
+            //float s = offset.y * sigma;
+            //float weight = exp(-r * r / (2.0 * s * s));
+            float weight = weights[i];
+            float a1 = color1.w * weight;
+            float a2 = color2.w * weight;
+            color1 = vec4(color1.xyz, a1);
+            color2 = vec4(color2.xyz, a2);
+            color = blend(color, blend(color1, color2));
+        }
+    }
+    if(count == 5){
+        color = vec4(color.xyz, color.w);
+    }
     gl_FragColor = color;
 }

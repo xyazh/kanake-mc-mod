@@ -3,6 +3,7 @@ package com.xyazh.kanake.block.blocks.teleportation.render;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
 import com.xyazh.kanake.block.blocks.unstableteleportation.TileUnstableTeleportation;
+import com.xyazh.kanake.events.RenderEvent;
 import com.xyazh.kanake.util.MathUtils;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -113,7 +114,28 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
     }
 
     public void render(@Nonnull TileTeleportation te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushMatrix();
+        RenderEvent.addPostRenderTask(() -> {
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableLighting();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableDepth();
+            GlStateManager.disableCull();
+            GlStateManager.depthMask(true);
+            GlStateManager.enableBlend();
+            this.bindTexture(TEXTURE_TP);
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            this.render(te, bufferbuilder, x, y, z, partialTicks, destroyStage, alpha);
+            tessellator.draw();
+
+            GlStateManager.enableLighting();
+            GlStateManager.enableCull();
+
+        });
+
+        /*GlStateManager.pushMatrix();
         GlStateManager.translate(x+0.5,y,z+0.5);
         GlStateManager.rotate((te.age + partialTicks)/40,0,1,0);
         GlStateManager.translate(-(x+0.5),-y,-(z+0.5));
@@ -138,6 +160,6 @@ public class RenderTileTeleportation extends TileEntitySpecialRenderer<TileTelep
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.enableFog();
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();*/
     }
 }
