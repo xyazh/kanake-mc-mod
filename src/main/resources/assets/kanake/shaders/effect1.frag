@@ -38,21 +38,12 @@ void main() {
     float step = 0.005;
     float thisPox = 0.0;
     float sigma = 0.05;
-    for(int i = 0; i < 10; i++){
-        float a = randNorm(0.2, 0.05, float(i) + time);
-        vec4 color1 = texture2D(tex0, texCoords + vec2(thisPox, 0.0));
-    }
-    while(thisPox < 0.2) {
-        //float a = 0.5 / (1 - thisPox);
-        vec4 color1 = texture2D(tex0, texCoords + vec2(thisPox, 0.0));
-        vec4 color2 = texture2D(tex0, texCoords - vec2(thisPox, 0.0));
-        float a1 = exp(-thisPox * thisPox / (2.0 * sigma * sigma)) * color1.w;
-        float a2 = exp(-thisPox * thisPox / (2.0 * sigma * sigma)) * color2.w;
+    for(int i = 0; i < 20; i++){
+        float r = randNorm(0.0, 0.05, float(i) + time);
+        vec4 color1 = texture2D(tex0, texCoords + vec2(r, 0.0));
+        float a1 = exp(-r * r / (2.0 * sigma * sigma)) * color1.w;
         color1 = vec4(color1.xyz, a1);
-        color2 = vec4(color2.xyz, a2);
-        color = blend(color, blend(color1, color2));
-        thisPox += step;
-        ///step = thisPox;
+        color = blend(color, color1);
     }
     color = blend(color, texture2D(tex0, texCoords));
     gl_FragColor = color;

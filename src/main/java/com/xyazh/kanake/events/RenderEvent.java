@@ -90,6 +90,7 @@ public class RenderEvent {
         GlStateManager.setActiveTexture(activeTextureUnit);
 
         EFFECT_SHADER_1.use();
+        EFFECT_SHADER_1.uniform1f("time", event.getPartialTicks());
         GL11.glViewport(0, 0, LOW_EFFECT_FBO.width, LOW_EFFECT_FBO.height);
         LOW_EFFECT_FBO.renderFboQuad();
         EFFECT_SHADER_1.release();
