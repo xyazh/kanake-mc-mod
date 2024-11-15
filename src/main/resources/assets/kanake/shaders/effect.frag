@@ -2,9 +2,10 @@
 
 uniform sampler2D tex0;
 uniform sampler2D tex1;
-varying vec2 TexCoords;
 
-const float epsilon = 0.0001;  // 设置比较的容忍度
+varying vec2 texCoords;
+
+const float epsilon = 0.0001;
 
 bool areColorsEqual(vec4 color1, vec4 color2) {
     return (abs(color1.r - color2.r) < epsilon) &&
@@ -13,14 +14,16 @@ bool areColorsEqual(vec4 color1, vec4 color2) {
     (abs(color1.a - color2.a) < epsilon);
 }
 
-
-void main(){
-    vec4 color1 = texture2D(tex0, TexCoords);
-    //vec4 color2 = texture2D(tex1, TexCoords);
-    vec4 color2 = vec4(1.0,1.0,1.0,1.0);
-    if (areColorsEqual(color1, color2)){
-        gl_FragColor = vec4(1.0,0.0,1.0,1.0);
-        return;
+vec4 getColor(vec2 tc) {
+    vec4 color1 = texture2D(tex0, tc);
+    vec4 color2 = texture2D(tex1, tc);
+    if (areColorsEqual(color1, color2)) {
+        return color1;
     }
-    gl_FragColor = vec4(0.0,0.0,0.0,0.0);
+    return vec4(0.0, 0.0, 0.0, 0.0);
+}
+
+
+void main() {
+    gl_FragColor = getColor(texCoords / 0.5);
 }

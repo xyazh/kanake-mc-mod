@@ -16,14 +16,29 @@ public class FramebufferExample {
     private final boolean useDepth;
     public int width;
     public int height;
-    private Framebuffer framebuffer;
+    public int realWidth;
+    public int realHeight;
+    public float scale = 1;
     protected int lastBindFBO = 0;
+    private Framebuffer framebuffer;
 
     public FramebufferExample(boolean useDepthIn) {
         width = MC.displayWidth;
         height = MC.displayHeight;
+        realWidth = MC.displayWidth;
+        realHeight = MC.displayHeight;
         useDepth = useDepthIn;
-        framebuffer = new Framebuffer(width, height, useDepthIn);
+        framebuffer = new Framebuffer(realWidth, realHeight, useDepthIn);
+    }
+
+    public FramebufferExample(boolean useDepthIn, float scale) {
+        width = MC.displayWidth;
+        height = MC.displayHeight;
+        realWidth = (int) (MC.displayWidth * scale);
+        realHeight = (int) (MC.displayHeight * scale);
+        useDepth = useDepthIn;
+        this.scale = scale;
+        framebuffer = new Framebuffer(realWidth, realHeight, useDepthIn);
     }
 
     public boolean shouldRecreate() {
@@ -45,8 +60,10 @@ public class FramebufferExample {
         }
         width = MC.displayWidth;
         height = MC.displayHeight;
+        realWidth = (int) (MC.displayWidth * scale);
+        realHeight = (int) (MC.displayHeight * scale);
         framebuffer.deleteFramebuffer();
-        framebuffer = new Framebuffer(width, height, useDepth);
+        framebuffer = new Framebuffer(realWidth, realHeight, useDepth);
         return true;
     }
 
@@ -99,8 +116,7 @@ public class FramebufferExample {
         float[] this$frame = this.framebuffer.framebufferColor;
         GlStateManager.clearColor(this$frame[0], this$frame[1], this$frame[2], this$frame[3]);
         int i = 16384;
-        if (this.useDepth)
-        {
+        if (this.useDepth) {
             GlStateManager.clearDepth(1.0D);
             i |= 256;
         }
@@ -182,8 +198,7 @@ public class FramebufferExample {
     }
 
     protected void delTexture() {
-        if (this.framebuffer.framebufferTexture > -1)
-        {
+        if (this.framebuffer.framebufferTexture > -1) {
             TextureUtil.deleteTexture(this.framebuffer.framebufferTexture);
             this.framebuffer.framebufferTexture = -1;
         }

@@ -2,7 +2,6 @@ package com.xyazh.kanake.events;
 
 
 import com.xyazh.kanake.Kanake;
-import com.xyazh.kanake.block.blocks.teleportation.render.RenderTileTeleportation;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
 import com.xyazh.kanake.render.FramebufferExample;
@@ -15,7 +14,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL30;
 
 import java.util.ArrayList;
 
@@ -24,15 +22,18 @@ import java.util.ArrayList;
 public class RenderEvent {
     public static FramebufferExample SCREEN_FBO = null;
     public static FramebufferExample EFFECT_FBO = null;
+    public static FramebufferExample LOW_EFFECT_FBO = null;
     public static Shader EFFECT_SHADER = null;
+    public static Shader EFFECT_SHADER_1 = null;
     public static final ArrayList<Runnable> POST_RENDER_TASKS = new ArrayList<>();
 
     @SubscribeEvent
     public static void onRenderInit(TextureStitchEvent.Post event) {
         SCREEN_FBO = new FramebufferExample(true);
         EFFECT_FBO = new FramebufferExample(true);
-
+        LOW_EFFECT_FBO = new FramebufferExample(true, 0.5f);
         EFFECT_SHADER = ShaderManager.loadVMWShader("effect");
+        EFFECT_SHADER_1 = ShaderManager.loadVMWShader("effect1");
     }
 
     public static void addPostRenderTask(Runnable task){
@@ -70,12 +71,15 @@ public class RenderEvent {
         EFFECT_SHADER.use();
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
         GlStateManager.enableTexture2D();
-        EFFECT_FBO.bindFramebufferTexture();
+        SCREEN_FBO.bindFramebufferTexture();
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE1);
         GlStateManager.enableTexture2D();
-        SCREEN_FBO.bindFramebufferTexture();
+        EFFECT_FBO.bindFramebufferTexture();
         EFFECT_SHADER.uniform1i("tex1", 1);
+        LOW_EFFECT_FBO.renderToFramebufferStart();
+        GL11.glViewport(0, 0, LOW_EFFECT_FBO.realWidth, LOW_EFFECT_FBO.realHeight);
         EFFECT_FBO.renderFboQuad();
+        LOW_EFFECT_FBO.renderToFramebufferEnd();
         EFFECT_SHADER.release();
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
         GlStateManager.enableTexture2D();
@@ -84,5 +88,10 @@ public class RenderEvent {
         GlStateManager.enableTexture2D();
         GlStateManager.bindTexture(0);
         GlStateManager.setActiveTexture(activeTextureUnit);
+
+        EFFECT_SHADER_1.use();
+        GL11.glViewport(0, 0, LOW_EFFECT_FBO.width, LOW_EFFECT_FBO.height);
+        LOW_EFFECT_FBO.renderFboQuad();
+        EFFECT_SHADER_1.release();
     }
 }
