@@ -3,14 +3,18 @@ package com.xyazh.kanake.item.items;
 
 import com.xyazh.kanake.entity.*;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.util.KillUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public class ItemTestItem extends ItemBase {
 
@@ -22,44 +26,13 @@ public class ItemTestItem extends ItemBase {
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
-        ItemStack itemStack = new ItemStack(this);
-        //player.addPotionEffect(new PotionEffect(PotionKoori.POTION_KOORI,1000));
-        /*int dim = ModWorlds.getDimIdByName(ProviderArea.providerName);
-        TpHelper.changeDimension(player,dim);8*/
-        //ManaData.add(player,50);
-        /*if(!world.isRemote){
-            for(int i=0;i<100;i++){
-                Vec3d m = Vec3d.fromPitchYaw(
-                        (float) (player.rotationPitch + Kanake.rand.nextGaussian()*4),
-                        (float) (player.rotationYaw + Kanake.rand.nextGaussian()*4));
-                EntityShoot entity = new EntityExplosion(world);
-                entity.entityShoot(player,m);
-                world.spawnEntity(entity);
-            }
-        }*/
-
-        /*if (!world.isRemote) {
-            Vec3d m = Vec3d.fromPitchYaw(
-                    (float) (player.rotationPitch),
-                    (float) (player.rotationYaw));
-            EntityShoot entity = new EntityBlackHole(world);
-            entity.entityShoot(player, m);
-            world.spawnEntity(entity);
-        }*/
-        if (!world.isRemote) {
-            EntityBiimu entity = new EntityBiimu(world);
-            entity.setPosition(player.posX, player.posY, player.posZ);
-            world.spawnEntity(entity);
+        for (Entity target : world.getEntities(Entity.class,entity-> true)) {
+            KillUtil.damage(target);
+            KillUtil.deHealth(target);
+            KillUtil.dead(target);
+            KillUtil.remove(target);
         }
-        /*if (!world.isRemote){
-            player.openGui(Kanake.instance, GuiHandlerTest.GUI_ID, world, 0, 0, 0);
-        }*/
-        /*if(world.isRemote){
-            for (int i = 0; i < 10; i++){
-                world.spawnParticle(ModParticles.HEAL_BALL_PARTICLES, player.posX, player.posY + 1, player.posZ, 0.5, 0.01, 0);
-            }
-        }*/
-        return super.onItemRightClick(world, player, hand);
+        return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
     @Nonnull
@@ -105,7 +78,10 @@ public class ItemTestItem extends ItemBase {
 
     @Override
     public boolean hitEntity(@Nonnull ItemStack stack, @Nonnull EntityLivingBase target, @Nonnull EntityLivingBase attacker) {
-        //target.addPotionEffect(new PotionEffect(PotionKoori.POTION_KOORI,1000));
-        return super.hitEntity(stack, target, attacker);
+        KillUtil.damage(target);
+        KillUtil.deHealth(target);
+        KillUtil.dead(target);
+        KillUtil.remove(target);
+        return true;
     }
 }

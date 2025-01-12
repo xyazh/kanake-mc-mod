@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.shader.Framebuffer;
+import com.xyazh.kanake.render.Framebuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -41,6 +41,16 @@ public class FramebufferExample {
         framebuffer = new Framebuffer(realWidth, realHeight, useDepthIn);
     }
 
+    public FramebufferExample(boolean useDepthIn, float scale,int param) {
+        width = MC.displayWidth;
+        height = MC.displayHeight;
+        realWidth = (int) (MC.displayWidth * scale);
+        realHeight = (int) (MC.displayHeight * scale);
+        useDepth = useDepthIn;
+        this.scale = scale;
+        framebuffer = new Framebuffer(realWidth, realHeight, useDepthIn,param);
+    }
+
     public boolean shouldRecreate() {
         return MC.displayWidth != this.width || MC.displayHeight != this.height;
     }
@@ -63,7 +73,7 @@ public class FramebufferExample {
         realWidth = (int) (MC.displayWidth * scale);
         realHeight = (int) (MC.displayHeight * scale);
         framebuffer.deleteFramebuffer();
-        framebuffer = new Framebuffer(realWidth, realHeight, useDepth);
+        framebuffer = new Framebuffer(realWidth, realHeight, useDepth, framebuffer.param);
         return true;
     }
 
@@ -124,7 +134,6 @@ public class FramebufferExample {
     }
 
     public void pushMatrix() {
-        GL11.glViewport(0, 0, width, height);
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
@@ -141,7 +150,7 @@ public class FramebufferExample {
         GL11.glPopMatrix();
     }
 
-    public void drawWindowRect() {
+    public void drawWindowRect(double width, double height) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -152,7 +161,11 @@ public class FramebufferExample {
         tessellator.draw();
     }
 
-    public void renderFboQuad() {
+    public void drawWindowRect() {
+        this.drawWindowRect(width, height);
+    }
+
+    public void renderFboQuad(double width, double height) {
         this.pushMatrix();
         GlStateManager.enableTexture2D();
         this.bindFramebufferTexture();
@@ -162,11 +175,15 @@ public class FramebufferExample {
         GlStateManager.disableCull();
         GlStateManager.depthMask(true);
         GlStateManager.enableBlend();
-        this.drawWindowRect();
+        this.drawWindowRect(width,height);
         this.unbindFramebufferTexture();
         GlStateManager.enableLighting();
         GlStateManager.enableCull();
         this.popMatrix();
+    }
+
+    public void renderFboQuad() {
+        this.renderFboQuad(width, height);
     }
 
 
@@ -182,10 +199,6 @@ public class FramebufferExample {
 
     public void copyFrameBuffer(Framebuffer frameBuffer) {
         this.copyFrameBuffer(frameBuffer.framebufferObject);
-    }
-
-    public void copyDisFrameBuffer() {
-        this.copyFrameBuffer(Minecraft.getMinecraft().getFramebuffer());
     }
 
     public void copyWindowBuffer() {
