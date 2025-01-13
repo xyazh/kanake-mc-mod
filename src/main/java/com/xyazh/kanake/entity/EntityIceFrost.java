@@ -2,6 +2,8 @@ package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.block.ModBlocks;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.*;
 import com.xyazh.kanake.potion.buff.PotionKoori;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -38,8 +40,8 @@ public class EntityIceFrost extends EntityShoot {
         super.onUpdate();
         if (world.isRemote) {
             for (int i = 0; i <= 10; i++) {
-                this.world.spawnParticle(ModParticles.ICE_PARTICLES, posX, posY, posZ, 0, 0, 0);
-                this.world.spawnParticle(ModParticles.ICE_PARTICLES1, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle1 = new MagicParticle(world, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle2 = new MagicParticle1(world, posX, posY, posZ, 0, 0, 0);
             }
         }
         if(this.inWater){
@@ -81,7 +83,7 @@ public class EntityIceFrost extends EntityShoot {
     protected void setDeadParticle(){
         if (world.isRemote) {
             for (int i = 0; i <= 100; i++) {
-                this.world.spawnParticle(ModParticles.TEST_PARTICLES1, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle = new TestParticle1(world, posX, posY, posZ, 0, 0, 0);
             }
         }
     }

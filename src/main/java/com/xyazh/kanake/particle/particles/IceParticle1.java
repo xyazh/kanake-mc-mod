@@ -59,6 +59,8 @@ public class IceParticle1 extends BaseParticle {
         this.move(this.motionX, this.motionY, this.motionZ);
     }
 
+
+
     @Override
     public int getBrightnessForRender(float partialTicks) {
         // 返回一个常数值，以禁用光照计算

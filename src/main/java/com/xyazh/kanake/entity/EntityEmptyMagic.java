@@ -6,6 +6,8 @@ import com.xyazh.kanake.magic.Magic;
 import com.xyazh.kanake.magic.command.*;
 import com.xyazh.kanake.network.EntityDataPacket;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.*;
 import com.xyazh.kanake.potion.buff.PotionKoori;
 import com.xyazh.kanake.util.TagUtil;
 import com.xyazh.kanake.util.Vec3d;
@@ -285,20 +287,17 @@ public class EntityEmptyMagic extends EntityShoot {
             return;
         }
         if (this.world.isRemote) {
-            EnumParticleTypes particle1, particle2;
-            if (this.temperature <= -50) {
-                particle1 = ModParticles.ICE_PARTICLES;
-                particle2 = ModParticles.ICE_PARTICLES1;
-            } else if (this.temperature < 50) {
-                particle1 = ModParticles.MAGIC_PARTICLES;
-                particle2 = ModParticles.MAGIC_PARTICLES1;
-            } else {
-                particle1 = ModParticles.SPARK_PARTICLES;
-                particle2 = ModParticles.SPARK_PARTICLES1;
-            }
             for (int i = 0; i < 10; i++) {
-                this.world.spawnParticle(particle1, posX, posY, posZ, 0, 0, 0);
-                this.world.spawnParticle(particle2, posX, posY, posZ, 0, 0, 0);
+                if (this.temperature <= -50) {
+                    SimpleParticle particle1 = new IceParticle(world, posX, posY, posZ, 0, 0, 0);
+                    SimpleParticle particle2 = new IceParticle1(world, posX, posY, posZ, 0, 0, 0);
+                } else if (this.temperature < 50) {
+                    SimpleParticle particle1 = new MagicParticle(world, posX, posY, posZ, 0, 0, 0);
+                    SimpleParticle particle2 = new MagicParticle1(world, posX, posY, posZ, 0, 0, 0);
+                } else {
+                    SimpleParticle particle1 = new SparkParticle(world, posX, posY, posZ, 0, 0, 0);
+                    SimpleParticle particle2 = new SparkParticle1(world, posX, posY, posZ, 0, 0, 0);
+                }
             }
         }
     }
@@ -308,16 +307,14 @@ public class EntityEmptyMagic extends EntityShoot {
             return;
         }
         if (this.world.isRemote) {
-            EnumParticleTypes particle;
-            if (this.temperature <= -50) {
-                particle = ModParticles.TEST_PARTICLES1;
-            } else if (this.temperature < 50) {
-                particle = ModParticles.TEST_PARTICLES2;
-            } else {
-                particle = ModParticles.TEST_PARTICLES;
-            }
             for (int i = 0; i <= 200; i++) {
-                this.world.spawnParticle(particle, posX, posY, posZ, 0, 0, 0);
+                if (this.temperature <= -50) {
+                    SimpleParticle particle = new TestParticle1(this.world, posX, posY, posZ, 0, 0, 0);
+                } else if (this.temperature < 50) {
+                    SimpleParticle particle = new TestParticle2(this.world, posX, posY, posZ, 0, 0, 0);
+                } else {
+                    SimpleParticle particle = new TestParticle(this.world, posX, posY, posZ, 0, 0, 0);
+                }
             }
         }
     }

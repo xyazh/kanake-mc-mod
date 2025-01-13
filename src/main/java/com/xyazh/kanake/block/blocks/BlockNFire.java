@@ -2,6 +2,9 @@ package com.xyazh.kanake.block.blocks;
 
 import com.xyazh.kanake.block.ModBlocks;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.TestParticle;
+import com.xyazh.kanake.particle.simple.particles.WanaParticle;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -43,7 +46,7 @@ public class BlockNFire extends Block {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand){
         for(int i=0;i<10;i++){
-            worldIn.spawnParticle(ModParticles.WANA_PARTICLES,pos.getX()+rand.nextFloat(),pos.getY(),pos.getZ()+rand.nextFloat(),0,0,0);
+            SimpleParticle particle = new WanaParticle(worldIn, pos.getX()+rand.nextFloat(),pos.getY(),pos.getZ()+rand.nextFloat(),0,0,0);
         }
     }
 
@@ -68,7 +71,7 @@ public class BlockNFire extends Block {
         worldIn.setBlockState(pos, Blocks.FIRE.getDefaultState(), 11);
         if (worldIn.isRemote) {
             for(int i = 0;i<300;i++){
-                worldIn.spawnParticle(ModParticles.TEST_PARTICLES,pos.getX()+0.5,pos.getY(),pos.getZ()+0.5,0,0,0);
+                SimpleParticle particle = new TestParticle(worldIn, pos.getX()+0.5,pos.getY(),pos.getZ()+0.5,0,0,0);
             }
         }
     }

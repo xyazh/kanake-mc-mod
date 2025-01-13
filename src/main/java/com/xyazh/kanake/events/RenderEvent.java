@@ -4,8 +4,12 @@ package com.xyazh.kanake.events;
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
 import com.xyazh.kanake.render.FramebufferExample;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,18 +19,22 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
+import javax.swing.text.html.parser.Entity;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 @Mod.EventBusSubscriber(modid = Kanake.MODID)
 @SideOnly(Side.CLIENT)
 public class RenderEvent {
     public static final ArrayList<Runnable> POST_RENDER_TASKS = new ArrayList<>();
-    public static final ArrayList<Runnable> POST_RENDER_PARTICLE_TASKS = new ArrayList<>();
+    public static final ArrayDeque<SimpleParticle> PARTICLES = new ArrayDeque<>();
     public static FramebufferExample SCREEN_FBO = null;
     public static FramebufferExample EFFECT_FBO = null;
     public static FramebufferExample LIGHT_FBO = null;
@@ -34,7 +42,7 @@ public class RenderEvent {
     public static Shader EFFECT_SHADER = null;
     public static Shader WINDOW_SHADER = null;
     public static Shader PONG_SHADER = null;
-    private static BufferBuilder BUFFER = null;
+    public static Minecraft MC = null;
 
     @SubscribeEvent
     public static void onRenderInit(TextureStitchEvent.Post event) {
@@ -45,35 +53,64 @@ public class RenderEvent {
         EFFECT_SHADER = ShaderManager.loadVMWShader("effect");
         WINDOW_SHADER = ShaderManager.loadVMWShader("window");
         PONG_SHADER = ShaderManager.loadVMWShader("pong");
+        MC = Minecraft.getMinecraft();
     }
 
-    public static BufferBuilder getBuffer() {
-        if (BUFFER == null) {
-            throw new RuntimeException("Get buffer is early");
+    @SubscribeEvent
+    public static void onTickWorld(TickEvent.ClientTickEvent event){
+        if (event.phase != TickEvent.Phase.END)
+        {
+            return;
         }
-        return BUFFER;
-    }
-
-    public static void renderParticles(boolean clear) {
-        Tessellator tessellator = Tessellator.getInstance();
-        BUFFER = tessellator.getBuffer();
-        BUFFER.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-        for (Runnable task : POST_RENDER_PARTICLE_TASKS) {
+        if (MC.isGamePaused())
+        {
+            return;
+        }
+        if (PARTICLES.isEmpty())
+        {
+            return;
+        }
+        Iterator<SimpleParticle> iterator = PARTICLES.iterator();
+        while (iterator.hasNext())
+        {
+            SimpleParticle particle = iterator.next();
             try {
-                task.run();
-            } catch (Exception e) {
-                Kanake.logger.error("Error in post render task: " + task.toString());
-                e.printStackTrace();
+                particle.onUpdate();
+            }catch (Exception e){
+                iterator.remove();
+            }
+            if (!particle.isAlive())
+            {
+                iterator.remove();
             }
         }
-        if (clear){
-            POST_RENDER_PARTICLE_TASKS.clear();
-        }
-        tessellator.draw();
     }
 
-    public static void addPostRenderParticleTask(Runnable task) {
-        POST_RENDER_PARTICLE_TASKS.add(task);
+    public static void renderParticles(float partialTicks) {
+        float f = ActiveRenderInfo.getRotationX();
+        float f1 = ActiveRenderInfo.getRotationZ();
+        float f2 = ActiveRenderInfo.getRotationYZ();
+        float f3 = ActiveRenderInfo.getRotationXY();
+        float f4 = ActiveRenderInfo.getRotationXZ();
+        EntityPlayerSP entityIn = Minecraft.getMinecraft().player;
+        SimpleParticle.interpPosX = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double)partialTicks;
+        SimpleParticle.interpPosY = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double)partialTicks;
+        SimpleParticle.interpPosZ = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double)partialTicks;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        for (SimpleParticle particle : PARTICLES){
+            particle.renderParticle(buffer, entityIn, partialTicks,  f, f4, f1, f2, f3);
+        }
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.alphaFunc(516, 0.003921569F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        tessellator.draw();
+        GlStateManager.enableLighting();
+        GlStateManager.enableTexture2D();
     }
 
     public static void addPostRenderTask(Runnable task) {
@@ -111,12 +148,12 @@ public class RenderEvent {
 
         //获取屏幕帧缓冲，绑定到纹理单元0
         RenderEvent.foreachPostRenderTask(false);
-        RenderEvent.renderParticles(false);
+        RenderEvent.renderParticles( event.getPartialTicks());
         SCREEN_FBO.copyBindBuffer();
         //再渲染到单独帧缓冲，用于求取单独能看见的光源
         EFFECT_FBO.renderToFramebufferStart();
         RenderEvent.foreachPostRenderTask(true);
-        RenderEvent.renderParticles(true);
+        RenderEvent.renderParticles(event.getPartialTicks());
         EFFECT_FBO.renderToFramebufferEnd();
 
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);

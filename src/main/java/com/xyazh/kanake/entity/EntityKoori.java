@@ -1,6 +1,10 @@
 package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.IceParticle;
+import com.xyazh.kanake.particle.simple.particles.IceParticle1;
+import com.xyazh.kanake.particle.simple.particles.TestParticle1;
 import com.xyazh.kanake.potion.buff.PotionKoori;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,8 +34,8 @@ public class EntityKoori extends EntityShoot{
         super.onUpdate();
         if (world.isRemote) {
             for (int i = 0; i <= 10; i++) {
-                this.world.spawnParticle(ModParticles.ICE_PARTICLES, posX, posY, posZ, 0, 0, 0);
-                this.world.spawnParticle(ModParticles.ICE_PARTICLES1, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle1 = new IceParticle(world, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle2 = new IceParticle1(world, posX, posY, posZ, 0, 0, 0);
             }
         }
         if(this.inWater){
@@ -72,7 +76,7 @@ public class EntityKoori extends EntityShoot{
     protected void setDeadParticle(){
         if (world.isRemote) {
             for (int i = 0; i <= 100; i++) {
-                this.world.spawnParticle(ModParticles.TEST_PARTICLES1, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle = new TestParticle1(world, posX, posY, posZ, 0, 0, 0);
             }
         }
     }

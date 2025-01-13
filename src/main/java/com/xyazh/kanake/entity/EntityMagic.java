@@ -2,6 +2,10 @@ package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.MagicParticle;
+import com.xyazh.kanake.particle.simple.particles.MagicParticle1;
+import com.xyazh.kanake.particle.simple.particles.TestParticle2;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -33,8 +37,8 @@ public class EntityMagic extends EntityShoot{
         }
         if (world.isRemote) {
             for (int i = 0; i <= 10; i++) {
-                this.world.spawnParticle(ModParticles.MAGIC_PARTICLES, posX, posY, posZ, 0, 0, 0);
-                this.world.spawnParticle(ModParticles.MAGIC_PARTICLES1, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle1 = new MagicParticle(world, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle2 = new MagicParticle1(world, posX, posY, posZ, 0, 0, 0);
             }
         }
         if(this.onHurt()){
@@ -50,7 +54,7 @@ public class EntityMagic extends EntityShoot{
     protected void setDeadParticle(){
         if (world.isRemote) {
             for (int i = 0; i <= 100; i++) {
-                this.world.spawnParticle(ModParticles.TEST_PARTICLES2, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle = new TestParticle2(world, posX, posY, posZ, 0, 0, 0);
             }
         }
     }

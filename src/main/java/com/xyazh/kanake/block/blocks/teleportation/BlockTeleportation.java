@@ -52,7 +52,7 @@ public class BlockTeleportation extends BlockBase implements ITileEntityProvider
             fx = r * Math.cos(phi);
             fy = rand.nextFloat()/2;
             fz = r * Math.sin(phi);
-            worldIn.spawnParticle(ModParticles.TP_PARTICLES1, pos.getX() + fx + 0.5, pos.getY() + fy, pos.getZ() + fz + 0.5, 0, 0, 0);
+            com.xyazh.kanake.particle.simple.SimpleParticle particle = new com.xyazh.kanake.particle.simple.particles.TpParticle1(worldIn,pos.getX() + fx + 0.5, pos.getY() + fy, pos.getZ() + fz + 0.5, 0, 0.05, 0);
         }
     }
 

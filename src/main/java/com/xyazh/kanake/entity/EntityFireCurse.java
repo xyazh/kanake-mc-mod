@@ -2,6 +2,10 @@ package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.block.ModBlocks;
 import com.xyazh.kanake.particle.ModParticles;
+import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.SparkParticle;
+import com.xyazh.kanake.particle.simple.particles.SparkParticle1;
+import com.xyazh.kanake.particle.simple.particles.TestParticle;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -36,8 +40,8 @@ public class EntityFireCurse extends EntityShoot{
         super.onUpdate();
         if (world.isRemote) {
             for (int i = 0; i <= 10; i++) {
-                this.world.spawnParticle(ModParticles.SPARK_PARTICLES, posX, posY, posZ, 0, 0, 0);
-                this.world.spawnParticle(ModParticles.SPARK_PARTICLES1, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle1 = new SparkParticle(world, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle2 = new SparkParticle1(world, posX, posY, posZ, 0, 0, 0);
             }
         }
         if(this.inWater){
@@ -87,7 +91,7 @@ public class EntityFireCurse extends EntityShoot{
     protected void setDeadParticle(){
         if (world.isRemote) {
             for (int i = 0; i <= 100; i++) {
-                this.world.spawnParticle(ModParticles.TEST_PARTICLES, posX, posY, posZ, 0, 0, 0);
+                SimpleParticle particle = new TestParticle(world, posX, posY, posZ, 0, 0, 0);
             }
         }
     }
