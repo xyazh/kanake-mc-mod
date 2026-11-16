@@ -4,6 +4,7 @@ import com.xyazh.kanake.block.blocks.*;
 import com.xyazh.kanake.block.blocks.clean.BlockClean;
 import com.xyazh.kanake.block.blocks.crystaler.BlockCrystaler;
 import com.xyazh.kanake.block.blocks.crystaler.TileCrystaler;
+import com.xyazh.kanake.block.blocks.glyphfuser.BlockGlyphFuser;
 import com.xyazh.kanake.block.blocks.manastorage.BlockInfManaStorage;
 import com.xyazh.kanake.block.blocks.manastorage.BlockManaStorage;
 import com.xyazh.kanake.block.blocks.manastove.BlockManaStove;
@@ -60,6 +61,9 @@ public class ModBlocks {
 			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
 	public static final Block MANA_STOVE = new BlockManaStove("mana_stove", Material.ROCK)
+			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+
+	public static final Block GLYPH_FUSER = new BlockGlyphFuser("glyph_fuser", Material.ROCK)
 			.setCreativeTab(ModCreativeTab.KNK_CREATIVE);
 
 	public static final Block PURE_HANA = new BlockPureHana("pure_hana")

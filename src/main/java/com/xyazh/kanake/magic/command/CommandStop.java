@@ -14,6 +14,10 @@ public class CommandStop extends OrderCommand {
         if (entity instanceof EntityEmptyMagic) {
             EntityEmptyMagic emptyMagic = (EntityEmptyMagic) entity;
             emptyMagic.isStop = this.isStop;
+            if (this.isStop) {
+                emptyMagic.orbit = false;
+                emptyMagic.continuousManaCost = 0;
+            }
         }
     }
 }

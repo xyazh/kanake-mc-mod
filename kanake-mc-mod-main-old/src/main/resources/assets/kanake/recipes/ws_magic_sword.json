@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "|"
+  ],
+  "key": {
+    "#": {
+      "item": "kanake:ws_magic_ingot"
+    },
+    "|": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    }
+  },
+  "result": {
+    "item": "kanake:ws_magic_sword",
+    "count": 1
+  }
+}

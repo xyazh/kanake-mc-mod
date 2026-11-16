@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "L#L",
+    "LLL"
+  ],
+  "key": {
+    "#": {
+      "item": "kanake:compressed1x_quartz_block"
+    },
+    "L": {
+      "item": "minecraft:quartz_stairs",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "kanake:mono_frame",
+    "count": 1
+  }
+}

@@ -4,10 +4,12 @@ import com.xyazh.kanake.util.PerlinNoise2d;
 import com.xyazh.kanake.util.Vec3d;
 import com.xyazh.kanake.world.tree.BigTreeGenerateManager;
 import com.xyazh.kanake.world.tree.BigTreeGenerateTemplate;
+import com.xyazh.kanake.world.tree.Branches;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -72,12 +74,27 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
         return b % 2 == 0;
     }
 
+    // Equivalent to Objects.hash(x, y, z, seed) without allocating an Object[] or boxing.
     private int hashCombine(int x, int y, int z) {
-        return Objects.hash(x, y, z, this.seed);
+        long seed = this.seed;
+        int h = 1;
+        h = 31 * h + x;
+        h = 31 * h + y;
+        h = 31 * h + z;
+        h = 31 * h + (int) (seed ^ (seed >>> 32));
+        return h;
     }
 
+    // Equivalent to Objects.hash(x, y, z, offset, seed).
     private int hashCombine(int x, int y, int z, long offset) {
-        return Objects.hash(x, y, z, offset, this.seed);
+        long seed = this.seed;
+        int h = 1;
+        h = 31 * h + x;
+        h = 31 * h + y;
+        h = 31 * h + z;
+        h = 31 * h + (int) (offset ^ (offset >>> 32));
+        h = 31 * h + (int) (seed ^ (seed >>> 32));
+        return h;
     }
 
     protected boolean isKabe(int x, int y, int z) {
@@ -117,11 +134,16 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
 
     private boolean buildLayerBase(int x, int y, int z, ChunkPrimer primer) {
         boolean result = false;
+        // These two random values only depend on the chunk/level, so compute them once instead
+        // of re-seeding an RNG 256 times for every 16x16 layer.
+        this.updateRandom4(x, y, z);
+        boolean fillBottom = this.posRand4.nextDouble() >= 0.01;
+        this.updateRandom4(x, y + 16, z);
+        boolean fillTop = this.posRand4.nextDouble() >= 0.01;
         for (int i = 0; i < 16; i++) {
             for (int k = 0; k < 16; k++) {
                 IBlockState state = STONE_BRICK_1;
-                this.updateRandom4(x, y, z);
-                if (this.posRand4.nextDouble() >= 0.01) {
+                if (fillBottom) {
                     this.updateRandom3(x + i, y, z + k);
                     if (this.posRand3.nextDouble() < 0.05) {
                         state = STONE_BRICK_2;
@@ -130,8 +152,7 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
                     }
                     primer.setBlockState(i, y, k, state);
                 }
-                this.updateRandom4(x, y + 16, z);
-                if (this.posRand4.nextDouble() >= 0.01) {
+                if (fillTop) {
                     this.updateRandom3(x + i, y + 15, z + k);
                     if (this.posRand3.nextDouble() < 0.05) {
                         state = STONE_BRICK_2;
@@ -176,6 +197,7 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
     private boolean buildMaze(int x, int z, int layer, ChunkPrimer primer) {
         boolean result = false;
         for (int l = 0; l < layer; l++) {
+            // Intentional: the returned value describes the top-most layer only.
             result = this.buildLayer(x, l, z, primer);
         }
         return result;
@@ -189,7 +211,8 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
             for (int k = 0; k < 16; k++) {
                 double height = 24 + this.perlinNoise2d1.noise(posX + i, posZ + k) + this.perlinNoise2d2.noise(posX + i, posZ + k);
                 if (height > 0) {
-                    for (int j = y; j <= y + height; j++) {
+                    int maxY = Math.min(255, (int) (y + height));
+                    for (int j = y; j <= maxY; j++) {
                         primer.setBlockState(i, j, k, STONE);
                     }
                 }
@@ -198,25 +221,71 @@ public class ChunkGeneratorMaze implements IChunkGenerator {
 
     }
 
-    private void buildTreeCell(int x, int y, int z, ChunkPrimer primer, int m, int n, Collection<BigTreeGenerateTemplate> trees) {
-        for (BigTreeGenerateTemplate tree : trees) {
-            if (tree.contain(x,y,z)) {
-                primer.setBlockState(m, y + 1, n, STONE);
-            }
-        }
-    }
-
     private void buildTree(int x, int z, ChunkPrimer primer) {
         Collection<BigTreeGenerateTemplate> trees = this.bigTreeGenerateManager.getTrees(x, z, 0);
-        if (trees.size() <= 0) {
+        if (trees.isEmpty()) {
             return;
         }
         int posX = x << 4;
         int posZ = z << 4;
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 256; j++) {
-                for (int k = 0; k < 16; k++) {
-                    this.buildTreeCell(posX + i, j, posZ + k, primer, i, k, trees);
+        ChunkPos chunkPos = new ChunkPos(x, z);
+        for (BigTreeGenerateTemplate tree : trees) {
+            HashSet<Branches> branches = tree.chunks.get(chunkPos);
+            if (branches == null || branches.isEmpty()) {
+                continue;
+            }
+            // Only scan the bounding box of each branch instead of all 16x16x256 blocks
+            // for every tree that reaches this chunk.
+            for (Branches branch : branches) {
+                int minX = Math.max(0, (int) Math.floor(branch.getMinX() - branch.radius) - posX);
+                int maxX = Math.min(15, (int) Math.ceil(branch.getMaxX() + branch.radius) - posX);
+                int minZ = Math.max(0, (int) Math.floor(branch.getMinZ() - branch.radius) - posZ);
+                int maxZ = Math.min(15, (int) Math.ceil(branch.getMaxZ() + branch.radius) - posZ);
+                int minY = Math.max(0, (int) Math.floor(branch.getMinY() - branch.radius));
+                int maxY = Math.min(254, (int) Math.ceil(branch.getMaxY() + branch.radius));
+                for (int bx = minX; bx <= maxX; bx++) {
+                    for (int bz = minZ; bz <= maxZ; bz++) {
+                        for (int by = minY; by <= maxY; by++) {
+                            if (branch.contain(posX + bx, by, posZ + bz)) {
+                                // by <= 254 guarantees by + 1 <= 255 (ChunkPrimer height limit).
+                                primer.setBlockState(bx, by + 1, bz, STONE);
+                            }
+                        }
+                    }
+                }
+                if (branch.leaf) {
+                    this.addLeaves(branch, posX, posZ, primer);
+                }
+            }
+        }
+    }
+
+    /**
+     * Grow a ball of leaves around the tip of a branch. Stone is used as a placeholder
+     * until a dedicated leaves block is added.
+     */
+    private void addLeaves(Branches branch, int posX, int posZ, ChunkPrimer primer) {
+        double leafRadius = 2.5D + branch.radius * 1.5D;
+        double radiusSq = leafRadius * leafRadius;
+        double centerX = branch.endPos.x;
+        double centerY = branch.endPos.y;
+        double centerZ = branch.endPos.z;
+        int limit = (int) Math.ceil(leafRadius);
+        int minX = Math.max(posX, (int) Math.floor(centerX) - limit);
+        int maxX = Math.min(posX + 15, (int) Math.floor(centerX) + limit);
+        int minZ = Math.max(posZ, (int) Math.floor(centerZ) - limit);
+        int maxZ = Math.min(posZ + 15, (int) Math.floor(centerZ) + limit);
+        int minY = Math.max(0, (int) Math.floor(centerY) - limit);
+        int maxY = Math.min(254, (int) Math.floor(centerY) + limit);
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                for (int y = minY; y <= maxY; y++) {
+                    double dx = x - centerX;
+                    double dy = y - centerY;
+                    double dz = z - centerZ;
+                    if (dx * dx + dy * dy + dz * dz <= radiusSq) {
+                        primer.setBlockState(x - posX, y + 1, z - posZ, STONE);
+                    }
                 }
             }
         }

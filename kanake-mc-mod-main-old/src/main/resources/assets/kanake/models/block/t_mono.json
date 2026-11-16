@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "kanake:blocks/quartz_block_lines",
+    "down": "kanake:blocks/quartz_block_lines_top",
+    "up": "kanake:blocks/quartz_block_lines_top",
+    "north": "kanake:blocks/quartz_block_lines",
+    "south": "kanake:blocks/quartz_block_lines",
+    "west": "kanake:blocks/quartz_block_lines",
+    "east": "kanake:blocks/quartz_block_lines"
+  }
+}

@@ -7,48 +7,18 @@ import java.util.HashMap;
 public class Magic {
     public static final HashMap<Integer, Command> ORDER_MAP = new HashMap<>();
     
-    //在原地生成一个魔法球体，并复制指令
-    public static final Command SPAWN = new CommandSpawn(0,false,true);
-    //增加一个方向为发射者朝向的小速度
-    public static final Command SPEED_LOW = new CommandSpeed(1,true,0.5);
-    //增加一个方向为发射者朝向的中速度
-    public static final Command SPEED_MEDIUM = new CommandSpeed(2,true,1.0);
-    //增加一个方向为发射者朝向的大速度
-    public static final Command SPEED_HIGH = new CommandSpeed(3,true,2.0);
     //增加一个方向随机的小速度
     public static final Command RANDOM_SPEED_LOW = new CommandRandomSpeed(4,false,0.5);
     //增加一个方向随机的中速度
     public static final Command RANDOM_SPEED_MEDIUM = new CommandRandomSpeed(5,false,1.0);
     //增加一个方向随机的大速度
     public static final Command RANDOM_SPEED_HIGH = new CommandRandomSpeed(6,false,2.0);
-    //停止执行指令20tick，1秒
-    public static final Command NOP_LOW = new CommandNop(7,false,20);
-    //停止执行指令80tick，4秒
-    public static final Command NOP_MEDIUM = new CommandNop(8,false,80);
-    //停止执行指令320tick，16秒
-    public static final Command NOP_HIGH = new CommandNop(9,false,320);
     //短时间内执行下面两条指令
     public static final Command CONCURRENT = new OrderCommand(10,false);
-    //产生小爆炸
-    public static final Command EXPLODE_SMALL = new CommandExplode(11,false,3);
-    //产生中爆炸
-    public static final Command EXPLODE_MEDIUM = new CommandExplode(12,false,5);
-    //产生大爆炸
-    public static final Command EXPLODE_BIG = new CommandExplode(13,false,8);
-    //使魔法小爆炸
-    public static final Command EXPLODE_SMALL_DEAD = new CommandExplodeDead(14,false,4);
-    //使魔法中爆炸
-    public static final Command EXPLODE_MEDIUM_DEAD = new CommandExplodeDead(15,false,5);
-    //使魔法大爆炸
-    public static final Command EXPLODE_BIG_DEAD = new CommandExplodeDead(16,false,9);
-    //结束魔法
-    public static final Command DEAD = new CommandDead(17,false);
     //使魔法温度升高
     public static final Command HEAT = new CommandTemperature(18,true,100);
     //使魔法温度降低
     public static final Command COOL = new CommandTemperature(19,true,-100);
-    //下一条指令在魔法结束时执行效果
-    public static final Command CALLBACK = new OrderCommand(20,false);
     //使魔法停止
     public static final Command STOP = new CommandStop(21,true,true);
     //切换魔法重力状态
@@ -73,12 +43,6 @@ public class Magic {
     public static final Command CLEAR = new OrderCommand(31,true);
     //使魔法反向速度
     public static final Command OPPOSITE_VELOCITY = new CommandOppositeVelocity(32,false);
-    //二连发
-    public static final Command SERIES_2 = new CommandSeries(33,false,1,true);
-    //三连发
-    public static final Command SERIES_3 = new CommandSeries(34,false,2,true);
-    //五连发
-    public static final Command SERIES_5 = new CommandSeries(35,false,4,true);
     //骑乘
     public static final Command RIDE = new CommandRide(36,false);
     //增加重力
@@ -97,6 +61,42 @@ public class Magic {
     public static final Command LOOK_AT_1 = new CommandLookAt(43, true,1);
     //觅踪锁定
     public static final Command LOOK_AT_2 = new CommandLookAt(44, true,2);
-    //魔法隐形
+    //魔法隐形（XX1 决定隐身是否继承）
     public static final Command HIDDEN = new CommandHidden(45,true);
+    //远距离施放
+    public static final Command REMOTE_CAST = new CommandReleaseCast(46,true,CommandReleaseCast.Mode.REMOTE);
+    //发射施放
+    public static final Command LAUNCH_CAST = new CommandReleaseCast(47,true,CommandReleaseCast.Mode.LAUNCH);
+    //原位施放
+    public static final Command PLACE_CAST = new CommandReleaseCast(48,true,CommandReleaseCast.Mode.PLACE);
+    //向下施放
+    public static final Command DOWN_CAST = new CommandReleaseCast(49,true,CommandReleaseCast.Mode.DOWN);
+    //向上飞行
+    public static final Command FLY_UP = new CommandFly(50,true,CommandFly.Mode.UP);
+    //平面环绕
+    public static final Command ORBIT = new CommandOrbit(51,true);
+    //发射（运动）
+    public static final Command LAUNCH_MOVE = new CommandFly(52,true,CommandFly.Mode.LAUNCH);
+    //向下飞行
+    public static final Command FLY_DOWN = new CommandFly(53,true,CommandFly.Mode.DOWN);
+    //延迟施法
+    public static final Command DELAY_CAST = new CommandDelayCast(54,false);
+    //多次执行
+    public static final Command MULTI_CAST = new CommandMultiCast(55,false);
+    //颜色闪光
+    public static final Command COLOR_FLASH = new CommandColorFlash(56,true);
+    //不继承
+    public static final Command NO_INHERIT = new CommandNoInherit(57,false);
+    //终止
+    public static final Command TERMINATE = new CommandTerminate(58,true);
+    //终结
+    public static final Command FINAL = new CommandFinal(59,true);
+    //死亡十字
+    public static final Command DEATH_CROSS = new CommandDeathCross(60,true);
+    //爆炸
+    public static final Command EXPLODE_MAGIC = new CommandExplodeMagic(61,true);
+    //多次爆炸
+    public static final Command MULTI_EXPLODE = new CommandMultiExplode(62,true);
+    //点火
+    public static final Command IGNITE = new CommandIgnite(63,true);
 }

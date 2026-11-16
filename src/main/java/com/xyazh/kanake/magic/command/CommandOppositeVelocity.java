@@ -15,6 +15,7 @@ public class CommandOppositeVelocity extends OrderCommand {
             Vec3d speed = emptyMagic.getSpeed();
             speed.mul(-1);
             emptyMagic.setSpeed(speed);
+            emptyMagic.continuousManaCost = 0.5;
             emptyMagic.shouldSyncSpeed = true;
         }
     }

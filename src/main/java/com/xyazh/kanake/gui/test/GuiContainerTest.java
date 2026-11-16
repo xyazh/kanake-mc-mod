@@ -57,10 +57,27 @@ public class GuiContainerTest extends GuiContainer {
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
         this.drawTexturedModalRect(bufferbuilder, offsetX, offsetY, 0, 0, this.xSize, this.ySize);
         tessellator.draw();
+
+        this.drawRect(offsetX + 4, offsetY + 128, offsetX + 172, offsetY + 252, 0xFF202020);
+        this.drawSlots(offsetX, offsetY, 2, 136);
+        this.drawSlots(offsetX, offsetY, 3, 178);
+        this.drawSlots(offsetX, offsetY, 1, 238);
+    }
+
+    private void drawSlots(int offsetX, int offsetY, int rows, int startY) {
+        for (int j = 0; j < rows; ++j) {
+            for (int k = 0; k < 9; ++k) {
+                int x = offsetX + 7 + k * 18;
+                int y = offsetY + startY - 1 + j * 18;
+                this.drawRect(x, y, x + 18, y + 18, 0xFF373737);
+                this.drawRect(x + 1, y + 1, x + 17, y + 17, 0xFF8B8B8B);
+            }
+        }
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         this.fontRenderer.drawString(I18n.format("gui.empty_magic_rune.title.1"), 8, 6, 4210752);
+        this.fontRenderer.drawString(I18n.format("gui.empty_magic_rune.title.finish"), 8, 129, 0xFFAA55);
     }
 }

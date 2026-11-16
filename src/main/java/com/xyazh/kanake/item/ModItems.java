@@ -10,6 +10,7 @@ import com.xyazh.kanake.item.hoe.ItemHarmoniumCrystalHoe;
 import com.xyazh.kanake.item.items.*;
 import com.xyazh.kanake.item.pickaxe.ItemHarmoniumCrystalPickaxe;
 import com.xyazh.kanake.item.potion.ItemPotionMp;
+import com.xyazh.kanake.item.spade.ItemHarmoniumCrystalSpade;
 import com.xyazh.kanake.item.storage.ItemManaContainer;
 import com.xyazh.kanake.item.swords.ItemHarmoniumCrystalSword;
 import com.xyazh.kanake.item.wsitem.ItemWSMagicSword;
@@ -21,10 +22,17 @@ import com.xyazh.kanake.magic.command.CommandLookAt;
 import net.minecraft.item.Item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ModItems {
     public static final List<Item> ITEMS = new ArrayList<Item>();
+    public static final Map<Integer, ItemEmblem> EMBLEM_MAP = new HashMap<>();
+
+    public static ItemEmblem getEmblem(int commandId) {
+        return EMBLEM_MAP.get(commandId);
+    }
 
     public static final Item TEST_ITEM = new ItemTestItem("test").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     //public static final Item TEST_ITEM2 = new ItemTestItem2("test2").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
@@ -51,7 +59,7 @@ public class ModItems {
     public static final Item HARMONIUM_CRYSTAL_AXE = new ItemHarmoniumCrystalAxe("harmonium_crystal_axe").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_HOE = new ItemHarmoniumCrystalHoe("harmonium_crystal_hoe").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_PICKAXE = new ItemHarmoniumCrystalPickaxe("harmonium_crystal_pickaxe").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
-    public static final Item HARMONIUM_CRYSTAL_SHOVEL = new ItemHarmoniumCrystalSword("harmonium_crystal_shovel").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item HARMONIUM_CRYSTAL_SHOVEL = new ItemHarmoniumCrystalSpade("harmonium_crystal_shovel").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_SWORD = new ItemHarmoniumCrystalSword("harmonium_crystal_sword").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_FIRE = new ItemBase("harmonium_crystal_fire").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item HARMONIUM_CRYSTAL_ICE = new ItemBase("harmonium_crystal_ice").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
@@ -125,48 +133,17 @@ public class ModItems {
     public static final Item DUST_MAGIC= new ItemBase("dust_magic")
             .setOreDict(new String[]{"dustMagic"})
             .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
-
-    public static final ItemEmblem EMBLEM_SPAWN = new ItemEmblem(Magic.SPAWN.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_SPEED_LOW = new ItemEmblem(Magic.SPEED_LOW.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_SPEED_MEDIUM = new ItemEmblem(Magic.SPEED_MEDIUM.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_SPEED_HIGH = new ItemEmblem(Magic.SPEED_HIGH.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_RANDOM_SPEED_LOW = new ItemEmblem(Magic.RANDOM_SPEED_LOW.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_RANDOM_SPEED_MEDIUM = new ItemEmblem(Magic.RANDOM_SPEED_MEDIUM.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_RANDOM_SPEED_HIGH = new ItemEmblem(Magic.RANDOM_SPEED_HIGH.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_NOP_LOW = new ItemEmblem(Magic.NOP_LOW.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_NOP_MEDIUM = new ItemEmblem(Magic.NOP_MEDIUM.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_NOP_HIGH = new ItemEmblem(Magic.NOP_HIGH.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_CONCURRENT = new ItemEmblem(Magic.CONCURRENT.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_EXPLODE_SMALL = new ItemEmblem(Magic.EXPLODE_SMALL.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_EXPLODE_MEDIUM = new ItemEmblem(Magic.EXPLODE_MEDIUM.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_EXPLODE_BIG = new ItemEmblem(Magic.EXPLODE_BIG.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_EXPLODE_SMALL_DEAD = new ItemEmblem(Magic.EXPLODE_SMALL_DEAD.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_EXPLODE_MEDIUM_DEAD = new ItemEmblem(Magic.EXPLODE_MEDIUM_DEAD.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_EXPLODE_BIG_DEAD = new ItemEmblem(Magic.EXPLODE_BIG_DEAD.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_DEAD = new ItemEmblem(Magic.DEAD.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_HEAT = new ItemEmblem(Magic.HEAT.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_COOL = new ItemEmblem(Magic.COOL.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_CALLBACK = new ItemEmblem(Magic.CALLBACK.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_STOP = new ItemEmblem(Magic.STOP.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
@@ -192,12 +169,6 @@ public class ModItems {
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_OPPOSITE_VELOCITY = new ItemEmblem(Magic.OPPOSITE_VELOCITY.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_SERIES_2 = new ItemEmblem(Magic.SERIES_2.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_SERIES_3 = new ItemEmblem(Magic.SERIES_3.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
-    public static final ItemEmblem EMBLEM_SERIES_5 = new ItemEmblem(Magic.SERIES_5.order)
-            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_RIDE = new ItemEmblem(Magic.RIDE.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_ADD_GRAVITY = new ItemEmblem(Magic.ADD_GRAVITY.order)
@@ -215,5 +186,52 @@ public class ModItems {
     public static final ItemEmblem EMBLEM_LOOK_AT_1 = new ItemEmblem(Magic.LOOK_AT_1.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
     public static final ItemEmblem EMBLEM_LOOK_AT_2 = new ItemEmblem(Magic.LOOK_AT_2.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final Item MAGIC_CRYSTAL_1 = new ItemMagicCrystal("magic_crystal_1", ItemMagicCrystal.ENHANCE)
+            .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item MAGIC_CRYSTAL_2 = new ItemMagicCrystal("magic_crystal_2", ItemMagicCrystal.QUICKEN)
+            .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item MAGIC_CRYSTAL_3 = new ItemMagicCrystal("magic_crystal_3", ItemMagicCrystal.DELAY)
+            .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item MAGIC_CRYSTAL_4 = new ItemMagicCrystal("magic_crystal_4", ItemMagicCrystal.DIRECTION)
+            .setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+
+    public static final ItemEmblem EMBLEM_HIDDEN = new ItemEmblem(Magic.HIDDEN.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_REMOTE_CAST = new ItemEmblem(Magic.REMOTE_CAST.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_LAUNCH_CAST = new ItemEmblem(Magic.LAUNCH_CAST.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_PLACE_CAST = new ItemEmblem(Magic.PLACE_CAST.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_DOWN_CAST = new ItemEmblem(Magic.DOWN_CAST.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_FLY_UP = new ItemEmblem(Magic.FLY_UP.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_ORBIT = new ItemEmblem(Magic.ORBIT.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_LAUNCH_MOVE = new ItemEmblem(Magic.LAUNCH_MOVE.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_FLY_DOWN = new ItemEmblem(Magic.FLY_DOWN.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_DELAY_CAST = new ItemEmblem(Magic.DELAY_CAST.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_MULTI_CAST = new ItemEmblem(Magic.MULTI_CAST.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_COLOR_FLASH = new ItemEmblem(Magic.COLOR_FLASH.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_NO_INHERIT = new ItemEmblem(Magic.NO_INHERIT.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_TERMINATE = new ItemEmblem(Magic.TERMINATE.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_FINAL = new ItemEmblem(Magic.FINAL.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_DEATH_CROSS = new ItemEmblem(Magic.DEATH_CROSS.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_EXPLODE_MAGIC = new ItemEmblem(Magic.EXPLODE_MAGIC.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_MULTI_EXPLODE = new ItemEmblem(Magic.MULTI_EXPLODE.order)
+            .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
+    public static final ItemEmblem EMBLEM_IGNITE = new ItemEmblem(Magic.IGNITE.order)
             .setCreativeTab(ModCreativeTab.KNK_EMBLEM);
 }

@@ -26,8 +26,7 @@ public class ModCreativeTab {
         @SideOnly(Side.CLIENT)
         public ItemStack getTabIconItem()
         {
-            return new ItemStack(ModItems.EMBLEM_SPAWN);
+            return new ItemStack(ModItems.EMBLEM_REMOTE_CAST);
         }
     };
-
 }

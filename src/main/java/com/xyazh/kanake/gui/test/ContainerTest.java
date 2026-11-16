@@ -16,13 +16,13 @@ import java.util.Arrays;
 public class ContainerTest extends Container
 {
     public final RuneItemStackHandler magicInv;
+    public final RuneItemStackHandler finishInv;
 
     public ContainerTest(EntityPlayer player,ItemStack itemStack)
     {
-        int numRows = 6;
-        int i = (numRows - 4) * 18;
-        this.magicInv = new RuneItemStackHandler(itemStack);
-        for (int j = 0; j < numRows; ++j)
+        this.magicInv = new RuneItemStackHandler(itemStack, "rune_order", 54);
+        this.finishInv = new RuneItemStackHandler(itemStack, "rune_finish", 18);
+        for (int j = 0; j < 6; ++j)
         {
             for (int k = 0; k < 9; ++k)
             {
@@ -42,17 +42,37 @@ public class ContainerTest extends Container
             }
         }
 
+        for (int j = 0; j < 2; ++j)
+        {
+            for (int k = 0; k < 9; ++k)
+            {
+                this.addSlotToContainer(new SlotItemHandler(this.finishInv, k + j * 9, 8 + k * 18, 136 + j * 18){
+                    @Override
+                    public boolean isItemValid(@Nonnull ItemStack stack)
+                    {
+                        return true;
+                    }
+
+                    @Override
+                    public int getItemStackLimit(@Nonnull ItemStack stack)
+                    {
+                        return 1;
+                    }
+                });
+            }
+        }
+
         for (int l = 0; l < 3; ++l)
         {
             for (int j1 = 0; j1 < 9; ++j1)
             {
-                this.addSlotToContainer(new Slot(player.inventory, j1 + l * 9 + 9, 8 + j1 * 18, 104 + l * 18 + i));
+                this.addSlotToContainer(new Slot(player.inventory, j1 + l * 9 + 9, 8 + j1 * 18, 178 + l * 18));
             }
         }
 
         for (int i1 = 0; i1 < 9; ++i1)
         {
-            this.addSlotToContainer(new Slot(player.inventory, i1, 8 + i1 * 18, 162 + i));
+            this.addSlotToContainer(new Slot(player.inventory, i1, 8 + i1 * 18, 238));
         }
     }
 

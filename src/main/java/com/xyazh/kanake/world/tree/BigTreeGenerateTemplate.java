@@ -10,16 +10,34 @@ public class BigTreeGenerateTemplate {
     protected final Random rand;
     protected Vec3d rootPos;
     protected final long seed;
-    public HashMap<ChunkPos,HashSet<Branches>> chunks = new HashMap<>();
-    protected static final LinkedHashMap<Long, BigTreeGenerateTemplate> TEMPLATES = new LinkedHashMap<Long, BigTreeGenerateTemplate>() {
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<Long, BigTreeGenerateTemplate> eldest) {
-            return size() > 10;
-        }
-    };
+    public final HashMap<ChunkPos,HashSet<Branches>> chunks = new HashMap<>();
+    private static final int MAX_CACHED_TEMPLATES = 2048;
+    protected static final Map<Long, BigTreeGenerateTemplate> TEMPLATES = Collections.synchronizedMap(
+            new LinkedHashMap<Long, BigTreeGenerateTemplate>(1024, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<Long, BigTreeGenerateTemplate> eldest) {
+                    return size() > MAX_CACHED_TEMPLATES;
+                }
+            });
 
     public static BigTreeGenerateTemplate getTemplate(long seed, Vec3d rootPos,float pitch,float yaw) {
-        return TEMPLATES.computeIfAbsent(seed, k -> new BigTreeGenerateTemplate(seed, rootPos, pitch, yaw));
+        // The old cache used Objects.hash(...) (a 32-bit int) as the key, so different trees
+        // could collide and silently share one template. Use a 64-bit key instead.
+        long key = cacheKey(seed, rootPos);
+        BigTreeGenerateTemplate template = TEMPLATES.get(key);
+        if (template == null) {
+            template = new BigTreeGenerateTemplate(seed, rootPos, pitch, yaw);
+            TEMPLATES.put(key, template);
+        }
+        return template;
+    }
+
+    private static long cacheKey(long seed, Vec3d rootPos) {
+        long h = seed;
+        h = h * 0x9E3779B97F4A7C15L + Double.doubleToLongBits(rootPos.x);
+        h = h * 0x9E3779B97F4A7C15L + Double.doubleToLongBits(rootPos.y);
+        h = h * 0x9E3779B97F4A7C15L + Double.doubleToLongBits(rootPos.z);
+        return h;
     }
 
     public BigTreeGenerateTemplate(long seed, Vec3d rootPos,float pitch,float yaw) {
@@ -55,10 +73,26 @@ public class BigTreeGenerateTemplate {
         if (v0.y > 255) {
             return;
         }
+        // pitch below -90 would flip the branch and make it grow sideways/downwards.
+        pitch = Math.max(-90.0F, Math.min(90.0F, pitch));
+        radius = Math.min(radius, 8.0F);
+        length = Math.min(length, 128.0F);
         Vec3d v1 = Vec3d.fromPitchYaw(pitch, yaw);
         v1.mul(length);
         v1.add(v0);
-        Branches branches = new Branches(v0, v1, radius);
+        // Clip the branch at the world height limit instead of writing outside the chunk.
+        if (v1.y > 255.0D) {
+            double dy = v1.y - v0.y;
+            if (dy <= 0.0D) {
+                return;
+            }
+            double t = (255.0D - v0.y) / dy;
+            if (t <= 0.0D) {
+                return;
+            }
+            v1.set(v0.x + (v1.x - v0.x) * t, 255.0D, v0.z + (v1.z - v0.z) * t);
+        }
+        Branches branches = new Branches(v0, v1, radius, maxDepth <= 2);
         this.calculateChunksForBranch(branches);
         int count = this.rand.nextInt(2) + 2;
         for (int i = 0; i < count; i++) {
@@ -73,26 +107,32 @@ public class BigTreeGenerateTemplate {
     public void calculateChunksForBranch(Branches branch) {
         Vec3d start = branch.startPos;
         Vec3d end = branch.endPos;
-
-        int startX = (int) Math.floor(start.x) >> 4;
-        int startZ = (int) Math.floor(start.z) >> 4;
-        int endX = (int) Math.floor(end.x) >> 4;
-        int endZ = (int) Math.floor(end.z) >> 4;
-
-        int minX = Math.min(startX, endX);
-        int maxX = Math.max(startX, endX);
-        int minZ = Math.min(startZ, endZ);
-        int maxZ = Math.max(startZ, endZ);
-
-        for (int x = minX; x <= maxX; x++) {
-            for (int z = minZ; z <= maxZ; z++) {
-                ChunkPos pos = new ChunkPos(x, z);
-                if (!this.chunks.containsKey(pos)){
-                    this.chunks.put(pos, new HashSet<>());
+        double dx = end.x - start.x;
+        double dz = end.z - start.z;
+        // Walk along the segment instead of registering every chunk in its bounding box.
+        // The old AABB version could register hundreds of unrelated chunks per branch.
+        int radiusChunks = (int) Math.ceil(branch.radius / 16.0D) + 1;
+        int steps = Math.max(1, (int) Math.ceil(Math.max(Math.abs(dx), Math.abs(dz)) * 2.0D));
+        for (int i = 0; i <= steps; i++) {
+            double t = (double) i / (double) steps;
+            int chunkX = (int) Math.floor(start.x + dx * t) >> 4;
+            int chunkZ = (int) Math.floor(start.z + dz * t) >> 4;
+            for (int ox = -radiusChunks; ox <= radiusChunks; ox++) {
+                for (int oz = -radiusChunks; oz <= radiusChunks; oz++) {
+                    this.addBranch(chunkX + ox, chunkZ + oz, branch);
                 }
-                this.chunks.get(pos).add(branch);
             }
         }
+    }
+
+    private void addBranch(int chunkX, int chunkZ, Branches branch) {
+        ChunkPos pos = new ChunkPos(chunkX, chunkZ);
+        HashSet<Branches> branches = this.chunks.get(pos);
+        if (branches == null) {
+            branches = new HashSet<>();
+            this.chunks.put(pos, branches);
+        }
+        branches.add(branch);
     }
 
     public boolean contain(double x,double y,double z) {

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "H*H",
+    "H#H"
+  ],
+  "key": {
+    "#": {
+      "item": "kanake:mono_sub"
+    },
+    "H": {
+      "type": "forge:ore_dict",
+      "ore": "blockQuartz"
+    },
+    "*": {
+      "item": "kanake:mono"
+    }
+  },
+  "result": {
+    "item": "kanake:mono_sp",
+    "count": 1
+  }
+}

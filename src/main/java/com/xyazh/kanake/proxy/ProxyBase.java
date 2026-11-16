@@ -15,4 +15,8 @@ public class ProxyBase {
 	public void registerItemRenderer(Item item, String name, int meta) {
 		//Ignored
 	}
+
+	public void registerParticles() {
+		//Ignored on the server
+	}
 }

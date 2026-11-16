@@ -4,6 +4,7 @@ import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.data.ManaAttribute;
 import com.xyazh.kanake.data.ManaData;
 import com.xyazh.kanake.hud.HUDMana;
+import com.xyazh.kanake.magic.mana.ManaSyncQueue;
 import com.xyazh.kanake.network.ManaPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -93,5 +94,12 @@ public class ManaEvent {
     public static void playerSleepHealMana(PlayerWakeUpEvent event){
         EntityPlayer player = event.getEntityPlayer();
         ManaData.setFull(player);
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event){
+        if (event.phase == TickEvent.Phase.END) {
+            ManaSyncQueue.flush();
+        }
     }
 }

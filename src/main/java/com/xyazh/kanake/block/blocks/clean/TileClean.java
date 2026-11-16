@@ -172,8 +172,11 @@ public class TileClean extends TileEntity implements ITickable {
 
     @Override
     public void update() {
-        double circleHeight = world.getWorldInfo().getTerrainType().getCloudHeight();
-        circleHeight = Math.min(128, circleHeight);
+        // WorldType can be null for custom/removed world types; keep a sane default.
+        double circleHeight = 128.0D;
+        if (this.world.getWorldInfo() != null && this.world.getWorldInfo().getTerrainType() != null) {
+            circleHeight = Math.min(128, this.world.getWorldInfo().getTerrainType().getCloudHeight());
+        }
         this.timeIt(circleHeight);
         if (this.world.isRemote) {
             if (this.shouldRenderCircle()) {

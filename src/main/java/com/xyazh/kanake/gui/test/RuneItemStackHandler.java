@@ -9,11 +9,18 @@ import javax.annotation.Nonnull;
 
 public class RuneItemStackHandler extends ItemStackHandler {
     protected ItemStack itemStack;
+    protected String key;
 
     public RuneItemStackHandler(ItemStack itemStack)
     {
-        super(54);
+        this(itemStack, "rune_order", 54);
+    }
+
+    public RuneItemStackHandler(ItemStack itemStack, String key, int size)
+    {
+        super(size);
         this.itemStack = itemStack;
+        this.key = key;
         this.loadFromItem();
     }
 
@@ -48,7 +55,7 @@ public class RuneItemStackHandler extends ItemStackHandler {
         if(compound==null){
             compound = new NBTTagCompound();
         }
-        compound.setTag("rune_command",this.serializeNBT());
+        compound.setTag(this.key, this.serializeNBT());
         this.itemStack.setTagCompound(compound);
     }
 
@@ -56,10 +63,10 @@ public class RuneItemStackHandler extends ItemStackHandler {
     {
         NBTTagCompound compound = this.itemStack.getTagCompound();
         if(compound!=null){
-            if(!compound.hasKey("rune_command")){
+            if(!compound.hasKey(this.key)){
                 return;
             }
-            this.deserializeNBT(compound.getCompoundTag("rune_command"));
+            this.deserializeNBT(compound.getCompoundTag(this.key));
         }
     }
 }

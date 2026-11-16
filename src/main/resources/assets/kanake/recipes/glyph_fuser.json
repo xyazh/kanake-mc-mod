@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "QGQ",
+    "GCG",
+    "QGQ"
+  ],
+  "key": {
+    "Q": {
+      "type": "forge:ore_dict",
+      "ore": "blockQuartz"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "C": {
+      "item": "kanake:crystal_magic"
+    }
+  },
+  "result": {
+    "item": "kanake:glyph_fuser",
+    "count": 1
+  }
+}

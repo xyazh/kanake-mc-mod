@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "kanake:blocks/harmonium_crystal_ore",
+    "down": "kanake:blocks/harmonium_crystal_ore",
+    "up": "kanake:blocks/harmonium_crystal_ore",
+    "north": "kanake:blocks/harmonium_crystal_ore",
+    "south": "kanake:blocks/harmonium_crystal_ore",
+    "west": "kanake:blocks/harmonium_crystal_ore",
+    "east": "kanake:blocks/harmonium_crystal_ore"
+  }
+}

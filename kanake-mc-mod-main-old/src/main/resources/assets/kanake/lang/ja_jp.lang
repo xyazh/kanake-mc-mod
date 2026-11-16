@@ -1,0 +1,20 @@
+itemGroup.knkcreative=よく分かる魔法
+
+tile.harmonium_crystal_ore.name=調合しクリスタル鉱石
+tile.mono.name=台座のコア
+tile.mono.desc=元素の力を注ぐ
+tile.t_mono.name=台座
+
+item.test.name= テストアイテム
+item.rune_fire_ball.name=ファイアボールのルーン
+item.rune_ice_bolt.name=アイスアローのルーン
+item.rune_fire_curse.name=火の呪のルーン
+item.rune_ice_frost.name=寒霜のルーン
+item.harmonium_crystal.name=調合しクリスタル
+item.harmonium_crystal_axe.name=調合しクリスタルの斧
+item.harmonium_crystal_hoe.name=調合しクリスタルのくわ
+item.harmonium_crystal_pickaxe.name=調合しクリスタルのつるはし
+item.harmonium_crystal_shovel.name=調合しクリスタルのシャベル
+item.harmonium_crystal_sword.name=調合しクリスタルの剣
+item.harmonium_crystal.desc=スライムを直接に殺すことができる
+item.slime_core.name=スライムのコア

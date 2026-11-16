@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "age=0": { "model": "kanake:pure_hana_1" },
+    "age=1": { "model": "kanake:pure_hana_2" },
+    "age=2": { "model": "kanake:pure_hana_3" },
+    "age=3": { "model": "kanake:pure_hana_3" },
+    "age=4": { "model": "kanake:pure_hana_4" },
+    "age=5": { "model": "kanake:pure_hana_5" },
+    "age=6": { "model": "kanake:pure_hana_6" },
+    "age=7": { "model": "kanake:pure_hana_7" }
+  }
+}

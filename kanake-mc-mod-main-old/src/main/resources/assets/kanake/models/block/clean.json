@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "kanake:blocks/bedrock",
+    "down": "kanake:blocks/bedrock",
+    "up": "kanake:blocks/bedrock",
+    "north": "kanake:blocks/bedrock",
+    "south": "kanake:blocks/bedrock",
+    "west": "kanake:blocks/bedrock",
+    "east": "kanake:blocks/bedrock"
+  }
+}

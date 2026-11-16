@@ -40,13 +40,15 @@ public class Vec3d {
 
 
     public static Vec3d fromPitchYaw(float pitch, float yaw) {
-        float radianYaw = -yaw * 0.017453292F - (float)Math.PI;
-        float radianPitch = -pitch * 0.017453292F;
-        float cosYaw = MathHelper.cos(radianYaw);
-        float sinYaw = MathHelper.sin(radianYaw);
+        // 使用与 Minecraft Entity#getLookVec 相同的方向约定。
+        float radianYaw = yaw * 0.017453292F;
+        float radianPitch = pitch * 0.017453292F;
         float cosPitch = MathHelper.cos(radianPitch);
-        float sinPitch = MathHelper.sin(radianPitch);
-        Vec3d result = new Vec3d(sinYaw * cosPitch, sinPitch, cosYaw * cosPitch);
+        Vec3d result = new Vec3d(
+                -MathHelper.sin(radianYaw) * cosPitch,
+                -MathHelper.sin(radianPitch),
+                MathHelper.cos(radianYaw) * cosPitch
+        );
         result.normalize();
         return result;
     }

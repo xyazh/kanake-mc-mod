@@ -8,10 +8,6 @@ import com.xyazh.kanake.damage.KillSlimeDamage;
 import com.xyazh.kanake.entity.EntityShoot;
 import com.xyazh.kanake.entity.EntityWSKnight;
 import com.xyazh.kanake.item.ModItems;
-import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
-import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
-import com.xyazh.kanake.particle.ModParticles;
-import com.xyazh.kanake.render.FramebufferExample;
 import com.xyazh.kanake.util.ParticleUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -35,7 +31,6 @@ import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.*;
 
 
 @Mod.EventBusSubscriber(modid = Kanake.MODID)
@@ -76,7 +71,7 @@ public class Event {
                 ((EntityWSKnight) entity).heal(damage);
                 World world = entity.world;
                 int amount = (int) damage;
-                ParticleUtil.remoteSpawnParticle(world, amount, ModParticles.HEAL_PARTICLES.getParticleName(),
+                ParticleUtil.remoteSpawnParticle(world, amount, "heal_particle",
                         entity.posX, entity.posY, entity.posZ,
                         0, 0, 0);
             }

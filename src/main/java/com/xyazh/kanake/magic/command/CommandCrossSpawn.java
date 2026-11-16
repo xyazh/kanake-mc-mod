@@ -20,14 +20,11 @@ public class CommandCrossSpawn extends OrderCommand {
             return;
         }
         EntityEmptyMagic entity1 = (EntityEmptyMagic) entity;
-        if(entity1.isSubMagic){
-            return;
-        }
         EntityEmptyMagic entityEmptyMagic1, entityEmptyMagic2, entityEmptyMagic3,entityEmptyMagic4;
-        entityEmptyMagic1 = entity1.copy();
-        entityEmptyMagic2 = entity1.copy();
-        entityEmptyMagic3 = entity1.copy();
-        entityEmptyMagic4 = entity1.copy();
+        entityEmptyMagic1 = entity1.copyForChild();
+        entityEmptyMagic2 = entity1.copyForChild();
+        entityEmptyMagic3 = entity1.copyForChild();
+        entityEmptyMagic4 = entity1.copyForChild();
         entityEmptyMagic1.setForward(new Vec3d(1.0,0.0,0.0));
         entityEmptyMagic2.setForward(new Vec3d(-1.0,0.0,0.0));
         entityEmptyMagic3.setForward(new Vec3d(0.0,0.0,1.0));
@@ -36,6 +33,10 @@ public class CommandCrossSpawn extends OrderCommand {
         entityEmptyMagic2.isSubMagic = isSubMagic;
         entityEmptyMagic3.isSubMagic = isSubMagic;
         entityEmptyMagic4.isSubMagic = isSubMagic;
+        entity1.addChild(entityEmptyMagic1);
+        entity1.addChild(entityEmptyMagic2);
+        entity1.addChild(entityEmptyMagic3);
+        entity1.addChild(entityEmptyMagic4);
         entity1.world.spawnEntity(entityEmptyMagic1);
         entity1.world.spawnEntity(entityEmptyMagic2);
         entity1.world.spawnEntity(entityEmptyMagic3);

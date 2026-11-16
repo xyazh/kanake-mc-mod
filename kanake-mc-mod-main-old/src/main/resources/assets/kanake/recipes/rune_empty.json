@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "***",
+    "*#*",
+    "***"
+  ],
+  "key": {
+    "#": {
+      "item": "kanake:rune"
+    },
+    "*": {
+      "type": "forge:ore_dict",
+      "ore": "gemHarmoniumCrystal"
+    }
+  },
+  "result": {
+    "item": "kanake:rune_empty",
+    "count": 1
+  }
+}

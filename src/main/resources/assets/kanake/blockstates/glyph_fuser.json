@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "normal": { "model": "kanake:glyph_fuser" }
+  }
+}

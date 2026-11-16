@@ -1,6 +1,5 @@
 package com.xyazh.kanake.item.items;
 
-import com.sun.javafx.geom.Vec3d;
 import com.xyazh.kanake.block.ModBlocks;
 import com.xyazh.kanake.block.blocks.teleportation.TileTeleportation;
 import com.xyazh.kanake.data.ManaData;

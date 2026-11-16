@@ -41,7 +41,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     }
 
     protected boolean isHurt() {
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(posX + 0.4, posY + 0.4, posZ + 0.4, posX - 0.4, posY - 0.4, posZ - 0.4);
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(posX - 0.4, posY - 0.4, posZ - 0.4, posX + 0.4, posY + 0.4, posZ + 0.4);
         List<EntityLivingBase> entityLivingBases = world.getEntitiesWithinAABB(EntityLivingBase.class, axisAlignedBB);
         boolean flag = false;
         for (EntityLivingBase entityLivingBase : entityLivingBases) {
@@ -100,6 +100,10 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
 
     public void setForwardUnlimited(Vec3d forward) {
         this.forward.set(forward);
+    }
+
+    public Vec3d getForwardVec() {
+        return this.forward.copy();
     }
 
     public void setForward(Vec3d forward) {
@@ -191,7 +195,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         this.livingAge = compound.getInteger("livingAge");
         this.forward = new Vec3d(
                 compound.getDouble("forward.x"),
-                compound.getDouble("forward.args"),
+                compound.getDouble("forward.y"),
                 compound.getDouble("forward.z")
         );
         this.speed = compound.getDouble("speed");
@@ -211,7 +215,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
         compound.setInteger("livingMaxAge", this.livingMaxAge);
         compound.setInteger("livingAge", this.livingAge);
         compound.setDouble("forward.x", this.forward.x);
-        compound.setDouble("forward.args", this.forward.y);
+        compound.setDouble("forward.y", this.forward.y);
         compound.setDouble("forward.z", this.forward.z);
         compound.setDouble("speed", this.speed);
         compound.setDouble("dy", this.dy);

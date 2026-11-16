@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Random;
 
 public class SimpleParticle {
+    public static final int FULLBRIGHT_LIGHT_X = 0xF000;
+    public static final int FULLBRIGHT_LIGHT_Y = 0xF0;
+    public static final float SIZE_SCALE = 0.95f;
     public static double interpPosX;
     public static double interpPosY;
     public static double interpPosZ;
@@ -75,6 +78,11 @@ public class SimpleParticle {
         this.posX = x;
         this.posY = y;
         this.posZ = z;
+        // 新建粒子/直接定位时同步上一帧位置，避免首次渲染从 (0,0,0)
+        // 到目标位置之间插值，造成粒子从错误位置飞入。
+        this.prevPosX = x;
+        this.prevPosY = y;
+        this.prevPosZ = z;
         float f = this.width / 2.0F;
         float f1 = this.height;
         this.setBoundingBox(new AxisAlignedBB(x - (double)f, y, z - (double)f, x + (double)f, y + (double)f1, z + (double)f));
@@ -104,7 +112,7 @@ public class SimpleParticle {
 
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
-        float f4 = 0.1F * this.particleScale;
+        float f4 = 0.1F * this.particleScale * SIZE_SCALE;
         float f5 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
         float f6 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
         float f7 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
@@ -124,10 +132,10 @@ public class SimpleParticle {
         x3 = rotationX * f4 - rotationXY * f4;
         y3 = -rotationZ * f4;
         z3 = rotationYZ * f4 - rotationXZ * f4;
-        buffer.pos(f5 + x0, f6 + y0, f7 + z0).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).endVertex();
-        buffer.pos(f5 + x1, f6 + y1, f7 + z1).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).endVertex();
-        buffer.pos(f5 + x2, f6 + y2, f7 + z2).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).endVertex();
-        buffer.pos(f5 + x3, f6 + y3, f7 + z3).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).endVertex();
+        buffer.pos(f5 + x0, f6 + y0, f7 + z0).tex(0.0D, 0.0D).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).lightmap(FULLBRIGHT_LIGHT_X, FULLBRIGHT_LIGHT_Y).endVertex();
+        buffer.pos(f5 + x1, f6 + y1, f7 + z1).tex(0.0D, 0.0D).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).lightmap(FULLBRIGHT_LIGHT_X, FULLBRIGHT_LIGHT_Y).endVertex();
+        buffer.pos(f5 + x2, f6 + y2, f7 + z2).tex(0.0D, 0.0D).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).lightmap(FULLBRIGHT_LIGHT_X, FULLBRIGHT_LIGHT_Y).endVertex();
+        buffer.pos(f5 + x3, f6 + y3, f7 + z3).tex(0.0D, 0.0D).color((float) this.color.x, (float) this.color.y, (float) this.color.z, this.alpha).lightmap(FULLBRIGHT_LIGHT_X, FULLBRIGHT_LIGHT_Y).endVertex();
     }
 
     public void move(double x, double y, double z)

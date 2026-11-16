@@ -50,7 +50,10 @@ public class BigTreeGenerateManager {
                 float yaw = 0 + this.rand2.nextFloat() * 360;
                 Vec3d rootPos = new Vec3d(x, y, z);
                 BigTreeGenerateTemplate tree = BigTreeGenerateTemplate.getTemplate(Objects.hash(rootPos, this.seed), rootPos,pitch, yaw);
-                if(tree.containChunk(inChunkX, inChunkZ)){
+                // Only keep trees that actually reach the chunk being generated.
+                // The old check used inChunkX/inChunkZ (the tree's own root chunk), which kept
+                // almost every candidate and made buildTree() test all of them for every block.
+                if(tree.containChunk(chunkX, chunkZ)){
                     trees.add(tree);
                 }
             }

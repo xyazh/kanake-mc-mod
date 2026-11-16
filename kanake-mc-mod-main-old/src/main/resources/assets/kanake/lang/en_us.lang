@@ -1,0 +1,20 @@
+itemGroup.knkcreative=Concise Magic
+
+tile.harmonium_crystal_ore.name=Harmonium Crystal Ore
+tile.mono.name=Pedestal Core
+tile.mono.desc=Injecting the Power of Elements
+tile.t_mono.name=Pedestal
+
+item.test.name=Test Item
+item.rune_fire_ball.name=Fire Ball Rune
+item.rune_ice_bolt.name=Ice Bolt Rune
+item.rune_fire_curse.name=Fire Curse Rune
+item.rune_ice_frost.name=Ice Frost Rune
+item.harmonium_crystal.name=Harmonium Crystal
+item.harmonium_crystal_axe.name=Harmonium Crystal Axe
+item.harmonium_crystal_hoe.name=Harmonium Crystal Hoe
+item.harmonium_crystal_pickaxe.name=Harmonium Crystal Pickaxe
+item.harmonium_crystal_shovel.name=Harmonium Crystal Shovel
+item.harmonium_crystal_sword.name=Harmonium Crystal Sword
+item.harmonium_crystal.desc=Can directly kill Slime
+item.slime_core.name=Slime Core

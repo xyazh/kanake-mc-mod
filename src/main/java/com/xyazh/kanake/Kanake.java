@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
-@Mod(modid = Kanake.MODID, name = Kanake.NAME, version = Kanake.VERSION,dependencies="before:baubles@[1.5.0,)")
+@Mod(modid = Kanake.MODID, name = Kanake.NAME, version = Kanake.VERSION, dependencies = "required-after:baubles@[1.5.0,)")
 public class Kanake
 {
     public static final String MODID = "kanake";
@@ -59,16 +59,20 @@ public class Kanake
         network = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
         HAS_BAUBLES = Loader.isModLoaded("baubles");
         HAS_OPT = Loader.isModLoaded("optifine");
+        if (!HAS_BAUBLES) {
+            // required-after:baubles 已经保证依赖存在，这里只是防御性日志
+            logger.error("Baubles (>= 1.5.0) is required by kanake but was not detected!");
+        }
         ConfigLoader.init(event);
         LoopThread.creatThread();
         RegistryHandler.preInitRegistries(event);
         GameRegistry.registerWorldGenerator(new GenOreHarmoniumCrystal(),130);
 
-        network.registerMessage(new SpawnParticlesHandler(),SpawnParticlesPacket.class,2,Side.CLIENT);
-        network.registerMessage(new KooriEntityHandler(), KooriEntityPacket.class, 3, Side.CLIENT);
-        network.registerMessage(new ManaHandler(), ManaPacket.class, 4, Side.CLIENT);
-        network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 5, Side.CLIENT);
-        network.registerMessage(new EntityDataHandler(), EntityDataPacket.class, 7, Side.CLIENT);
+        network.registerMessage(new SpawnParticlesHandler(),SpawnParticlesPacket.class,0,Side.CLIENT);
+        network.registerMessage(new KooriEntityHandler(), KooriEntityPacket.class, 1, Side.CLIENT);
+        network.registerMessage(new ManaHandler(), ManaPacket.class, 2, Side.CLIENT);
+        network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 3, Side.CLIENT);
+        network.registerMessage(new EntityDataHandler(), EntityDataPacket.class, 4, Side.CLIENT);
 
         if(Side.CLIENT.equals(event.getSide())){
             preInitClient(event);
@@ -91,7 +95,7 @@ public class Kanake
     public void init(FMLInitializationEvent event)
     {
         if(Side.CLIENT == event.getSide()){
-            ModParticles.registerParticles();
+            proxy.registerParticles();
             ModParticles.appendAllParticlesToMyMap();
         }
         ModGuis.registerGuis();

@@ -2,6 +2,7 @@ package com.xyazh.kanake.events;
 
 
 import com.xyazh.kanake.Kanake;
+import com.xyazh.kanake.entity.EntityEmptyMagic;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
 import com.xyazh.kanake.particle.simple.SimpleParticle;
@@ -14,6 +15,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -25,12 +27,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-@Mod.EventBusSubscriber(modid = Kanake.MODID)
+@Mod.EventBusSubscriber(modid = Kanake.MODID, value = Side.CLIENT)
 @SideOnly(Side.CLIENT)
 public class RenderEvent {
     public static final ArrayList<Runnable> POST_RENDER_TASKS = new ArrayList<>();
@@ -43,6 +44,8 @@ public class RenderEvent {
     public static Shader WINDOW_SHADER = null;
     public static Shader PONG_SHADER = null;
     public static Minecraft MC = null;
+    private static float lastParticlePartialTicks = 0.0f;
+    private static boolean hasLastParticlePartialTicks = false;
 
     @SubscribeEvent
     public static void onRenderInit(TextureStitchEvent.Post event) {
@@ -86,6 +89,34 @@ public class RenderEvent {
         }
     }
 
+    private static void spawnEntityParticles(float partialTicks) {
+        if (MC == null || MC.world == null || MC.isGamePaused()) {
+            return;
+        }
+        float deltaTicks;
+        if (!hasLastParticlePartialTicks) {
+            deltaTicks = 0.05f;
+            hasLastParticlePartialTicks = true;
+        } else {
+            deltaTicks = partialTicks - lastParticlePartialTicks;
+            if (deltaTicks < 0.0f) {
+                deltaTicks += 1.0f;
+            }
+        }
+        lastParticlePartialTicks = partialTicks;
+        if (deltaTicks > 2.0f) {
+            deltaTicks = 2.0f;
+        }
+        if (deltaTicks <= 0.0f) {
+            return;
+        }
+        for (Entity entity : MC.world.loadedEntityList) {
+            if (entity instanceof EntityEmptyMagic) {
+                ((EntityEmptyMagic) entity).spawnParticleFrame(partialTicks, deltaTicks);
+            }
+        }
+    }
+
     public static void renderParticles(float partialTicks) {
         float f = ActiveRenderInfo.getRotationX();
         float f1 = ActiveRenderInfo.getRotationZ();
@@ -98,7 +129,9 @@ public class RenderEvent {
         SimpleParticle.interpPosZ = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double)partialTicks;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        boolean cullEnabled = GL11.glIsEnabled(GL11.GL_CULL_FACE);
+        GlStateManager.disableCull();
+        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
         for (SimpleParticle particle : PARTICLES){
             particle.renderParticle(buffer, entityIn, partialTicks,  f, f4, f1, f2, f3);
         }
@@ -109,6 +142,9 @@ public class RenderEvent {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
         tessellator.draw();
+        if (cullEnabled) {
+            GlStateManager.enableCull();
+        }
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
     }
@@ -145,6 +181,9 @@ public class RenderEvent {
     @SubscribeEvent
     public static void onWorldRendered(RenderWorldLastEvent event) {
         int activeTextureUnit = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+
+        //按渲染帧生成持续粒子，避免 20Hz 实体 tick 造成粒子断断续续
+        RenderEvent.spawnEntityParticles(event.getPartialTicks());
 
         //获取屏幕帧缓冲，绑定到纹理单元0
         RenderEvent.foreachPostRenderTask(false);

@@ -19,6 +19,12 @@ archivesBaseName = 'kanake'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
+// Sources contain UTF-8 Chinese comments while javac on a Chinese Windows uses GBK by default,
+// which fails with "unmappable character for encoding GBK" during a clean build.
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 minecraft {
     mappings channel: 'snapshot', version: '20171003-1.12'
     runs {
@@ -26,10 +32,13 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            // ForgeGradle 3.0.197 leaves MC_VERSION as the literal "${MC_VERSION}" here.
+            environment 'MC_VERSION', '1.12.2'
         }
         server {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            environment 'MC_VERSION', '1.12.2'
         }
     }
 }
@@ -44,11 +53,28 @@ dependencies {
     compileOnly(files("./libs/Baubles-1.12-1.5.2-deobf.jar"))
     // at runtime, use the full JEI jar
     //runtime "mezz.jei:jei_1.12.2-4.13.1.220"
-    runtime "baubles:Baubles-1.12-1.5.2-deobf"
+    // The Baubles jar only exists in ./libs, no maven repository provides it.
+    // The old "baubles:Baubles-1.12-1.5.2-deobf" coordinate cannot be resolved
+    // (it breaks runClient and IDE import).
+    runtimeOnly(files("./libs/Baubles-1.12-1.5.2-deobf.jar"))
 }
 
 
 repositories {
+}
+
+// Replace ${version} / ${mcversion} placeholders in mcmod.info, otherwise FML reports
+// the literal placeholder as the mod version and cannot match the Minecraft version.
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", "1.12.2"
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': '1.12.2'
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
 }
 
 jar {
@@ -82,3 +108,24 @@ publishing {
 }
 
 sourceSets { main { output.resourcesDir = output.classesDir } }
+
+// ForgeGradle 3.0.197 writes .idea/runConfigurations/*.xml with a plain <component> root element.
+// IntelliJ only loads files whose root is <component name="ProjectRunConfigurationManager">,
+// so the generated runClient/runServer entries would not show up in the Run/Debug configurations.
+task fixIntellijRuns {
+    doLast {
+        def dir = file('.idea/runConfigurations')
+        if (dir.isDirectory()) {
+            dir.listFiles()?.findAll { it.name.endsWith('.xml') }.each { f ->
+                def text = f.getText('UTF-8')
+                if (text.contains('<component>')) {
+                    f.setText(text.replaceFirst('<component>', '<component name="ProjectRunConfigurationManager">'), 'UTF-8')
+                }
+            }
+        }
+    }
+}
+
+tasks.matching { it.name == 'genIntellijRuns' }.all { genTask ->
+    genTask.finalizedBy fixIntellijRuns
+}

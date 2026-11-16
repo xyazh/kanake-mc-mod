@@ -21,7 +21,9 @@ public class ManaData {
     }
 
     public static double getMax(EntityPlayer player){
-        return player.getAttributeMap().getAttributeInstance(ManaAttribute.MANA_ATTRIBUTE).getAttributeValue();
+        IAttributeInstance instance = player.getAttributeMap().getAttributeInstance(ManaAttribute.MANA_ATTRIBUTE);
+        // The attribute may not be registered yet (e.g. during early entity construction).
+        return instance == null ? 200.0D : instance.getAttributeValue();
     }
 
     public static double remain(EntityPlayer player){
@@ -39,9 +41,8 @@ public class ManaData {
     }
 
     public static double add(EntityPlayer player,double n){
-        IAttributeInstance instance = player.getAttributeMap().getAttributeInstance(ManaAttribute.MANA_ATTRIBUTE);
         double mana = get(player);
-        double can = instance.getAttributeValue() - mana;
+        double can = getMax(player) - mana;
         double real = Math.min(can,n);
         set(player,mana+real);
         return n-real;

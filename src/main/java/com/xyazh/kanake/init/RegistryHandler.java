@@ -1,5 +1,6 @@
 package com.xyazh.kanake.init;
 
+import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.block.ModBlocks;
 import com.xyazh.kanake.item.ItemBlockBase;
 import com.xyazh.kanake.item.ModItems;
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = Kanake.MODID)
 public class RegistryHandler {
 	public static WorldType TYPE_ONE;
 	public static final int WILDCARD_VALUE = Short.MAX_VALUE;

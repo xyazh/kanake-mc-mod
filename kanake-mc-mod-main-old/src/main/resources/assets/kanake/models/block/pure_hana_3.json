@@ -1,0 +1,7 @@
+{
+    "parent": "kanake:block/crop",
+    "textures": {
+        "all": "kanake:blocks/pure_hana_3",
+        "particle": "kanake:blocks/pure_hana_3"
+    }
+}

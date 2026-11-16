@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "kanake:blocks/mono_left",
+    "down": "kanake:blocks/mono_top",
+    "up": "kanake:blocks/mono_top",
+    "north": "kanake:blocks/mono_left",
+    "south": "kanake:blocks/mono_left",
+    "west": "kanake:blocks/mono_left",
+    "east": "kanake:blocks/mono_left"
+  }
+}

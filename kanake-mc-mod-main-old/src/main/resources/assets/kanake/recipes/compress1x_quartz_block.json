@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "blockQuartz"
+    }
+  },
+  "result": {
+    "item": "kanake:compressed1x_quartz_block",
+    "count": 1
+  }
+}

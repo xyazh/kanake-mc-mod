@@ -1,6 +1,7 @@
 package com.xyazh.kanake.proxy;
 
 import com.xyazh.kanake.Kanake;
+import com.xyazh.kanake.particle.ClientParticles;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.Item;
@@ -26,7 +27,12 @@ public class ClientProxy extends ProxyBase {
 
 	public void registerItemRenderer(Item item, String name, int meta)
 	{
-		ModelResourceLocation resourceLocation = new ModelResourceLocation(String.format("%s:models/item/%s", Kanake.MODID,name));
+		ModelResourceLocation resourceLocation = new ModelResourceLocation(String.format("%s:%s", Kanake.MODID, name), "inventory");
 		ModelLoader.setCustomModelResourceLocation(item, meta, resourceLocation);
+	}
+
+	@Override
+	public void registerParticles() {
+		ClientParticles.register();
 	}
 }

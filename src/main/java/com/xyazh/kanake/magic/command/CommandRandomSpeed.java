@@ -16,6 +16,7 @@ public class CommandRandomSpeed extends OrderCommand {
             EntityEmptyMagic emptyMagic = (EntityEmptyMagic) entity;
             Vec3d v1 = Vec3d.random(speed);
             emptyMagic.addSpeed(v1);
+            emptyMagic.continuousManaCost = 0.5;
             emptyMagic.shouldSyncSpeed = true;
         }
     }
