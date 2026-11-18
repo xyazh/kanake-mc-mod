@@ -2,7 +2,10 @@ package com.xyazh.kanake.item.items;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.item.ModItems;
+import com.xyazh.kanake.magic.Magic;
+import com.xyazh.kanake.magic.command.Command;
 import com.xyazh.kanake.magic.glyph.GlyphData;
+import com.xyazh.kanake.magic.glyph.GlyphOrder;
 import com.xyazh.kanake.util.IHasModel;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.client.resources.I18n;
@@ -61,6 +64,21 @@ public class ItemEmblem extends Item implements IHasModel {
         public void addInformation(@Nonnull ItemStack stack, World world, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
             tooltip.add(I18n.format("item." + this.name + ".desc"));
             NBTTagCompound data = GlyphData.get(stack);
+            Command command = Magic.ORDER_MAP.get(this.commandId);
+            if (command != null) {
+                GlyphOrder order = new GlyphOrder(this.commandId, 0, data);
+                tooltip.add(I18n.format("tooltip.glyph.mana", command.getManaCost(null, order)));
+                int interval = command.getInterval(null, order);
+                if (interval > 0) {
+                    tooltip.add(I18n.format("tooltip.glyph.interval", interval, interval / 20.0));
+                } else {
+                    tooltip.add(I18n.format("tooltip.glyph.interval.now"));
+                }
+                double speed = command.getSpellSpeed(order);
+                if (speed >= 0) {
+                    tooltip.add(I18n.format("tooltip.glyph.spell_speed", speed));
+                }
+            }
             if (data.hasKey(GlyphData.ENHANCE)) {
                 tooltip.add(I18n.format("tooltip.glyph.enhance", data.getInteger(GlyphData.ENHANCE)));
             }
@@ -74,7 +92,7 @@ public class ItemEmblem extends Item implements IHasModel {
                 tooltip.add(I18n.format("tooltip.glyph.count", data.getInteger(GlyphData.COUNT)));
             }
             if (data.hasKey(GlyphData.SPEED)) {
-                tooltip.add(I18n.format("tooltip.glyph.speed", data.getInteger(GlyphData.SPEED)));
+                tooltip.add(I18n.format("tooltip.glyph.speed_level", data.getInteger(GlyphData.SPEED)));
             }
             if (data.hasKey(GlyphData.RADIUS)) {
                 tooltip.add(I18n.format("tooltip.glyph.radius", data.getInteger(GlyphData.RADIUS)));

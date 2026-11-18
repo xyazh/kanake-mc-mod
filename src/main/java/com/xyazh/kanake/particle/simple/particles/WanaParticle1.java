@@ -39,6 +39,7 @@ public class WanaParticle1 extends SimpleParticle {
         this.motionZ = 0;
         this.setPosition(xCoordIn,yCoordIn+0.1,zCoordIn);
         this.setAlphaF(0);
+        this.particleScale = 0.0f;
         this.canCollide = false;
     }
 
@@ -50,14 +51,18 @@ public class WanaParticle1 extends SimpleParticle {
         }
         float dAge;
         if(this.particleAge<this.begin){
-            dAge = 1-(float)(this.begin-this.particleAge)/(float) this.begin;
-            this.particleScale *= dAge;
-            this.setSize(dAge*this.width,dAge*this.height);
+            dAge = this.begin > 0 ? (float) this.particleAge / (float) this.begin : 1.0f;
+            this.particleScale = 0.8f * dAge;
+            this.setAlphaF(dAge);
+            this.setSize(Math.max(0.01f, dAge) * this.width, Math.max(0.01f, dAge) * this.height);
             return;
         }else {
-            dAge = (float) (this.particleMaxAge-this.particleAge)/(float) this.particleMaxAge;
-            this.particleScale *= dAge;
-            this.setSize(dAge*this.width,dAge*this.height);
+            dAge = this.particleMaxAge > this.begin
+                    ? (float) (this.particleMaxAge - this.particleAge) / (float) (this.particleMaxAge - this.begin)
+                    : 0.0f;
+            this.particleScale = 0.8f * dAge;
+            this.setAlphaF(dAge);
+            this.setSize(Math.max(0.01f, dAge) * this.width, Math.max(0.01f, dAge) * this.height);
         }
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;

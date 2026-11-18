@@ -56,5 +56,6 @@ public class BlockTableCoreMono extends BlockTableMono{
     @SideOnly(Side.CLIENT)
     public void addInformation(@Nonnull ItemStack stack, @Nullable World player, List<String> tooltip, @Nonnull ITooltipFlag advanced){
         tooltip.add(I18n.format("tile.mono.desc"));
+        super.addInformation(stack, player, tooltip, advanced);
     }
 }

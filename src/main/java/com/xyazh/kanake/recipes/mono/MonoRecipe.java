@@ -38,7 +38,7 @@ public class MonoRecipe {
     }
 
     public void onFail(MonoWorkingRecipe workingRecipe){
-        workingRecipe.coreMono.removeStackFromSlot(0);
+        // P0: 失败时不再删除核心材料；由 MonoWorkingRecipe 统一回收已消耗的输入物品。
     }
 
     public MonoRecipe(@Nonnull ResourceLocation id,@Nonnull Object coreItem, @Nonnull ItemStack result, Object[] recipe) {

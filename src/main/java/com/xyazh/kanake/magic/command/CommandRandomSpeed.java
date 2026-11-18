@@ -1,6 +1,7 @@
 package com.xyazh.kanake.magic.command;
 
 import com.xyazh.kanake.entity.EntityEmptyMagic;
+import com.xyazh.kanake.magic.glyph.GlyphOrder;
 import com.xyazh.kanake.util.Vec3d;
 import net.minecraft.entity.Entity;
 
@@ -19,5 +20,10 @@ public class CommandRandomSpeed extends OrderCommand {
             emptyMagic.continuousManaCost = 0.5;
             emptyMagic.shouldSyncSpeed = true;
         }
+    }
+
+    @Override
+    public double getSpellSpeed(GlyphOrder order) {
+        return this.speed;
     }
 }

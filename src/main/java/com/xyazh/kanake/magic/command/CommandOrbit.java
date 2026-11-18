@@ -40,6 +40,11 @@ public class CommandOrbit extends OrderCommand {
     }
 
     @Override
+    public double getSpellSpeed(GlyphOrder order) {
+        return 0.05 + 0.01 * GlyphData.getInt(order.data, GlyphData.SPEED, 0);
+    }
+
+    @Override
     public boolean canUpgrade(int crystalType) {
         return crystalType == 1 || crystalType == 2 || crystalType == 4;
     }

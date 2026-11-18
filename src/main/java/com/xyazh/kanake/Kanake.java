@@ -69,7 +69,6 @@ public class Kanake
         GameRegistry.registerWorldGenerator(new GenOreHarmoniumCrystal(),130);
 
         network.registerMessage(new SpawnParticlesHandler(),SpawnParticlesPacket.class,0,Side.CLIENT);
-        network.registerMessage(new KooriEntityHandler(), KooriEntityPacket.class, 1, Side.CLIENT);
         network.registerMessage(new ManaHandler(), ManaPacket.class, 2, Side.CLIENT);
         network.registerMessage(new PlayerManaHandler(), PlayerManaPacket.class, 3, Side.CLIENT);
         network.registerMessage(new EntityDataHandler(), EntityDataPacket.class, 4, Side.CLIENT);

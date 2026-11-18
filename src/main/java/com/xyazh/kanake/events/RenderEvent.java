@@ -2,10 +2,12 @@ package com.xyazh.kanake.events;
 
 
 import com.xyazh.kanake.Kanake;
-import com.xyazh.kanake.entity.EntityEmptyMagic;
+import com.xyazh.kanake.entity.EntityLifeDrain;
+import com.xyazh.kanake.entity.EntityShoot;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.Shader;
 import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
 import com.xyazh.kanake.particle.simple.SimpleParticle;
+import com.xyazh.kanake.particle.simple.particles.LifeDrainParticleSystem;
 import com.xyazh.kanake.render.FramebufferExample;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -111,8 +113,11 @@ public class RenderEvent {
             return;
         }
         for (Entity entity : MC.world.loadedEntityList) {
-            if (entity instanceof EntityEmptyMagic) {
-                ((EntityEmptyMagic) entity).spawnParticleFrame(partialTicks, deltaTicks);
+            if (entity instanceof EntityShoot) {
+                ((EntityShoot) entity).spawnParticleFrame(partialTicks, deltaTicks);
+            }
+            if (entity instanceof EntityLifeDrain) {
+                LifeDrainParticleSystem.update((EntityLifeDrain) entity);
             }
         }
     }
@@ -133,7 +138,10 @@ public class RenderEvent {
         GlStateManager.disableCull();
         buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
         for (SimpleParticle particle : PARTICLES){
-            particle.renderParticle(buffer, entityIn, partialTicks,  f, f4, f1, f2, f3);
+            // This is the same argument order used by vanilla ParticleManager:
+            // X, XZ, Z, YZ, XY. Do not reorder these values; doing so makes
+            // every billboard face the wrong direction.
+            particle.renderParticle(buffer, entityIn, partialTicks, f, f4, f1, f2, f3);
         }
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();

@@ -30,12 +30,6 @@ public class EntityFireBall extends EntityShoot{
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (world.isRemote) {
-            for (int i = 0; i <= 10; i++) {
-                SimpleParticle particle1 = new SparkParticle(world, posX, posY, posZ, 0, 0, 0);
-                SimpleParticle particle2 = new SparkParticle1(world, posX, posY, posZ, 0, 0, 0);
-            }
-        }
         if(this.inWater){
             this.setDead();
             this.setDeadParticle();
@@ -80,6 +74,24 @@ public class EntityFireBall extends EntityShoot{
             for (int i = 0; i <= 100; i++) {
                 SimpleParticle particle = new TestParticle(world, posX, posY, posZ, 0, 0, 0);
             }
+        }
+    }
+
+    @Override
+    public void spawnParticleFrame(float partialTicks, float deltaTicks) {
+        if (!this.world.isRemote || this.isDead) {
+            return;
+        }
+        int count = this.consumeParticleBudget(11.0, deltaTicks);
+        if (count <= 0) {
+            return;
+        }
+        double x = this.getParticleX(partialTicks);
+        double y = this.getParticleY(partialTicks);
+        double z = this.getParticleZ(partialTicks);
+        for (int i = 0; i < count; i++) {
+            new SparkParticle(this.world, x, y, z, 0, 0, 0);
+            new SparkParticle1(this.world, x, y, z, 0, 0, 0);
         }
     }
 

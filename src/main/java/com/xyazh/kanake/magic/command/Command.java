@@ -40,6 +40,13 @@ public class Command {
         return 1.0;
     }
 
+    /**
+     * 法术的线性速度；没有速度概念（例如纯辅助/爆炸纹章）时返回 -1。
+     */
+    public double getSpellSpeed(GlyphOrder order) {
+        return -1.0;
+    }
+
     public boolean canUpgrade(int crystalType) {
         return false;
     }

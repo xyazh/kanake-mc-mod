@@ -3,6 +3,8 @@ package com.xyazh.kanake.block.blocks.manatable;
 import com.xyazh.kanake.util.PlayerUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -13,9 +15,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class BlockTableMono extends BlockManaTableBase{
@@ -35,6 +40,9 @@ public class BlockTableMono extends BlockManaTableBase{
             return false;
         }
         TileManaWithForeverEntity tileEntity = (TileManaWithForeverEntity) tileEntity1;
+        if(tileEntity instanceof TileTableMono && ((TileTableMono) tileEntity).tryFuse(playerIn, hand)){
+            return true;
+        }
         boolean isTileEmpty,isPlayerEmpty;
         isTileEmpty = tileEntity.isEmpty();
         isPlayerEmpty = PlayerUtil.isMainHandEmpty(playerIn);
@@ -50,6 +58,28 @@ public class BlockTableMono extends BlockManaTableBase{
             tileEntity.addStackFromSlot(0,PlayerUtil.countMainHandItemStack(playerIn,1));
         }
         return true;
+    }
+
+    @Override
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        if (!worldIn.isRemote) {
+            TileEntity tileEntity = worldIn.getTileEntity(pos);
+            if (tileEntity instanceof TileTableMono) {
+                TileTableCoreMono core = ((TileTableMono) tileEntity).getCoreMono();
+                if (core != null && core.monoWorkingRecipe.isWorking()) {
+                    // 运行中的结构被破坏：小爆炸、清除核心、终止配方，不返还已抽取输入。
+                    core.monoWorkingRecipe.interrupt();
+                }
+            }
+        }
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag advanced){
+        tooltip.add(I18n.format("tile.t_mono.desc"));
+        super.addInformation(stack, player, tooltip, advanced);
     }
 
     @Nonnull

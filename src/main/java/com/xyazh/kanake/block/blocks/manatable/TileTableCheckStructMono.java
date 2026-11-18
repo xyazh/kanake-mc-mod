@@ -1,7 +1,6 @@
 package com.xyazh.kanake.block.blocks.manatable;
 
 import com.xyazh.kanake.block.ModBlocks;
-import com.xyazh.kanake.init.LoopThread;
 import com.xyazh.kanake.util.OreDictUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -128,7 +127,6 @@ public class TileTableCheckStructMono extends TileTableMono{
                 }
             }
         }
-        this.isStructuralIntegrityB = true;
         return true;
     }
 
@@ -163,24 +161,29 @@ public class TileTableCheckStructMono extends TileTableMono{
                 }
             }
         }
-        this.isStructuralIntegrityS = true;
         return true;
     }
 
     public boolean checkStruct(){
         this.init();
-        this.isStructuralIntegrityB = false;
-        this.isStructuralIntegrityS = false;
+        this.isOutTheChunk = false;
+        boolean structuralB = false;
+        boolean structuralS = false;
         switch (this.getLevel()){
             case 1:
-                return this.checkStructS();
+                structuralS = this.checkStructS();
+                break;
             case 2:
-                if(this.checkStructB()){
-                    return true;
+                structuralB = this.checkStructB();
+                if(!structuralB){
+                    structuralS = this.checkStructS();
                 }
-                return this.checkStructS();
+                break;
         }
-        return false;
+        // 只在完整扫描结束后一次性发布结果，避免工作线程读到“扫描中”的 false 状态
+        this.isStructuralIntegrityB = structuralB;
+        this.isStructuralIntegrityS = structuralS;
+        return structuralB || structuralS;
     }
 
     public void setSubTile(){
@@ -250,12 +253,11 @@ public class TileTableCheckStructMono extends TileTableMono{
         return tileTableMonos;
     }
 
-    public void checkStructQueue(){
-        this.shouldSetSubBlock = this.checkStruct();
-    }
-
     public boolean finishStruct(){
         return this.isStructuralIntegrityS||this.isStructuralIntegrityB;
+    }
+
+    protected void onStructureChanged(boolean valid){
     }
 
     @Override
@@ -264,13 +266,16 @@ public class TileTableCheckStructMono extends TileTableMono{
         if(world.isRemote){
             return;
         }
-        if(this.checkTime--<0){
-            LoopThread.blockingQueue.add(this::checkStructQueue);
+        // 结构检测必须和方块/方块实体更新在同一服务端线程执行，不能异步访问 World。
+        if(this.checkTime-- <= 0){
             this.checkTime = this.maxCheckTime;
-        }
-        if(this.shouldSetSubBlock){
-            this.setSubTile();
-            this.shouldSetSubBlock = false;
+            boolean valid = this.checkStruct();
+            this.shouldSetSubBlock = valid;
+            if(this.shouldSetSubBlock){
+                this.setSubTile();
+                this.shouldSetSubBlock = false;
+            }
+            this.onStructureChanged(valid);
         }
     }
 

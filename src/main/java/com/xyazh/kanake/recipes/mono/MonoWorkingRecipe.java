@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,6 +32,9 @@ public class MonoWorkingRecipe {
 
 
     protected TileTableCoreMono coreMono;
+    private int invalidStructureTicks = 0;
+    private static final int MAX_INVALID_STRUCTURE_TICKS = 100;
+
     public MonoWorkingRecipe(TileTableCoreMono coreMono){
         this.coreMono = coreMono;
     }
@@ -39,50 +43,123 @@ public class MonoWorkingRecipe {
         return (!(isFail||isFinish))&&(!this.map.isEmpty());
     }
 
-    protected void onFinish(){
+    protected void onFinish() {
         this.isFinish = true;
-        if(this.recipe!=null){
+        this.invalidStructureTicks = 0;
+        if (this.coreMono.particle != null) {
+            this.coreMono.particle.setDead();
+            this.coreMono.particle = null;
+        }
+        if (this.recipe != null) {
             this.recipe.onFinish(this);
         }
-        this.coreMono.setInventorySlotContents(0,this.outItem.copy());
+        this.coreMono.setInventorySlotContents(0, this.outItem.copy());
     }
 
-    protected void onFail(){
-        if(this.recipe!=null){
+    protected void onFail() {
+        if (this.recipe != null) {
             this.recipe.onFail(this);
         }
-        this.isFail = true;
+        this.interrupt();
     }
 
-    public void doWork(){
-        if(this.isFinish||this.isFail){
+    /**
+     * 运行中的配方被破坏/中止：
+     * 1. 产生不破坏方块的小爆炸；
+     * 2. 清除台座核心物品；
+     * 3. 终止配方，不再产出，也不返还已经抽取的输入，避免刷物品。
+     */
+    public void interrupt() {
+        if (this.isFinish || this.isFail) {
             return;
         }
-        if(!(this.coreMono.isStructuralIntegrityS||this.coreMono.isStructuralIntegrityB)){
+        World world = this.coreMono.getWorld();
+        if (world != null && !world.isRemote) {
+            world.createExplosion(null,
+                    this.coreMono.getPos().getX() + 0.5,
+                    this.coreMono.getPos().getY() + 1.0,
+                    this.coreMono.getPos().getZ() + 0.5,
+                    0.8F, false);
+        }
+        this.isFail = true;
+        this.workingSlot = null;
+        this.invalidStructureTicks = 0;
+        if (this.coreMono.particle != null) {
+            this.coreMono.particle.setDead();
+            this.coreMono.particle = null;
+        }
+        this.coreMono.removeStackFromSlot(0);
+        this.coreMono.markDirty();
+        this.coreMono.shouldFindRecipe = false;
+    }
+
+    private boolean hasInvalidInput() {
+        if (this.coreMono.getWorld() == null) {
+            return true;
+        }
+        for (RecipeSlot slot : this.map.values()) {
+            if (slot.time <= 0) {
+                // 已经抽取/消耗的槽位，不再要求台座上还有物品
+                continue;
+            }
+            TileTableMono tile = this.getSlotTile(slot);
+            if (tile == null || !this.checkItemStack(tile.getStackInSlot(0), slot.itemStack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ItemStack getWorkingItemStack() {
+        if (this.workingSlot == null) {
+            return ItemStack.EMPTY;
+        }
+        return this.workingSlot.itemStack;
+    }
+
+    public void doWork() {
+        if (this.isFinish || this.isFail) {
+            return;
+        }
+        if (this.hasInvalidInput()) {
+            // 运行期间任何尚未抽取的输入被取走/替换，立即判定失败
             this.onFail();
             return;
         }
-        if(this.workingSlot==null){
+        if (!this.checkItemStack(this.coreMono.getStackInSlot(0), this.coreItem)) {
+            // 核心物品被取走/替换：立即中止，避免无消耗产出
+            this.onFail();
+            return;
+        }
+        if (!this.coreMono.finishStruct()) {
+            // 结构失效/尚未完成：先暂停，避免一次临时状态直接毁掉整个配方。
+            if (++this.invalidStructureTicks < MAX_INVALID_STRUCTURE_TICKS) {
+                return;
+            }
+            this.onFail();
+            return;
+        }
+        this.invalidStructureTicks = 0;
+        if (this.workingSlot == null) {
             this.workingSlot = this.getWorkingSlot();
         }
-        if(this.workingSlot==null){
+        if (this.workingSlot == null) {
             this.onFinish();
-        }else {
+        } else {
             TileTableMono mono = this.getWorkingTile();
-            if(mono==null){
-                this.onFail();
-                return;
-            }else if(!this.checkItemStack(mono.getStackInSlot(0),this.workingSlot.itemStack)){
+            if (mono == null) {
                 this.onFail();
                 return;
             }
-            if(this.coreMono.particle!=null){
+            if (this.coreMono.particle != null) {
                 this.coreMono.particle.age = this.workingSlot.time;
             }
             if (!(0 < --this.workingSlot.time)) {
+                // 工作槽完成时抽取/消耗该台座上的物品
                 this.workingSlot.working = false;
                 mono.removeStackFromSlot(0);
-                if(this.coreMono.particle!=null){
+                mono.markDirty();
+                if (this.coreMono.particle != null) {
                     this.coreMono.particle.setDead();
                     this.coreMono.particle = null;
                 }
@@ -139,9 +216,14 @@ public class MonoWorkingRecipe {
         this.recipe = recipe;
         for (int i = 0; i < outTiles.size(); i++) {
             TileTableMono tileTableMono = outTiles.get(i);
+            ItemStack input = tileTableMono.getStackInSlot(0);
+            if (input.isEmpty()) {
+                continue;
+            }
             RecipeSlot slot = new RecipeSlot(i);
             slot.pos = tileTableMono.getPos();
-            slot.itemStack = tileTableMono.getStackInSlot(0);
+            // 配方开始时不抽取，保留在台座上；等该槽工作完成后再逐个消耗。
+            slot.itemStack = input.copy();
             slot.time = recipe.getTime(this.coreMono,outTiles,slot.itemStack);
             this.map.put(slot.pos, slot);
         }
@@ -154,6 +236,7 @@ public class MonoWorkingRecipe {
         this.isFail = false;
         this.isFinish = false;
         this.workingSlot = null;
+        this.invalidStructureTicks = 0;
     }
 
     protected boolean checkItemStack(ItemStack itemStack1, ItemStack itemStack2) {
@@ -179,7 +262,6 @@ public class MonoWorkingRecipe {
             ResourceLocation resourceLocation = new ResourceLocation(recipeID);
             this.recipe = MonoRecipeManager.RECIPES.get(resourceLocation);
         }
-
     }
 
     @Nonnull

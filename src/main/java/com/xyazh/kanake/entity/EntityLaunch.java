@@ -36,12 +36,6 @@ public class EntityLaunch extends EntityShoot{
         if(!this.hasNoGravity()){
             dy += 0.0012;
         }
-        if (world.isRemote) {
-            for (int i = 0; i <= 10; i++) {
-                SimpleParticle particle1 = new MagicParticle(world, posX, posY, posZ, 0, 0, 0);
-                SimpleParticle particle2 = new MagicParticle1(world, posX, posY, posZ, 0, 0, 0);
-            }
-        }
 
         if(this.collided){
             this.setDeadParticle();
@@ -54,6 +48,24 @@ public class EntityLaunch extends EntityShoot{
             for (int i = 0; i <= 100; i++) {
                 SimpleParticle particle = new TestParticle2(world, posX, posY, posZ, 0, 0, 0);
             }
+        }
+    }
+
+    @Override
+    public void spawnParticleFrame(float partialTicks, float deltaTicks) {
+        if (!this.world.isRemote || this.isDead) {
+            return;
+        }
+        int count = this.consumeParticleBudget(11.0, deltaTicks);
+        if (count <= 0) {
+            return;
+        }
+        double x = this.getParticleX(partialTicks);
+        double y = this.getParticleY(partialTicks);
+        double z = this.getParticleZ(partialTicks);
+        for (int i = 0; i < count; i++) {
+            new MagicParticle(this.world, x, y, z, 0, 0, 0);
+            new MagicParticle1(this.world, x, y, z, 0, 0, 0);
         }
     }
 

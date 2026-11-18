@@ -39,6 +39,9 @@ public class ModItems {
     public static final Item RUNE = new ItemBase("rune").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_EMPTY = new ItemBase("rune_empty").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_EMPTY_MAGIC = new ItemEmptyMagicRune("rune_empty_magic").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item SCROLL_ENDER = new ItemEnderScroll("scroll_ender").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item SCROLL_LIFE_DRAIN = new ItemLifeDrainScroll("scroll_life_drain").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item SCROLL_SKY_STRIKE = new ItemSkyStrikeScroll("scroll_sky_strike").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL = new ItemFireBallRune("rune_fire_ball").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL_LOOK_AT = new ItemFireBallLookAtRune("rune_fire_ball_look_at").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_ICE_BOLT = new ItemIceBoltRune("rune_ice_bolt").setCreativeTab(ModCreativeTab.KNK_CREATIVE);

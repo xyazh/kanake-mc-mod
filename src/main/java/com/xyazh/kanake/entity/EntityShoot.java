@@ -34,6 +34,7 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     protected double dy = 0;
     public boolean shouldSyncSpeed = false;
     public Explosion lastExplosion = null;
+    private double particleBudget = 0;
 
     public EntityShoot(World worldIn) {
         super(worldIn);
@@ -55,6 +56,37 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
 
     public boolean hasNoGravity() {
         return false;
+    }
+
+    /**
+     * 由客户端渲染帧调用。旧符文实体在 20Hz 的 onUpdate 里生成粒子会随帧率抖动，
+     * 因此统一改成按帧预算生成。默认无粒子、无操作。
+     */
+    public void spawnParticleFrame(float partialTicks, float deltaTicks) {
+    }
+
+    protected int consumeParticleBudget(double particlesPerTick, float deltaTicks) {
+        this.particleBudget += particlesPerTick * deltaTicks;
+        int count = (int) this.particleBudget;
+        if (count > 0) {
+            this.particleBudget -= count;
+        }
+        return count;
+    }
+
+    protected double getParticleX(float partialTicks) {
+        return this.ticksExisted <= 0 ? this.posX
+                : this.prevPosX + (this.posX - this.prevPosX) * partialTicks;
+    }
+
+    protected double getParticleY(float partialTicks) {
+        return this.ticksExisted <= 0 ? this.posY
+                : this.prevPosY + (this.posY - this.prevPosY) * partialTicks;
+    }
+
+    protected double getParticleZ(float partialTicks) {
+        return this.ticksExisted <= 0 ? this.posZ
+                : this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks;
     }
 
     protected boolean customMotion() {

@@ -173,6 +173,34 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityEnderBolt.class)
+                .id(new ResourceLocation(Kanake.MODID, "ender_bolt"), 254)
+                .name("ender_bolt")
+                .tracker(1024, 3, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityLifeDrain.class)
+                .id(new ResourceLocation(Kanake.MODID, "life_drain"), 255)
+                .name("life_drain")
+                .tracker(1024, 3, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntitySkyStrikeProjectile.class)
+                .id(new ResourceLocation(Kanake.MODID, "sky_strike_projectile"), 256)
+                .name("sky_strike_projectile")
+                .tracker(1024, 1, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntitySkyStrike.class)
+                .id(new ResourceLocation(Kanake.MODID, "sky_strike"), 257)
+                .name("sky_strike")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }
 

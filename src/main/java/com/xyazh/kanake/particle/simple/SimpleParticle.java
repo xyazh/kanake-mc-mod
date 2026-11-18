@@ -18,7 +18,7 @@ import java.util.Random;
 public class SimpleParticle {
     public static final int FULLBRIGHT_LIGHT_X = 0xF000;
     public static final int FULLBRIGHT_LIGHT_Y = 0xF0;
-    public static final float SIZE_SCALE = 0.95f;
+    public static final float SIZE_SCALE = 0.475f;
     public static double interpPosX;
     public static double interpPosY;
     public static double interpPosZ;

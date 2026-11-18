@@ -22,6 +22,14 @@ public class BindEntityRenderer {
         RenderingRegistry.registerEntityRenderingHandler(EntityShield.class,RenderShield::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityBall.class, RenderBall::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityBiimu.class, RenderBiimu::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityEnderBolt.class,
+                manager -> new RenderInvisibleEntity<EntityEnderBolt>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityLifeDrain.class,
+                manager -> new RenderInvisibleEntity<EntityLifeDrain>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntitySkyStrikeProjectile.class,
+                manager -> new RenderInvisibleEntity<EntitySkyStrikeProjectile>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntitySkyStrike.class,
+                manager -> new RenderInvisibleEntity<EntitySkyStrike>(manager));
     }
 
 }

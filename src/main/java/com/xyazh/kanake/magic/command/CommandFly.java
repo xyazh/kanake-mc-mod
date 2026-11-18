@@ -62,6 +62,12 @@ public class CommandFly extends OrderCommand {
     }
 
     @Override
+    public double getSpellSpeed(GlyphOrder order) {
+        int enhance = GlyphData.getInt(order.data, GlyphData.ENHANCE, 0);
+        return this.mode == Mode.LAUNCH ? 0.5 + 0.1 * enhance : 0.2 + 0.05 * enhance;
+    }
+
+    @Override
     public boolean canUpgrade(int crystalType) {
         return crystalType == 1;
     }

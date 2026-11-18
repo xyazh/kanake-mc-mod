@@ -99,6 +99,14 @@ public class CommandReleaseCast extends OrderCommand {
     }
 
     @Override
+    public double getSpellSpeed(GlyphOrder order) {
+        if (this.mode == Mode.LAUNCH || this.mode == Mode.DOWN) {
+            return 0.5 + 0.25 * GlyphData.getInt(order.data, GlyphData.ENHANCE, 0);
+        }
+        return -1.0;
+    }
+
+    @Override
     public boolean canUpgrade(int crystalType) {
         return crystalType == 1 || crystalType == 2 || crystalType == 3;
     }
