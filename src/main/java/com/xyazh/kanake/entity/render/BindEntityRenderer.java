@@ -30,6 +30,10 @@ public class BindEntityRenderer {
                 manager -> new RenderInvisibleEntity<EntitySkyStrikeProjectile>(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntitySkyStrike.class,
                 manager -> new RenderInvisibleEntity<EntitySkyStrike>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityMagicCannonCharge.class,
+                manager -> new RenderInvisibleEntity<EntityMagicCannonCharge>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityMagicCannonBeam.class,
+                manager -> new RenderInvisibleEntity<EntityMagicCannonBeam>(manager));
     }
 
 }

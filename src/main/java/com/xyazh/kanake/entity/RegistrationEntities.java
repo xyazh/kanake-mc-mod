@@ -201,6 +201,27 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityEye.class)
+                .id(new ResourceLocation(Kanake.MODID, "eye"), 258)
+                .name("eye")
+                .tracker(1024, 3, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityMagicCannonCharge.class)
+                .id(new ResourceLocation(Kanake.MODID, "magic_cannon_charge"), 259)
+                .name("magic_cannon_charge")
+                .tracker(1024, 2, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityMagicCannonBeam.class)
+                .id(new ResourceLocation(Kanake.MODID, "magic_cannon_beam"), 260)
+                .name("magic_cannon_beam")
+                .tracker(1024, 2, true)
+                .build()
+        );
     }
 }
 

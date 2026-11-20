@@ -5,6 +5,7 @@ import com.xyazh.kanake.particle.simple.particles.SkyStrikeArrayParticle;
 import com.xyazh.kanake.particle.simple.particles.SkyStrikeSparkParticle;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
@@ -274,13 +275,13 @@ public class EntitySkyStrike extends EntityShoot {
                 this.posX - AREA_RADIUS, this.minY, this.posZ - AREA_RADIUS,
                 this.posX + AREA_RADIUS, this.maxY, this.posZ + AREA_RADIUS
         );
-        List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+        List<Entity> targets = this.world.getEntitiesWithinAABB(Entity.class, box);
         EntityLivingBase owner = this.shootingEntity;
         MagicDamage damage = new MagicDamage("sky_strike");
         damage.setAttacker(owner);
         damage.setDamageIsAbsolute();
 
-        for (EntityLivingBase target : targets) {
+        for (Entity target : targets) {
             if (!isValidTarget(target, owner)) {
                 continue;
             }
@@ -293,26 +294,35 @@ public class EntitySkyStrike extends EntityShoot {
                 continue;
             }
 
-            // The direct setHealth step represents the irreversible part of the
-            // spell: it ignores resistance and always removes one fifth of max HP.
-            float directLoss = target.getMaxHealth() * DIRECT_HEALTH_FRACTION;
-            float remaining = target.getHealth() - directLoss;
-            if (remaining <= 0.0F) {
-                target.setHealth(0.0F);
-                target.onDeath(damage);
+            // Non-living damageable entities such as ender crystals do not
+            // have max health/setHealth semantics; hit them with the absolute
+            // magic damage directly.
+            if (!(target instanceof EntityLivingBase)) {
+                target.attackEntityFrom(damage, ABSOLUTE_DAMAGE);
                 continue;
             }
-            target.setHealth(remaining);
+
+            EntityLivingBase living = (EntityLivingBase) target;
+            // The direct setHealth step represents the irreversible part of the
+            // spell: it ignores resistance and always removes one fifth of max HP.
+            float directLoss = living.getMaxHealth() * DIRECT_HEALTH_FRACTION;
+            float remaining = living.getHealth() - directLoss;
+            if (remaining <= 0.0F) {
+                living.setHealth(0.0F);
+                living.onDeath(damage);
+                continue;
+            }
+            living.setHealth(remaining);
 
             // The flat 300 points are absolute magic damage. They bypass armor,
             // enchantment reduction and the normal hurt cooldown.
-            target.hurtResistantTime = 0;
-            target.attackEntityFrom(damage, ABSOLUTE_DAMAGE);
+            living.hurtResistantTime = 0;
+            living.attackEntityFrom(damage, ABSOLUTE_DAMAGE);
         }
     }
 
-    private static boolean isValidTarget(EntityLivingBase target, EntityLivingBase owner) {
-        if (target == null || owner == target || !target.isEntityAlive()) {
+    private static boolean isValidTarget(Entity target, EntityLivingBase owner) {
+        if (target == null || owner == target || target.isDead) {
             return false;
         }
         if (target instanceof EntityPlayer) {
