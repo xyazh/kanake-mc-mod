@@ -1,6 +1,7 @@
 package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import com.xyazh.kanake.particle.ModParticles;
 import com.xyazh.kanake.particle.simple.SimpleParticle;
 import com.xyazh.kanake.particle.simple.particles.MagicParticle;
@@ -87,7 +88,7 @@ public class EntityMagic extends EntityShoot{
             flag = true;
             MagicDamage damageSource = new MagicDamage();
             damageSource.setAttacker(this.shootingEntity);
-            entityLivingBase.attackEntityFrom(damageSource, 8);
+            MagicDamageUtil.attackEntity(entityLivingBase, damageSource, 8.0F, 8.0F);
         }
         return flag;
     }

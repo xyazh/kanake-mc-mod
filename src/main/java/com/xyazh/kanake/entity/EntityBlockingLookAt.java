@@ -1,6 +1,7 @@
 package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import com.xyazh.kanake.particle.ModParticles;
 import com.xyazh.kanake.particle.simple.SimpleParticle;
 import com.xyazh.kanake.particle.simple.particles.MagicParticle;
@@ -146,7 +147,7 @@ public class EntityBlockingLookAt extends EntityShoot {
                 flag = true;
                 MagicDamage damageSource = new MagicDamage();
                 damageSource.setAttacker(this.shootingEntity);
-                entityLivingBase.attackEntityFrom(damageSource, 4);
+                MagicDamageUtil.attackEntity(entityLivingBase, damageSource, 4.0F, 4.0F);
             }else{
                 flag = true;
                 entity.setDead();

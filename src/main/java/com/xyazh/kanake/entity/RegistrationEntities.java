@@ -222,6 +222,41 @@ public class RegistrationEntities {
                 .tracker(1024, 2, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityGuardianBeam.class)
+                .id(new ResourceLocation(Kanake.MODID, "guardian_beam"), 261)
+                .name("guardian_beam")
+                .tracker(1024, 1, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntitySilentRain.class)
+                .id(new ResourceLocation(Kanake.MODID, "silent_rain"), 262)
+                .name("silent_rain")
+                .tracker(1024, 20, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityGodWrath.class)
+                .id(new ResourceLocation(Kanake.MODID, "god_wrath"), 263)
+                .name("god_wrath")
+                .tracker(1024, 1, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityGodWrathBeam.class)
+                .id(new ResourceLocation(Kanake.MODID, "god_wrath_beam"), 264)
+                .name("god_wrath_beam")
+                .tracker(1024, 1, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityNuclearStrike.class)
+                .id(new ResourceLocation(Kanake.MODID, "nuclear_strike"), 265)
+                .name("nuclear_strike")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }
 

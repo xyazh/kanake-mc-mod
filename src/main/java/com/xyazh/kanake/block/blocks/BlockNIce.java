@@ -6,6 +6,7 @@ import com.xyazh.kanake.particle.simple.SimpleParticle;
 import com.xyazh.kanake.particle.simple.particles.TestParticle;
 import com.xyazh.kanake.particle.simple.particles.TestParticle1;
 import com.xyazh.kanake.particle.simple.particles.WanaParticle1;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import com.xyazh.kanake.potion.buff.PotionKoori;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -58,7 +59,7 @@ public class BlockNIce extends Block {
         if(entity instanceof EntityLivingBase){
             EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
             DamageSource damageSource = DamageSource.MAGIC;
-            entityLivingBase.attackEntityFrom(damageSource, 8);
+            MagicDamageUtil.attackEntity(entityLivingBase, damageSource, 8.0F, 8.0F);
             entityLivingBase.addPotionEffect(new PotionEffect(PotionKoori.POTION_KOORI,200));
             this.breakBlock(world,pos,this.getDefaultState());
         }

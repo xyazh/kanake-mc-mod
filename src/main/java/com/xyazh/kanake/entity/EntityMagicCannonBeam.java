@@ -1,6 +1,7 @@
 package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import com.xyazh.kanake.particle.simple.particles.MagicCannonBeamParticle;
 import com.xyazh.kanake.particle.simple.particles.SkyStrikeSparkParticle;
 import com.xyazh.kanake.util.Vec3d;
@@ -205,7 +206,7 @@ public class EntityMagicCannonBeam extends EntityShoot {
             if (target instanceof EntityLivingBase) {
                 ((EntityLivingBase) target).hurtResistantTime = 0;
             }
-            target.attackEntityFrom(damage, DAMAGE);
+            MagicDamageUtil.attackEntity(target, damage, DAMAGE, DAMAGE);
         }
     }
 

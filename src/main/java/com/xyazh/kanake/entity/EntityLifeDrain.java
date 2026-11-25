@@ -1,6 +1,7 @@
 package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -96,7 +97,7 @@ public class EntityLifeDrain extends EntityShoot {
             target.hurtResistantTime = 0;
             MagicDamage damage = new MagicDamage();
             damage.setAttacker(owner);
-            if (target.attackEntityFrom(damage, DRAIN_AMOUNT)) {
+            if (MagicDamageUtil.attackEntity(target, damage, DRAIN_AMOUNT, DRAIN_AMOUNT)) {
                 drained = true;
             }
         }

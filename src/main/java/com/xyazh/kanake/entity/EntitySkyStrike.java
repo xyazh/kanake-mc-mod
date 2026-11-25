@@ -1,6 +1,8 @@
 package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
+import com.xyazh.kanake.util.KillUtil;
 import com.xyazh.kanake.particle.simple.particles.SkyStrikeArrayParticle;
 import com.xyazh.kanake.particle.simple.particles.SkyStrikeSparkParticle;
 import net.minecraft.block.Block;
@@ -308,16 +310,20 @@ public class EntitySkyStrike extends EntityShoot {
             float directLoss = living.getMaxHealth() * DIRECT_HEALTH_FRACTION;
             float remaining = living.getHealth() - directLoss;
             if (remaining <= 0.0F) {
-                living.setHealth(0.0F);
+                if (!KillUtil.setHealthDirect(living, 0.0F)) {
+                    living.setHealth(0.0F);
+                }
                 living.onDeath(damage);
                 continue;
             }
-            living.setHealth(remaining);
+            if (!KillUtil.setHealthDirect(living, remaining)) {
+                living.setHealth(remaining);
+            }
 
             // The flat 300 points are absolute magic damage. They bypass armor,
             // enchantment reduction and the normal hurt cooldown.
             living.hurtResistantTime = 0;
-            living.attackEntityFrom(damage, ABSOLUTE_DAMAGE);
+            MagicDamageUtil.attackEntity(living, damage, ABSOLUTE_DAMAGE, ABSOLUTE_DAMAGE);
         }
     }
 

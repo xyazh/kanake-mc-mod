@@ -34,6 +34,16 @@ public class BindEntityRenderer {
                 manager -> new RenderInvisibleEntity<EntityMagicCannonCharge>(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityMagicCannonBeam.class,
                 manager -> new RenderInvisibleEntity<EntityMagicCannonBeam>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityGuardianBeam.class,
+                manager -> new RenderInvisibleEntity<EntityGuardianBeam>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntitySilentRain.class,
+                manager -> new RenderInvisibleEntity<EntitySilentRain>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityGodWrath.class,
+                manager -> new RenderInvisibleEntity<EntityGodWrath>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityGodWrathBeam.class,
+                manager -> new RenderInvisibleEntity<EntityGodWrathBeam>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityNuclearStrike.class,
+                manager -> new RenderInvisibleEntity<EntityNuclearStrike>(manager));
     }
 
 }

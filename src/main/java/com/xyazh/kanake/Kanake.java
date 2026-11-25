@@ -1,6 +1,7 @@
 package com.xyazh.kanake;
 
 import com.xyazh.kanake.common.ConfigLoader;
+import com.xyazh.kanake.entity.NuclearStrikeChunkLoader;
 import com.xyazh.kanake.gen.GenOreHarmoniumCrystal;
 import com.xyazh.kanake.gui.ModGuis;
 import com.xyazh.kanake.init.LoopThread;
@@ -67,6 +68,7 @@ public class Kanake
         LoopThread.creatThread();
         RegistryHandler.preInitRegistries(event);
         GameRegistry.registerWorldGenerator(new GenOreHarmoniumCrystal(),130);
+        NuclearStrikeChunkLoader.registerCallback();
 
         network.registerMessage(new SpawnParticlesHandler(),SpawnParticlesPacket.class,0,Side.CLIENT);
         network.registerMessage(new ManaHandler(), ManaPacket.class, 2, Side.CLIENT);
@@ -98,6 +100,10 @@ public class Kanake
             ModParticles.appendAllParticlesToMyMap();
         }
         ModGuis.registerGuis();
+        // Pre-init normally registers this already. Calling it here as well is
+        // harmless and covers unusual load orders where the mod instance was
+        // not available during preInit.
+        NuclearStrikeChunkLoader.registerCallback();
     }
 
     @EventHandler

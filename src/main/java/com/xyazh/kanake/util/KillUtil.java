@@ -283,6 +283,21 @@ public final class KillUtil {
         }
     }
 
+    /**
+     * Directly writes health through the synchronized health DataParameter,
+     * bypassing overridden setHealth methods and ordinary damage caps. This is
+     * intentionally a low-level operation; callers must handle death.
+     */
+    public static boolean setHealthDirect(EntityLivingBase entity, float value) {
+        if (entity == null || Float.isNaN(value) || Float.isInfinite(value)) {
+            return false;
+        }
+        float maxHealth = entity.getMaxHealth();
+        float clamped = Math.max(0.0F, Math.min(value, Math.max(0.0F, maxHealth)));
+        setRawHealth(entity, clamped);
+        return Math.abs(entity.getHealth() - clamped) < 0.001F;
+    }
+
     private static void setRawHealth(EntityLivingBase entity, float value) {
         if (HEALTH_PARAMETER != null) {
             try {

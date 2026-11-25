@@ -1,6 +1,7 @@
 package com.xyazh.kanake.item.wsitem;
 
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import com.xyazh.kanake.item.swords.ItemSwordBase;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,7 +25,7 @@ public class ItemWSSword extends ItemSwordBase {
     public boolean hitEntity(@Nonnull ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
     {
         target.hurtResistantTime = 0;
-        target.attackEntityFrom(new MagicDamage().setAttacker(attacker),8);
+        MagicDamageUtil.attackEntity(target, new MagicDamage().setAttacker(attacker), 8.0F, 8.0F);
         return super.hitEntity(stack,target,attacker);
     }
 

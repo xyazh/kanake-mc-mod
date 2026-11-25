@@ -2,6 +2,7 @@ package com.xyazh.kanake.entity;
 
 import com.xyazh.kanake.Kanake;
 import com.xyazh.kanake.damage.MagicDamage;
+import com.xyazh.kanake.damage.MagicDamageUtil;
 import com.xyazh.kanake.magic.Magic;
 import com.xyazh.kanake.magic.command.Command;
 import com.xyazh.kanake.magic.command.CommandNoInherit;
@@ -762,7 +763,8 @@ public class EntityEmptyMagic extends EntityShoot {
             }
             DamageSource damageSource = DamageSource.causeIndirectDamage(this, this.shootingEntity);
             damageSource.setMagicDamage();
-            target.attackEntityFrom(damageSource, (float) task.damage);
+            MagicDamageUtil.attackEntity(target, damageSource,
+                    (float) task.damage, (float) task.damage);
         }
     }
 
@@ -782,15 +784,15 @@ public class EntityEmptyMagic extends EntityShoot {
             int dTemperature = Math.min(Math.abs(this.temperature), 50);
             float damage = 4 + 4 * (dTemperature / 50f);
             if (this.temperature <= -50) {
-                entityLivingBase.attackEntityFrom(damageSource, damage);
+                MagicDamageUtil.attackEntity(entityLivingBase, damageSource, damage, 8.0F);
                 entityLivingBase.addPotionEffect(new PotionEffect(PotionKoori.POTION_KOORI, dTemperature));
             } else if (this.temperature < 50) {
                 MagicDamage magicDamage = new MagicDamage();
                 magicDamage.setAttacker(this.shootingEntity);
-                entityLivingBase.attackEntityFrom(damageSource, damage);
+                MagicDamageUtil.attackEntity(entityLivingBase, magicDamage, damage, 8.0F);
             } else {
                 damageSource.setFireDamage();
-                entityLivingBase.attackEntityFrom(damageSource, damage);
+                MagicDamageUtil.attackEntity(entityLivingBase, damageSource, damage, 8.0F);
                 entityLivingBase.setFire(dTemperature / 20);
             }
         }
