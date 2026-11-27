@@ -210,20 +210,9 @@ public final class NuclearStrikeRenderHelper {
         double t = Math.max(0.0D, age - EntityNuclearStrike.IMPACT_TICK);
 
         // The mushroom cloud itself is built from NuclearSmokeParticle puffs in
-        // EntityNuclearStrike.spawnParticleFrame. Only the persistent radiation
-        // ring and the cooling crater afterglow remain procedural geometry here.
-        if (t <= EntityNuclearStrike.RADIATION_TICKS) {
-            double radiationFade = clamp(1.0D - t / EntityNuclearStrike.RADIATION_TICKS);
-            double pulse = 1.0D + 0.025D * Math.sin(t * 0.25D);
-            double radius = EntityNuclearStrike.RADIATION_RADIUS * pulse;
-            float r = PALE_RED[0] * (float) (0.35D + 0.65D * radiationFade);
-            float g = PALE_RED[1] * (float) (0.35D + 0.65D * radiationFade);
-            float b = PALE_RED[2] * (float) (0.35D + 0.65D * radiationFade);
-            drawArcRing(buffer, ox, oy + 0.06D, oz,
-                    Math.max(0.1D, radius - 1.0D), radius, 192,
-                    t * 0.02D, t * 0.02D + TWO_PI, r, g, b);
-        }
-
+        // EntityNuclearStrike.spawnParticleFrame. The long-lived rotating
+        // radiation ring is intentionally not rendered: only the static cooling
+        // crater afterglow remains as procedural geometry.
         // Crater afterglow.
         if (!airburst) {
             double glow = Math.max(0.0D, 1.0D - t / 420.0D);

@@ -257,6 +257,13 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityHeavenStrike.class)
+                .id(new ResourceLocation(Kanake.MODID, "heaven_strike"), 266)
+                .name("heaven_strike")
+                .tracker(1024, 3, true)
+                .build()
+        );
     }
 }
 

@@ -19,7 +19,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * Super-tier spell "Sky Strike" ritual.
+ * Super-tier spell "Heaven's Judgment" (天罚) ritual. The registry name is kept
+ * as {@code sky_strike} for save compatibility; the "Sky Strike" (天击) name now
+ * belongs to {@link EntityHeavenStrike}.
  *
  * <p>The entity itself is invisible. Its complete visual (the descending beam,
  * the arrays, the charge and the final cannon) is drawn procedurally by

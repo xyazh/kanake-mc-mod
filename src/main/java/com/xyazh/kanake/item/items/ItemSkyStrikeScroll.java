@@ -19,7 +19,8 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * The blank scroll carrying the super-tier spell "Sky Strike".
+ * The blank scroll carrying the super-tier spell "Heaven's Judgment" (天罚).
+ * The registry id is kept as {@code scroll_sky_strike} for save compatibility.
  */
 public class ItemSkyStrikeScroll extends ItemBase {
     public static final double MANA_COST = 180.0D;

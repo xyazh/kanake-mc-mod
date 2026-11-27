@@ -43,6 +43,33 @@ minecraft {
     }
 }
 
+configurations {
+    compileClasspath {
+        // Keep ForgeGradle's build-time stub Side enum out of the IDE/module
+        // classpath. The stub contains BUKKIT; the real Forge enum does not.
+        exclude group: 'net.minecraftforge', module: 'mergetool'
+    }
+    runtimeClasspath {
+        // ForgeGradle exposes Forge's build-time merge tool on the runtime
+        // classpath. Its stub Side enum contains an extra BUKKIT value, while
+        // the real Forge Side enum only has CLIENT/SERVER. If the stub wins
+        // classloading, FML's NetworkRegistry iterates Side.values() and tries
+        // to insert a BUKKIT channel into a map that has no BUKKIT key, causing
+        // a NullPointerException during mod construction.
+        exclude group: 'net.minecraftforge', module: 'mergetool'
+    }
+}
+
+// Runtime-only Guard: some ForgeGradle versions also inject the merge tool
+// into the JavaExec classpath after the runtime configuration is resolved.
+tasks.matching { it.name == 'runClient' || it.name == 'runServer' }.all { task ->
+    task.doFirst {
+        task.classpath = task.classpath.filter {
+            !it.name.toLowerCase().contains('mergetool')
+        }
+    }
+}
+
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
 

@@ -44,6 +44,8 @@ public class BindEntityRenderer {
                 manager -> new RenderInvisibleEntity<EntityGodWrathBeam>(manager));
         RenderingRegistry.registerEntityRenderingHandler(EntityNuclearStrike.class,
                 manager -> new RenderInvisibleEntity<EntityNuclearStrike>(manager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityHeavenStrike.class,
+                manager -> new RenderInvisibleEntity<EntityHeavenStrike>(manager));
     }
 
 }
