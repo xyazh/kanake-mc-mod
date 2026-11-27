@@ -264,6 +264,43 @@ public class RegistrationEntities {
                 .tracker(1024, 3, true)
                 .build()
         );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntitySuperBlackHole.class)
+                .id(new ResourceLocation(Kanake.MODID, "super_black_hole"), 267)
+                .name("super_black_hole")
+                // Both sides derive the radius independently, so there is no
+                // dynamic state to sync. The ritual is stationary; a slow
+                // tracker interval is enough for spawn/removal tracking.
+                .tracker(1024, 20, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityStar.class)
+                .id(new ResourceLocation(Kanake.MODID, "star"), 268)
+                .name("star")
+                // Temperature and animation are computed locally from the
+                // client entity age, so no per-tick state packets are needed.
+                .tracker(1024, 20, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityWideLightningStrike.class)
+                .id(new ResourceLocation(Kanake.MODID, "wide_lightning"), 269)
+                .name("wide_lightning")
+                // The array and central bolt are driven by the entity age on
+                // both sides. Chain links are separate, short-lived entities.
+                .tracker(1024, 20, true)
+                .build()
+        );
+        event.getRegistry().register(EntityEntryBuilder.create()
+                .entity(EntityWideLightningBolt.class)
+                .id(new ResourceLocation(Kanake.MODID, "wide_lightning_bolt"), 270)
+                .name("wide_lightning_bolt")
+                // Endpoint and seed are included in the spawn packet. The
+                // entity lives for twelve ticks and never changes state.
+                .tracker(512, 20, true)
+                .build()
+        );
     }
 }
 

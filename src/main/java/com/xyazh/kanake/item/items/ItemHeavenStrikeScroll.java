@@ -94,14 +94,4 @@ public class ItemHeavenStrikeScroll extends ItemBase {
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(@Nonnull ItemStack stack, World world,
-                               @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
-        tooltip.add(I18n.format("item.scroll_heaven_strike.desc"));
-        tooltip.add(I18n.format("item.scroll_heaven_strike.desc.1"));
-        tooltip.add(I18n.format("item.scroll_heaven_strike.desc.2"));
-        tooltip.add(I18n.format("item.scroll_heaven_strike.desc.3"));
-    }
 }

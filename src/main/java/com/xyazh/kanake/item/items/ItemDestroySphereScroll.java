@@ -3,8 +3,6 @@ package com.xyazh.kanake.item.items;
 import com.xyazh.kanake.data.ManaData;
 import com.xyazh.kanake.entity.EntityDestroy;
 import com.xyazh.kanake.util.Vec3d;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -12,11 +10,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * Launch scroll for the existing destruction-sphere entity.
@@ -62,14 +57,5 @@ public class ItemDestroySphereScroll extends ItemBase {
             world.spawnEntity(sphere);
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(@Nonnull ItemStack stack, World world,
-                               @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
-        tooltip.add(I18n.format("item.scroll_destroy_sphere.desc"));
-        tooltip.add(I18n.format("item.scroll_destroy_sphere.desc.1"));
-        tooltip.add(I18n.format("item.scroll_destroy_sphere.desc.2"));
     }
 }

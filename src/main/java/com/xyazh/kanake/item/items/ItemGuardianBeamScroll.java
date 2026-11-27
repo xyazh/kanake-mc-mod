@@ -48,11 +48,4 @@ public class ItemGuardianBeamScroll extends ItemBase {
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(@Nonnull ItemStack stack, World world, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
-        tooltip.add(I18n.format("item.scroll_guardian_beam.desc"));
-        tooltip.add(I18n.format("item.scroll_guardian_beam.desc.1"));
-    }
 }

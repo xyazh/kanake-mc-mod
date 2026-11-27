@@ -49,6 +49,8 @@ public class ModItems {
     public static final Item SCROLL_GOD_WRATH = new ItemGodWrathScroll("scroll_god_wrath").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item SCROLL_NUCLEAR_STRIKE = new ItemNuclearStrikeScroll("scroll_nuclear_strike").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item SCROLL_BLACK_HOLE = new ItemBlackHoleScroll("scroll_black_hole").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item SCROLL_STAR = new ItemStarScroll("scroll_star").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
+    public static final Item SCROLL_WIDE_LIGHTNING = new ItemWideLightningScroll("scroll_wide_lightning").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item SCROLL_DESTROY_SPHERE = new ItemDestroySphereScroll("scroll_destroy_sphere").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL = new ItemFireBallRune("rune_fire_ball").setCreativeTab(ModCreativeTab.KNK_CREATIVE);
     public static final Item RUNE_FIRE_BALL_LOOK_AT = new ItemFireBallLookAtRune("rune_fire_ball_look_at").setCreativeTab(ModCreativeTab.KNK_CREATIVE);

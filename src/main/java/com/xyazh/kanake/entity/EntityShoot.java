@@ -360,6 +360,10 @@ public abstract class EntityShoot extends Entity implements IProjectile, IEntity
     @Override
     public int readData(ByteBuf buf) {
         int type = buf.readInt();
+        return readData(type, buf);
+    }
+
+    protected int readData(int type, ByteBuf buf) {
         if (type == 1) {
             this.speed = buf.readFloat();
             this.forward = new Vec3d(

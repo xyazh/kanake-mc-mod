@@ -47,12 +47,4 @@ public class ItemGodWrathScroll extends ItemBase {
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(@Nonnull ItemStack stack, World world, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flag) {
-        tooltip.add(I18n.format("item.scroll_god_wrath.desc"));
-        tooltip.add(I18n.format("item.scroll_god_wrath.desc.1"));
-        tooltip.add(I18n.format("item.scroll_god_wrath.desc.2"));
-    }
 }

@@ -9,6 +9,7 @@ import com.xyazh.kanake.libs.weaponlib.shader.jim.ShaderManager;
 import com.xyazh.kanake.particle.simple.SimpleParticle;
 import com.xyazh.kanake.particle.simple.particles.LifeDrainParticleSystem;
 import com.xyazh.kanake.render.FramebufferExample;
+import com.xyazh.kanake.render.WideLightningWorldRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.Particle;
@@ -150,6 +151,22 @@ public class RenderEvent {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
         tessellator.draw();
+
+        // Keep the lightning opaque (alpha 1.0). The bloom extraction shader
+        // compares the scene buffer with the particle-only buffer, so additive
+        // blending would make those colors differ and silently remove the
+        // glow. Normal alpha blending with opacity 1 extracts correctly.
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+        WideLightningWorldRenderer.render(buffer, partialTicks);
+        // Always finish the buffer, even when no lightning vertices were added.
+        // Otherwise BufferBuilder stays in the "Already building" state and the
+        // next particle pass throws IllegalStateException.
+        tessellator.draw();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
         if (cullEnabled) {
             GlStateManager.enableCull();
         }
